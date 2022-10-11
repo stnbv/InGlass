@@ -1,5 +1,6 @@
 package com.inglass.android
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +10,7 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat.START
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.analytics.FirebaseAnalytics
