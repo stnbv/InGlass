@@ -1,0 +1,31 @@
+buildscript {
+    apply from: "${rootProject.projectDir}/versions.gradle"
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+    dependencies {
+        classpath gradlePlugins.gradlePlugin
+        classpath gradlePlugins.kotlinPlugin
+        classpath gradlePlugins.hiltPlugin
+        classpath gradlePlugins.navigationPlugin
+
+        classpath 'com.google.gms:google-services:4.3.10'
+        classpath 'com.google.firebase:firebase-appdistribution-gradle:2.2.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
+
+        classpath gradlePlugins.detektPlugin
+        classpath gradlePlugins.codeQualityPlugin
+    }
+}
+
+subprojects {
+    afterEvaluate {
+        owner.apply from: rootProject.file("code_quality/detekt/detekt.gradle")
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

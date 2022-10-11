@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Main Colors-->
+    <!--Общие цвета всего приложения указываем в этом месте-->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="pink">#FF97A2</color>
+    <color name="main_black">#333F49</color>
+    <color name="black_text">#1F2227</color>
+    <color name="prompt_black">#32362F</color>
+    <color name="normal_gray">#95959E</color>
+    <color name="light_gray">#C2CDDB</color>
+    <color name="main_white">#F2F7FF</color>
+    <color name="main_green">#AFD838</color>
+    <color name="grey">#525568</color>
+    <color name="background_toolbar">#F1F7FF</color>
+    <color name="shadow_half_transparent">#80DAE2E8</color>
+    <color name="light_grey">#96969F</color>
+    <color name="translucent">#80FFFFFF</color>
+    <color name="lavender_light">#DFE6F6</color>
+	<color name="white_96">#F5FFFFFF</color>
+	<color name="white_98">#FAFFFFFF</color>
+    <color name="red">#FF4143</color>
+
+    <!-- Colors of the pressed buttons -->
+    <color name="button_pressed_pink">#FFAAB2</color>
+    <color name="white_pressed">#C3CDE4</color>
+    <color name="main_black_pressed">#435360</color>
+    <color name="main_black_stroke_pressed">#6A7B89</color>
+    <color name="text_main_black_pressed">#576672</color>
+
+    <!--OnlyThisScreenColorName-->
+    <!--Уникальные цвета для конкретных экранов-->
+
+    <!--RegistrationUserInfo-->
+    <color name="light_blue">#AFBED8</color>
+
+    <!-- ProfileFragment -->
+    <color name="blue_blue_light">#CBD9E5</color>
+
+    <!-- CatalogFragment -->
+    <color name="pink_second">#FA95A4</color>
+
+    <!--CosmoPassport-->
+    <color name="white_blue">#FCFDFF</color>
+    <color name="blue_half_transparent">#808F9DC3</color>
+    <color name="black_time_video">#292929</color>
+
+    <!--ItemRecommendedPrograms-->
+    <color name="light_pink">#FFDDE0</color>
+    <color name="main_black_half_transparent">#80333F49</color>
+
+    <!--ProcedureProgramFragment-->
+    <color name="white_pink">#F5F8FF</color>
+
+    <!--ArticleTitlesFragment-->
+    <color name="main_black_97per_transparent">#F7333F49</color>
+
+    <!--NotificationBottomSheetDialogFragment-->
+    <color name="very_light_blue">#EFF7FF</color>
+
+    <!--GalleryForSocialPlaceholder-->
+    <color name="gallery_for_social_placeholder_bg">#EEF4FF</color>
+
+    <!--MuscleInfoDialogViewBackground-->
+    <color name="muscle_info_dialog_view_background">#40000000</color>
+    
+    <!--TitleArrowTint-->
+    <color name="arrow_tint">#717981</color>
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="FragmentSettingsBinding">
+
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.auth_screens.settings.SettingsVM" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <TextView
+            android:id="@+id/loginTextView"
+            style="@style/TitleScreen"
+            android:layout_marginHorizontal="18dp"
+            android:text="@string/settings_enter_server_address"
+            android:textSize="20dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/baseUrlTextInputLayout"
+            style="@style/DefaultTextInputLayout"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/baseUrlTextInputEditText"
+                style="@style/DefaultTextInputEditText"
+                android:inputType="textPassword"
+                android:maxLength="40"
+                android:textColor="@color/main_black"
+                android:textColorHint="@color/normal_gray"
+                android:textSize="16dp"
+                app:unfocusedHint="@{@string/settings_server_address_hint}"
+                tools:hint="@string/login_hint_pass" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/registerButton"
+            style="@style/RoundButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:onClick="@{() -> vm.navToLogin()}"
+            android:text="@string/settings_set_server_address"
+            app:backgroundTint="@drawable/bg_tint_pressed_main_black" />
+
+    </LinearLayout>
+
+
+</layout>

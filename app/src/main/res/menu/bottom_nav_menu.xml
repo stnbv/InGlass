@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_change_user"
+            android:onClick="selectBottomNavigation"
+            android:title="@string/title_change_user" />
+
+        <item
+            android:id="@+id/nav_helpers"
+            android:onClick="selectBottomNavigation"
+            android:title="@string/title_helpers" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:onClick="selectBottomNavigation"
+            android:title="@string/setting_title" />
+
+    </group>
+</menu>

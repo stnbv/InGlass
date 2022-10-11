@@ -1,0 +1,112 @@
+<resources>
+    <string name="app_name">InGlass</string>
+
+    <!--Generals-->
+    <string name="comment_text">Комментировать</string>
+    <string name="text_your_comment">Ваш комментарий</string>
+    <string name="text_send">Отправить</string>
+    <string name="text_massage">Текст сообщения</string>
+    <string name="no_internet_connection">Отсутствует подключение к интернету</string>
+    <string name="internet_connection_restored">Подключение к интернету восстановлено</string>
+    <string name="ok">ОK</string>
+    <string name="my">Мои</string>
+
+    <!-- Errors -->
+    <string name="error_internal_error">Что-то пошло не так, попробуйте позже...</string>
+    <string name="error_external_error">Ошибка сервера, попробуйте позже...</string>
+    <string name="error_internal_connectivity_error">Нет подключения к интернету, проверьте пожалуйста соединение и повторите попытку</string>
+    <string name="error_format_email">Неверный формат e-mail</string>
+    <string name="error_login_or_pass">Неверный логин или пароль</string>
+    <string name="error_not_fill_required_fields">Обязательные поля не заполнены</string>
+    <string name="error_user_already_registered">Пользователь уже зарегистрирован</string>
+    <string name="error_min_length_sms_code">Код слишком короткий</string>
+    <string name="error_phone_number">Некорректный номер телефона</string>
+    <string name="error_repeated_pass">Пароли не совпадают</string>
+    <string name="error_password_not_equals">Пароли не совпадают</string>
+    <string name="error_password_incorrect">Неверный пароль</string>
+    <string name="error_unregistered_phone">Номер телефона не зарегистрирован</string>
+    <string name="error_unregistered_email">Email не зарегистрирован</string>
+    <string name="error_sms_code">Неверный код подтверждения</string>
+    <string name="error_pass_min_length">Пароль должен содержать не менее 8 символов</string>
+    <string name="error_all_attempts_used">На сегодня число попыток исчерпано</string>
+
+    <!-- Titles in App -->
+    <string name="title_home">Главная</string>
+    <string name="title_change_user">Смена пользователя</string>
+    <string name="title_helpers">Помощники</string>
+    <string name="title_login">Авторизация</string>
+    <string name="title_splash">Сплеш</string>
+    <string name="title_desktop">Рабочий стол</string>
+    <string name="setting_title">Настройки</string>
+    <string name="title_access_to_settings">Доступ к настройкам</string>
+
+    <string name="title_onboard">Онбординг</string>
+    <string name="title_registration">Регистрация</string>
+    <string name="title_purchase_history">История покупок</string>
+    <string name="title_details">Подробней</string>
+    <string name="title_understandable">Понятно</string>
+    <string name="title_turn_on">Включить</string>
+    <string name="title_country_code">Страна</string>
+
+    <!-- DesktopFragment -->
+    <string name="desktop_scan_scan_only_one_item">Отметка операции в количестве 1шт</string>
+    <string name="desktop_scan_barcode">Сканирование</string>
+    <string name="desktop_select_operation">Выберите операцию</string>
+    <string name="desktop_clear_cache">Очистить базу</string>
+    <string name="desktop_no_operation">Нет доступных операций</string>
+
+    <!-- AuthFragment -->
+    <string name="action_sign_in">Войти</string>
+    <string name="login">Логин</string>
+    <string name="login_hint_pass">Пароль</string>
+    <string name="login_title_auth">Авторизация</string>
+    <string name="login_settings">Настройки</string>
+
+    <!--AccessToSettingsDialogFragment-->
+    <string name="access_to_setting_title">Для доступа к настройкам необходимо ввести пароль</string>
+    <string name="access_to_setting_hint">Пароль доступа</string>
+    <string name="access_to_settings_ok">Подтвердить</string>
+
+    <!--SettingsFragment-->
+    <string name="settings_set_server_address">Установить</string>
+    <string name="settings_enter_server_address">Введите IP-адрес сервера</string>
+    <string name="settings_server_address_hint">IP-адрес</string>
+
+    <!-- SplashFragment -->
+    <string name="splash_load_algorithms">Загружаем алгоритмы</string>
+
+    <!-- Strings for camera settings. -->
+    <string name="pref_category_key_camera" translatable="false">pckc</string>
+    <string name="pref_category_title_camera" translatable="false">Camera</string>
+    <string name="pref_key_rear_camera_preview_size" translatable="false">rcpvs</string>
+    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
+    <string name="pref_key_front_camera_preview_size" translatable="false">fcpvs</string>
+    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
+    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
+    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
+    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
+    <string name="pref_title_rear_camera_preview_size" translatable="false">Rear camera preview size</string>
+    <string name="pref_title_front_camera_preview_size" translatable="false">Front camera preview size</string>
+    <string name="pref_title_camerax_rear_camera_target_resolution" translatable="false">CameraX rear camera target resolution</string>
+    <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">CameraX front camera target resolution</string>
+    <string name="pref_title_camera_live_viewport" translatable="false">Enable live viewport</string>
+    <string name="pref_summary_camera_live_viewport" translatable="false">Do not block camera preview drawing on detection</string>
+
+    <!-- Strings for info preference. -->
+    <string name="pref_title_info_hide" translatable="false">Hide detection info</string>
+    <string name="pref_key_info_hide" translatable="false">ih</string>
+
+    <!-- Strings for text recognition preference. -->
+    <string name="pref_title_group_recognized_text_in_blocks" translatable="false">Group recognized text in paragraphs</string>
+    <string name="pref_key_group_recognized_text_in_blocks" translatable="false">grtib</string>
+    <string name="pref_title_show_language_tag" translatable="false">Show language identified</string>
+    <string name="pref_key_show_language_tag" translatable="false">slt</string>
+
+
+    <!-- Strings for pose detector prefer gpu preference. -->
+    <string name="pref_title_pose_detector_prefer_gpu" translatable="false">Prefer using GPU</string>
+    <string name="pref_key_pose_detector_prefer_gpu" translatable="false">pdpg</string>
+    <string name="pref_summary_pose_detector_prefer_gpu" translatable="false">If enabled, GPU will be used as long as it is available, stable and returns correct results. In this case, the detector will not check if GPU is really faster than CPU.</string>
+
+
+</resources>

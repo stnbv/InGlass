@@ -1,0 +1,21 @@
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+detekt {
+    config = rootProject.files('code_quality/detekt/config.yml')
+    baseline = rootProject.file('code_quality/detekt/baseline.xml')
+    ignoreFailures = false
+    disableDefaultRuleSets = false
+    reports {
+        xml {
+            destination = file('build/reports/detekt-results.xml')
+        }
+        html {
+            destination = file('build/reports/detekt-results.html')
+        }
+        txt.enabled = false
+    }
+}
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0"
+}

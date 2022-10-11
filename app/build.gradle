@@ -1,0 +1,99 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-parcelize'
+    id 'androidx.navigation.safeargs.kotlin'
+
+    id  'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+apply from: "${rootProject.projectDir}/common.android.gradle"
+
+android {
+    defaultConfig {
+        applicationId "com.inglass.android"
+        versionCode 5
+        versionName "1.0.0"
+        setProperty("archivesBaseName", "RealCosmetology" + "-v" + versionName + "(" + versionCode + ")")
+    }
+}
+
+dependencies {
+    //ExternalLibs
+    implementation project(':widgets')
+
+    //Android
+    implementation libraries.annotation
+
+    //Support
+    implementation libraries.legacySupport
+    implementation libraries.activitySupport
+    implementation libraries.fragmentSupport
+    implementation libraries.swiperefreshLayoutSupport
+    implementation libraries.recyclerviewSupport
+    implementation libraries.viewpager2Support
+    implementation libraries.cardviewSupport
+    implementation libraries.dotsindicatorSupport
+    implementation libraries.permissionsKotlin
+    implementation libraries.browser
+
+    //Lifecycle
+    implementation libraries.lifecycleRuntime
+    implementation libraries.lifecycleJava
+    implementation libraries.lifecycleViewModel
+    implementation libraries.lifecycleLiveData
+    implementation libraries.lifecycleExtensions
+
+    //Security
+    implementation libraries.securityCrypto
+
+    //Retrofit, Okhttp3 and GSON (Network & JSON Parser)
+    implementation libraries.retrofitCore
+    implementation libraries.retrofiltConverterGson
+    implementation libraries.retrofitConverterScalar
+    implementation libraries.okhttpCore
+    implementation libraries.okhttpInterceptor
+    implementation libraries.gson
+
+    //Room
+    implementation libraries.roomCore
+    implementation libraries.roomKtx
+    kapt libraries.roomCompiler
+
+    //Paging 3
+    implementation libraries.paging
+
+    //Navigation
+    implementation libraries.navigationCore
+    implementation libraries.navigationUiKtx
+    implementation libraries.navigationFragment
+
+    //ExoPlayer
+    implementation libraries.exoplayer
+    implementation libraries.exoplayerUi
+
+    //Пока оставляем не через versions, не хочет через них / Alex(27.12.21)
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // Facebook Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.1.0'
+
+    //camera
+    // CameraX
+    implementation "androidx.camera:camera-camera2:1.2.0-alpha02"
+    implementation "androidx.camera:camera-lifecycle:1.2.0-alpha02"
+    implementation "androidx.camera:camera-view:1.2.0-alpha02"
+
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
+    implementation 'com.google.mlkit:object-detection:17.0.0'
+
+    implementation 'com.google.mlkit:object-detection-custom:17.0.0'
+    implementation 'com.google.mlkit:text-recognition:16.0.0-beta6'
+    implementation 'com.google.mlkit:camera:16.0.0-beta3'
+
+}

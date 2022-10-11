@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "213611611786",
+    "project_id": "realcosmetology-5679c",
+    "storage_bucket": "realcosmetology-5679c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213611611786:android:3c94c04f43d684eb978f73",
+        "android_client_info": {
+          "package_name": "com.inglass.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213611611786-tfi9c1s3ch3g7tia2puj3tsvjn0mjcnr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmzT-jXDx0ojkIYN-zNEzUVYFQdt1aRqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213611611786-tfi9c1s3ch3g7tia2puj3tsvjn0mjcnr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "213611611786-6852qpis7kvmjkbak1ifu09ushd773rt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.joy-dev.demo-rc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

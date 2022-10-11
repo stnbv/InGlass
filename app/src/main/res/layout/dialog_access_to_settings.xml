@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="AccessToSettingsBinding">
+
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.dialogs.AccessToSettingsDialogVM" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="18dp"
+        android:background="@drawable/bg_dialog"
+        android:orientation="vertical"
+        tools:ignore="SpUsage, ContentDescription">
+
+        <TextView
+            android:id="@+id/deletePhotoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/access_to_setting_title"
+            android:textColor="@color/main_black"
+            android:textSize="20dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passTextInputLayout"
+            style="@style/DefaultTextInputLayout"
+            android:layout_marginHorizontal="18dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/main_black">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passTextInputEditText"
+                style="@style/DefaultTextInputEditText"
+                android:inputType="textPassword"
+                android:maxLength="40"
+                android:text="@={vm.passwordText}"
+                android:textColor="@color/main_black"
+                android:textColorHint="@color/normal_gray"
+                android:textSize="16dp"
+                app:unfocusedHint="@{@string/access_to_setting_hint}"
+                tools:hint="@string/login_hint_pass" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/error_password_incorrect"
+            app:visibility="@{vm.passwordError}" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/okMaterialButton"
+            style="@style/RoundButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="38dp"
+            android:onClick="@{() -> vm.checkPassword()}"
+            android:text="@string/access_to_settings_ok"
+            app:backgroundTint="@drawable/bg_tint_pressed_main_black" />
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ItemScannedBinding">
+
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.main.scan2.ScannedItemVM" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itemCareCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_button_rounded"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="8dp"
+        tools:ignore="SpUsage">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_ripple_button"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/dateTimeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:text="@={vm.dateTime}"
+                android:textAlignment="textStart"
+                android:textColor="@color/main_black"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/codeTextView"
+                app:layout_constraintEnd_toStartOf="@id/operationTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="06.10.22 12:29:38" />
+
+            <TextView
+                android:id="@+id/operationTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2sp"
+                android:text="@={vm.operation}"
+                android:textColor="@color/main_black"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/dateTimeTextView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Резка" />
+
+            <TextView
+                android:id="@+id/codeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="2sp"
+                android:text="@={vm.barcode}"
+                android:textAlignment="textStart"
+                android:textColor="@color/main_black"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dateTimeTextView"
+                tools:text="Код: 9346346436748367" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <padding android:top="5dp" /> <!-- нужно для центровки icons в input edit text -->
+        </shape>
+    </item>
+    <!-- Drop Shadow Stack -->
+    <item>
+        <shape>
+            <padding android:bottom="1dp" />
+            <corners android:radius="9dp" />
+            <solid android:color="#00A7B3DA" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:bottom="1dp" />
+            <corners android:radius="9dp" />
+            <solid android:color="#20A7B3DA" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:bottom="1dp" />
+            <corners android:radius="9dp" />
+            <solid android:color="#40A7B3DA" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:bottom="1dp" />
+            <corners android:radius="9dp" />
+            <solid android:color="#60A7B3DA" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <padding android:bottom="1dp" />
+            <corners android:radius="9dp" />
+            <solid android:color="#80A7B3DA" />
+        </shape>
+    </item>
+
+    <!-- Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="9dp" />
+            <solid android:color="@color/white" />
+        </shape>
+    </item>
+</layer-list>

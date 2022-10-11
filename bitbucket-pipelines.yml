@@ -1,0 +1,22 @@
+image: androidsdk/android-30
+
+pipelines:
+  default: # pipeline definition for all branches
+    - step: # step to build Android debug application
+        name: Gradlew Detekt
+        caches: # caching speed up subsequent execution
+          - gradle
+        script:
+          - chmod +x gradlew
+          - ./gradlew detekt
+        artifacts:
+          - app/build/reports/detekt-results.xml # artifacts are files that are produced by a step
+    - step: # step to build Android debug application
+        name: Android Debug Application
+        caches: # caching speed up subsequent execution
+          - gradle
+        script:
+          - chmod +x gradlew
+          - ./gradlew assembleDebug
+        artifacts:
+          - app/build/outputs/**  # artifacts are files that are produced by a step

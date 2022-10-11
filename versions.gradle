@@ -1,0 +1,155 @@
+ext.versions = [
+        gradle_version      : '7.0.3',
+        kotlin              : '1.5.31',
+        anotation           : '1.3.0',
+        core_ktx            : '1.7.0',
+        core_runtime        : '2.1.0',
+        coroutines          : '1.5.2',
+        nav_arch            : '2.3.5',
+        material_design     : '1.4.0',
+        activity            : '1.4.0',
+        fragment_version    : '1.4.0-rc01',
+        legacy              : '1.0.0',
+        lifecycle_extensions: '2.2.0',
+        lifecycle           : '2.4.0',
+        appcompat           : '1.3.1',
+        constraint_layout   : '2.1.1',
+        swiperefresh_layout : '1.1.0',
+        recyclerview        : '1.3.0-alpha01',
+        viewpager2          : '1.0.0',
+        cardview            : '1.0.0',
+        intuit              : '1.0.6',
+        koin                : '2.2.2',
+        timber              : '5.0.1',
+        security_crypto     : '1.1.0-alpha03',
+        gson                : '2.8.8',
+        retrofit            : '2.9.0',
+        okhttp3             : '5.0.0-alpha.2',
+        hilt                : '2.38.1',
+        detekt              : '1.16.0',
+        code_quality        : '1.1.0',
+        glide               : '4.12.0',
+        room                : '2.4.0-beta01',
+        paging              : '3.1.0',
+        decoro              : '1.5.0',
+        circle_image_view   : '3.1.0',
+        dotsindicator       : '4.2',
+        permissions_kotlin  : '2.1.4',
+        browser             :'1.3.0',
+        exoplayer           : '2.16.1',
+        leak_canary         : '2.8.1',
+]
+
+ext.gradlePlugins = [
+        gradlePlugin     : "com.android.tools.build:gradle:$versions.gradle_version",
+        kotlinPlugin     : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
+        hiltPlugin       : "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt",
+        navigationPlugin : "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.nav_arch",
+        detektPlugin     : "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$versions.detekt",
+        codeQualityPlugin: "ru.mobileup:code-quality-android:$versions.code_quality"
+]
+
+ext.libraries = [
+        //Kotlin
+        kotlinStdlib             : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin",
+        coreKtx                  : "androidx.core:core-ktx:$versions.core_ktx",
+
+        //Android
+        appcompat                : "androidx.appcompat:appcompat:$versions.appcompat",
+        coreRuntime              : "androidx.arch.core:core-runtime:$versions.core_runtime",
+        annotation               : "androidx.annotation:annotation:$versions.anotation",
+
+        //Support
+        legacySupport            : "androidx.legacy:legacy-support-v4:$versions.legacy",
+        activitySupport          : "androidx.activity:activity-ktx:$versions.activity",
+        fragmentSupport          : "androidx.fragment:fragment-ktx:$versions.fragment_version",
+        materialSupport          : "com.google.android.material:material:$versions.material_design",
+        constraintLayoutSupport  : "androidx.constraintlayout:constraintlayout:$versions.constraint_layout",
+        swiperefreshLayoutSupport: "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swiperefresh_layout",
+        recyclerviewSupport      : "androidx.recyclerview:recyclerview:$versions.recyclerview",
+        viewpager2Support        : "androidx.viewpager2:viewpager2:$versions.viewpager2",
+        cardviewSupport          : "androidx.cardview:cardview:$versions.cardview",
+        circleImageViewSupport   : "de.hdodenhof:circleimageview:$versions.circle_image_view",
+        dotsindicatorSupport     : "com.tbuonomo:dotsindicator:$versions.dotsindicator",
+        permissionsKotlin        : "com.markodevcic:peko:$versions.permissions_kotlin",
+        browser                  : "androidx.browser:browser:$versions.browser",
+
+        //Lifecycle
+        lifecycleRuntime         : "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle",
+        lifecycleJava            : "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle",
+        lifecycleViewModel       : "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle",
+        lifecycleLiveData        : "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle",
+        lifecycleExtensions      : "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle_extensions",
+
+        //Coroutines
+        coroutinesCore           : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines",
+        coroutinesAndroid        : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines",
+
+        //Security
+        securityCrypto           : "androidx.security:security-crypto-ktx:$versions.security_crypto",
+
+        //Hilt
+        hiltCore                 : "com.google.dagger:hilt-android:$versions.hilt",
+        hiltCompiler             : "com.google.dagger:hilt-android-compiler:$versions.hilt",
+
+        //Retrofit, Okhttp3 and GSON (Network & JSON Parser)
+        retrofitCore             : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+        retrofiltConverterGson   : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+        retrofitConverterScalar  : "com.squareup.retrofit2:converter-scalars:$versions.retrofit",
+        okhttpCore               : "com.squareup.okhttp3:okhttp:$versions.okhttp3",
+        okhttpInterceptor        : "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3",
+        gson                     : "com.google.code.gson:gson:$versions.gson",
+
+        //Glide
+        glide                    : "com.github.bumptech.glide:glide:$versions.glide",
+        glideAnnProcess          : "com.github.bumptech.glide:compiler:$versions.glide",
+
+        //Room
+        roomCore                 : "androidx.room:room-runtime:$versions.room",
+        roomCompiler             : "androidx.room:room-compiler:$versions.room",
+        roomKtx                  : "androidx.room:room-ktx:$versions.room",
+
+        //Paging 3
+        paging                   : "androidx.paging:paging-runtime-ktx:$versions.paging",
+
+        //Navigation
+        navigationCore           : "androidx.navigation:navigation-runtime-ktx:$versions.nav_arch",
+        navigationUiKtx          : "androidx.navigation:navigation-ui-ktx:$versions.nav_arch",
+        navigationFragment       : "androidx.navigation:navigation-fragment-ktx:$versions.nav_arch",
+
+        //Intuit - a scalable size unit
+        intuitSdp                : "com.intuit.sdp:sdp-android:$versions.intuit",
+        intuitSsp                : "com.intuit.ssp:ssp-android:$versions.intuit",
+
+        //Logger
+        timber                   : "com.jakewharton.timber:timber:$versions.timber",
+
+        //Decoro (PhoneInputMask)
+        decoro                   : "ru.tinkoff.decoro:decoro:$versions.decoro",
+
+        //ExoPlayer
+        exoplayer                : "com.google.android.exoplayer:exoplayer:$versions.exoplayer",
+        exoplayerUi              : "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer",
+
+        //Debug
+        leakCanary               : "com.squareup.leakcanary:leakcanary-android:$versions.leak_canary",
+
+        // CameraX
+        camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",
+        camera2                  : "androidx.camera:camera-lifecycle:1.2.0-alpha02",
+        camera3                  : "androidx.camera:camera-view:1.2.0-alpha02",
+
+        barcode_scanning         : "com.google.mlkit:barcode-scanning:17.0.2",
+        object_detection         : "com.google.mlkit:object-detection:17.0.0",
+
+        object_detection_custom  : "com.google.mlkit:object-detection-custom:17.0.0",
+        text_recognition         : "com.google.mlkit:text-recognition:16.0.0-beta6",
+        mlkit_camera             : "com.google.mlkit:camera:16.0.0-beta3"
+]
+
+def build_versions = [:]
+build_versions.compile_sdk = 32
+build_versions.min_sdk = 24
+build_versions.target_sdk = 32
+build_versions.build_tools = "30.0.3"
+ext.build_versions = build_versions

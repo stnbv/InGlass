@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data class="FragmentDesktopBinding">
+
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.main.desktop.DesktopVM" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_grey">
+
+        <TextView
+            android:id="@+id/receiveNewsAndOffersTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/desktop_scan_scan_only_one_item"
+            android:textColor="@color/main_black"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/receiveNewsAndOffersSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:paddingHorizontal="16dp"
+            android:thumb="@drawable/selector_switch_thumb"
+            app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintTop_toTopOf="@+id/receiveNewsAndOffersTextView"
+            app:track="@drawable/selector_switch_track"
+            app:useMaterialThemeColors="false" />
+
+        <Spinner
+            android:id="@+id/sexSpinner"
+            android:layout_width="0dp"
+            android:layout_height="57dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/bg_edit_text"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:includeFontPadding="true"
+            android:spinnerMode="dropdown"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expandableButtonsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="100dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sexSpinner"
+            app:setOnlyAdapter="@{vm.adapter}" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonScan"
+            style="@style/RoundButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/desktop_scan_barcode"
+            app:backgroundTint="@drawable/bg_tint_pressed_main_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expandableButtonsRecyclerView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonDelete"
+            style="@style/RoundButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/desktop_clear_cache"
+            app:backgroundTint="@drawable/bg_tint_pressed_main_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/buttonScan" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
