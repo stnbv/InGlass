@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.barcodescanner
+package com.inglass.android.utils.barcodescanner
 
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*

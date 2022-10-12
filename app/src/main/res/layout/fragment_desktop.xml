@@ -9,11 +9,16 @@
             type="com.inglass.android.presentation.main.desktop.DesktopVM" />
     </data>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light_grey">
+
+
 
         <TextView
             android:id="@+id/receiveNewsAndOffersTextView"
@@ -66,7 +71,6 @@
             android:layout_marginTop="20dp"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="100dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -100,5 +104,6 @@
             app:layout_constraintTop_toBottomOf="@id/buttonScan" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </layout>
 

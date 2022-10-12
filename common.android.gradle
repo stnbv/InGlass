@@ -111,9 +111,6 @@ dependencies {
     implementation libraries.exoplayer
     implementation libraries.exoplayerUi
 
-    //Debug
-    implementation libraries.leakCanary
-
 }
 
 codeQuality {

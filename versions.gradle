@@ -131,9 +131,6 @@ ext.libraries = [
         exoplayer                : "com.google.android.exoplayer:exoplayer:$versions.exoplayer",
         exoplayerUi              : "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer",
 
-        //Debug
-        leakCanary               : "com.squareup.leakcanary:leakcanary-android:$versions.leak_canary",
-
         // CameraX
         camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",
         camera2                  : "androidx.camera:camera-lifecycle:1.2.0-alpha02",

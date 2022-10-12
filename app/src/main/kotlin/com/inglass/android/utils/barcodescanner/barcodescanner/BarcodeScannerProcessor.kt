@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.inglass.android.presentation.barcodescanner.barcodescanner
+package com.inglass.android.utils.barcodescanner.barcodescanner
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.util.Log
@@ -31,6 +30,8 @@ import com.inglass.android.App
 import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.presentation.main.scan2.GraphicOverlay
 import java.util.*
+
+private const val TAG = "BarcodeProcessor"
 
 class BarcodeScannerProcessor(context: Context) : VisionProcessorBase<List<Barcode>>(context) {
 
@@ -66,7 +67,6 @@ class BarcodeScannerProcessor(context: Context) : VisionProcessorBase<List<Barco
 
       App.scanResSet.add(barcode.rawValue.toString())
       graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode))
-      logExtrasForTesting(barcode)
       saveBarcode(barcode.rawValue.toString())
     }
   }
@@ -75,10 +75,9 @@ class BarcodeScannerProcessor(context: Context) : VisionProcessorBase<List<Barco
     Log.e(TAG, "Barcode detection failed $e")
   }
 
-  @SuppressLint("NewApi")
   fun saveBarcode(barcode: String) {
     val currentTime = Calendar.getInstance().time
-    var scanResult = ScanResult(
+    val scanResult = ScanResult(
       barcode = barcode,
       hasUploaded = false,
       employee = 1,
@@ -89,18 +88,5 @@ class BarcodeScannerProcessor(context: Context) : VisionProcessorBase<List<Barco
 
 //    HomeActivity.adapter.refreshView(db?.scanResultsDao()?.getLast2001()!!)
 //    HomeActivity.adapter.notifyDataSetChanged()
-  }
-
-  companion object {
-    private const val TAG = "BarcodeProcessor"
-
-    private fun logExtrasForTesting(barcode: Barcode?) {
-      if (barcode != null) {
-        Log.v(
-          MANUAL_TESTING_LOG,
-          "barcode raw value: " + barcode.rawValue
-        )
-      }
-    }
   }
 }

@@ -15,9 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import com.inglass.android.R
-import com.inglass.android.presentation.barcodescanner.PreferenceUtils
-import com.inglass.android.presentation.barcodescanner.VisionImageProcessor
-import com.inglass.android.presentation.barcodescanner.barcodescanner.BarcodeScannerProcessor
+import com.inglass.android.utils.barcodescanner.PreferenceUtils
+import com.inglass.android.utils.barcodescanner.VisionImageProcessor
+import com.inglass.android.utils.barcodescanner.barcodescanner.BarcodeScannerProcessor
 import com.inglass.android.presentation.main.scan2.GraphicOverlay
 
 @RequiresApi(VERSION_CODES.LOLLIPOP)
@@ -48,15 +48,6 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
                     bindAllCameraUseCases()
                 }
             )
-
-//        val cameraProviderFuture = ProcessCameraProvider.getInstance(application)
-//        cameraProviderFuture.addListener(
-//            {
-//                cameraProvider = cameraProviderFuture.get()
-//                bindAllCameraUseCases()
-//            },
-//            ContextCompat.getMainExecutor(application)
-//        )
     }
 
     public override fun onResume() {

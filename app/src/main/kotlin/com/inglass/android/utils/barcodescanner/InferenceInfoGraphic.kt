@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.barcodescanner
+package com.inglass.android.utils.barcodescanner
 
 import android.graphics.Canvas
 import android.graphics.Color

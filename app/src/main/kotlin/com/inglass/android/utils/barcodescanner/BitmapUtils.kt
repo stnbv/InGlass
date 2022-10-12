@@ -1,6 +1,5 @@
-package com.inglass.android.presentation.barcodescanner
+package com.inglass.android.utils.barcodescanner
 
-import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
@@ -8,21 +7,17 @@ import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.YuvImage
 import android.media.Image.Plane
-import android.net.Uri
 import android.os.Build.VERSION_CODES
-import android.provider.MediaStore.Images.Media
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
-import androidx.exifinterface.media.ExifInterface
-import com.inglass.android.presentation.barcodescanner.FrameMetadata.Builder
+import com.inglass.android.utils.barcodescanner.FrameMetadata.Builder
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.nio.ByteBuffer
 
 object BitmapUtils {
-    private const val TAG = "BitmapUtils"
+//    private const val TAG = "BitmapUtils"
 
     /** Converts NV21 format byte buffer to bitmap.  */
     fun getBitmap(data: ByteBuffer, metadata: FrameMetadata): Bitmap? {
@@ -77,56 +72,56 @@ object BitmapUtils {
         return rotatedBitmap
     }
 
-    @Throws(IOException::class)
-    fun getBitmapFromContentUri(contentResolver: ContentResolver, imageUri: Uri): Bitmap? {
-        val decodedBitmap = Media.getBitmap(contentResolver, imageUri) ?: return null
-        val orientation = getExifOrientationTag(contentResolver, imageUri)
-        var rotationDegrees = 0
-        var flipX = false
-        var flipY = false
-        when (orientation) {
-            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipX = true
-            ExifInterface.ORIENTATION_ROTATE_90 -> rotationDegrees = 90
-            ExifInterface.ORIENTATION_TRANSPOSE -> {
-                rotationDegrees = 90
-                flipX = true
-            }
-            ExifInterface.ORIENTATION_ROTATE_180 -> rotationDegrees = 180
-            ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipY = true
-            ExifInterface.ORIENTATION_ROTATE_270 -> rotationDegrees = -90
-            ExifInterface.ORIENTATION_TRANSVERSE -> {
-                rotationDegrees = -90
-                flipX = true
-            }
-            ExifInterface.ORIENTATION_UNDEFINED, ExifInterface.ORIENTATION_NORMAL -> {}
-            else -> {}
-        }
-        return rotateBitmap(decodedBitmap, rotationDegrees, flipX, flipY)
-    }
+//    @Throws(IOException::class)
+//    fun getBitmapFromContentUri(contentResolver: ContentResolver, imageUri: Uri): Bitmap? {
+//        val decodedBitmap = Media.getBitmap(contentResolver, imageUri) ?: return null
+//        val orientation = getExifOrientationTag(contentResolver, imageUri)
+//        var rotationDegrees = 0
+//        var flipX = false
+//        var flipY = false
+//        when (orientation) {
+//            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipX = true
+//            ExifInterface.ORIENTATION_ROTATE_90 -> rotationDegrees = 90
+//            ExifInterface.ORIENTATION_TRANSPOSE -> {
+//                rotationDegrees = 90
+//                flipX = true
+//            }
+//            ExifInterface.ORIENTATION_ROTATE_180 -> rotationDegrees = 180
+//            ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipY = true
+//            ExifInterface.ORIENTATION_ROTATE_270 -> rotationDegrees = -90
+//            ExifInterface.ORIENTATION_TRANSVERSE -> {
+//                rotationDegrees = -90
+//                flipX = true
+//            }
+//            ExifInterface.ORIENTATION_UNDEFINED, ExifInterface.ORIENTATION_NORMAL -> {}
+//            else -> {}
+//        }
+//        return rotateBitmap(decodedBitmap, rotationDegrees, flipX, flipY)
+//    }
 
-    private fun getExifOrientationTag(resolver: ContentResolver, imageUri: Uri): Int {
-        // We only support parsing EXIF orientation tag from local file on the device.
-        // See also:
-        // https://android-developers.googleblog.com/2016/12/introducing-the-exifinterface-support-library.html
-        if (ContentResolver.SCHEME_CONTENT != imageUri.scheme
-            && ContentResolver.SCHEME_FILE != imageUri.scheme
-        ) {
-            return 0
-        }
-        var exif: ExifInterface
-        try {
-            resolver.openInputStream(imageUri).use { inputStream ->
-                if (inputStream == null) {
-                    return 0
-                }
-                exif = ExifInterface(inputStream)
-            }
-        } catch (e: IOException) {
-            Log.e(TAG, "failed to open file to read rotation meta data: $imageUri", e)
-            return 0
-        }
-        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-    }
+//    private fun getExifOrientationTag(resolver: ContentResolver, imageUri: Uri): Int {
+//        // We only support parsing EXIF orientation tag from local file on the device.
+//        // See also:
+//        // https://android-developers.googleblog.com/2016/12/introducing-the-exifinterface-support-library.html
+//        if (ContentResolver.SCHEME_CONTENT != imageUri.scheme
+//            && ContentResolver.SCHEME_FILE != imageUri.scheme
+//        ) {
+//            return 0
+//        }
+//        var exif: ExifInterface
+//        try {
+//            resolver.openInputStream(imageUri).use { inputStream ->
+//                if (inputStream == null) {
+//                    return 0
+//                }
+//                exif = ExifInterface(inputStream)
+//            }
+//        } catch (e: IOException) {
+//            Log.e(TAG, "failed to open file to read rotation meta data: $imageUri", e)
+//            return 0
+//        }
+//        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+//    }
 
     /**
      * Converts YUV_420_888 to NV21 bytebuffer.
