@@ -10,11 +10,15 @@ import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat.START
+import androidx.core.view.isVisible
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.inglass.android.databinding.ActivityMainBinding
+import com.inglass.android.databinding.MenuHeaderBinding
+import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.utils.navigation.DIALOGS
 import com.inglass.android.utils.navigation.SCREENS
 import com.inglass.android.utils.navigation.findNavController
@@ -29,9 +33,10 @@ class AppActivity : AppCompatActivity() {
 
     private val viewModel: AppActivityVM by viewModels()
 
-    private var binding: ActivityMainBinding? = null
+    lateinit var binding: ActivityMainBinding
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private lateinit var menuHeader: MenuHeaderBinding
 
 //    fun createToolbarConfig() = ToolbarConfig(
 //        binding!!.toolbar,
@@ -46,24 +51,41 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
-        setContentView(binding?.root)
-        binding?.vm = viewModel
-        binding?.menu?.doOnClick { binding?.drawerLayout?.openDrawer(START) }
-        binding?.navView?.setupWithNavController(findNavController(R.id.navHostFragment))
+        setContentView(binding.root)
+        binding.vm = viewModel
+        binding.menu.doOnClick { binding.drawerLayout.openDrawer(START) }
+        binding.navView.setupWithNavController(findNavController(R.id.navHostFragment))
+
+        menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
         showMenu()
+    }
+
+    fun setMenuPersonalInformation(personalInformation: PersonalInformationModel) {
+        with(personalInformation) {
+            menuHeader.nameTextView.text = fullName
+            menuHeader.serverAddressTextView.text = lastName //TODO Заменить на адрес сервера
+            Glide
+                .with(this@AppActivity)
+                .load(photo)
+                .into(menuHeader.profileImageView)
+        }
     }
 
     private fun showMenu() {
         if (findNavController(R.id.navHostFragment).currentDestination?.label == getString(R.string.title_splash) ||
             findNavController(R.id.navHostFragment).currentDestination?.label == getString(R.string.title_login)
-        ) viewModel.showMenu.postValue(false)
-        else viewModel.showMenu.postValue(true)
+        ) {
+            viewModel.showMenu.postValue(false)
+        } else {
+            viewModel.showMenu.postValue(true)
+        }
     }
 
     fun navigateToScreen(screen: SCREENS) {
         hideKeyboard()
         findNavController(R.id.navHostFragment).apply {
             setCurrentScreenWithNavController(screen)
+            setMenuVisibility(screen.menuVisibility)
         }
     }
 
@@ -72,6 +94,13 @@ class AppActivity : AppCompatActivity() {
             setCurrentDialogScreenWithNavController(dialog)
         }
     }
+
+    private fun setMenuVisibility(visibility: Boolean) {
+        if (visibility) {
+            binding?.menu?.isVisible = visibility
+        }
+    }
+
 
     private fun hideKeyboard() {
         val imm = applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager

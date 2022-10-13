@@ -1,5 +1,6 @@
 package com.inglass.android.di
 
+import com.inglass.android.BuildConfig
 import com.inglass.android.data.remote.api.IAuthApi
 import com.inglass.android.data.remote.api.IPersonalInformationApi
 import com.inglass.android.data.remote.interceptors.AuthTokenInterceptor
@@ -24,9 +25,6 @@ private const val TIMEOUT = 20L
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val HTTP_SCHEME = "https://"
-    private const val API_PATH = "cosmetology.joy-dev.com/api/"
-
     @Provides
     @Singleton
     fun provideClient(authTokenInterceptor: AuthTokenInterceptor, httpLoggingInterceptor: HttpLoggingInterceptor) =
@@ -43,7 +41,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("$HTTP_SCHEME$API_PATH")
+        .baseUrl("${BuildConfig.BASE_URL}${BuildConfig.API_ENDPOINT}")
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

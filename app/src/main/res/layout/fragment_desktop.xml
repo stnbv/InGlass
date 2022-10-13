@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data class="FragmentDesktopBinding">
 
@@ -13,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_grey">
+        android:background="@color/light_gray">
 
         <TextView
             android:id="@+id/receiveNewsAndOffersTextView"
@@ -47,8 +48,8 @@
             android:layout_width="0dp"
             android:layout_height="57dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="4dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/bg_edit_text"
             android:drawableEnd="@drawable/ic_arrow_down"
             android:includeFontPadding="true"
@@ -58,11 +59,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
 
+        <TextView
+            android:id="@+id/helpersTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sexSpinner"
+            tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expandableButtonsRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
             android:clipToPadding="false"
             android:overScrollMode="never"
@@ -70,7 +82,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sexSpinner"
+            app:layout_constraintTop_toBottomOf="@id/helpersTextView"
             app:setOnlyAdapter="@{vm.adapter}" />
 
         <com.google.android.material.button.MaterialButton

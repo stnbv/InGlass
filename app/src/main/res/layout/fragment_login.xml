@@ -64,14 +64,14 @@
                         android:id="@+id/passTextInputEditText1"
                         style="@style/DefaultTextInputEditText"
                         android:inputType="textPassword"
-                        android:text= ""
                         android:textColor="@color/main_black"
                         android:textColorHint="@color/normal_gray"
                         android:textSize="16dp"
+                        android:text="@={vm.phone}"
                         android:maxLength="40"
                         android:digits="ABCDEFGHJIKLMNOPQRSTUVWXYZabcdefghjiklmnopqrstuvwxyz"
                         app:unfocusedHint="@{@string/login}"
-                        tools:hint="@string/login_hint_pass" />
+                        tools:hint="Логин" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

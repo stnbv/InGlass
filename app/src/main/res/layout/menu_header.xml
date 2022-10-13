@@ -17,6 +17,17 @@
             android:layout_height="80dp"
             android:background="@drawable/logo_inglass" />
 
+        <TextView
+            android:id="@+id/serverAddressTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:text="http//:localhost"
+            android:textColor="@color/grey"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/personEmailTextInputLayout" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImageView"
             android:layout_width="100dp"
@@ -27,9 +38,9 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
         <TextView
-            android:id="@+id/personBirthTextView"
+            android:id="@+id/nameTextView"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Имя, Фамилия"
             android:textColor="@color/grey"

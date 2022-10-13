@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import app.inglass.tasker.data.db.AppDatabase
+import com.inglass.android.AppActivity
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentDesktopBinding
 import com.inglass.android.utils.base.BaseFragment
@@ -20,30 +21,7 @@ import kotlinx.coroutines.launch
 
 
 private val OPERATIONS =
-    mutableListOf(
-        "Резка",
-        "Полировка",
-        "Полировка (фигурная)",
-        "Фацет",
-        "Фацет (фигурный)",
-        "Шлифовка",
-        "Притупка",
-        "Отверстия",
-        "Матовка",
-        "Гравировка",
-        "Закалка",
-        "Триплекс",
-        "Покраска",
-        "Сборка",
-        "Фотопечать",
-        "УФ склейка",
-        "Упаковка",
-        "Выдача",
-        "Перемещение",
-        "Пленка",
-        "Гидрорезка",
-        "Вырез"
-    )
+    mutableListOf("Резка", "Полировка", "Полировка (фигурная)", "Фацет", "Фацет (фигурный)", "Вырез")
 
 @AndroidEntryPoint
 class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout.fragment_desktop) {
@@ -73,6 +51,10 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
 
         binding.buttonScan.doOnClick {
             viewModel.navigateToScreen(SCANNER)
+        }
+
+        viewModel.userInfo.observe (viewLifecycleOwner) {
+            (activity as AppActivity).setMenuPersonalInformation(it)
         }
 
         populateOperations()

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.inglass.android.BuildConfig
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.utils.helpers.fromJson
@@ -13,6 +14,7 @@ private const val PREFS = "real_cosmetology_prefs"
 private const val AUTH_DATA_KEY = "auth_data"
 private const val IS_ONBOARD_KEY = "is_onboard"
 private const val USER_KEY = "user_key"
+private const val BASE_URL_KEY = "base_url_key"
 
 class PreferencesRepository(context: Context) : IPreferencesRepository {
 
@@ -23,6 +25,10 @@ class PreferencesRepository(context: Context) : IPreferencesRepository {
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
+
+    override var baseUrl: String
+        get() = settings.getString(BASE_URL_KEY, null) ?: BuildConfig.BASE_URL
+        set(value) = settings.edit().putString(BASE_URL_KEY, value).apply()
 
     override var token: String?
         get() = settings.getString(AUTH_DATA_KEY, null)
