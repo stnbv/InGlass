@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.main.scan2
+package com.inglass.android.presentation.main.desktop
 
 import com.inglass.android.R
 import com.inglass.android.databinding.ItemScannedBinding
@@ -11,7 +11,7 @@ class ScannedItemVM(
 ) : CommonItemVM<ItemScannedBinding>(R.layout.item_scanned) {
     var dateTime = DateFormatHelper.FullDateTimeStamp.format(data.dateTime)
     var operation = data.operation
-    var barcode = data.barcode +" в количестве 1 шт."
+    var barcode = data.barcode + " в количестве 1 шт."
 }
 
 data class ScannedItemData(

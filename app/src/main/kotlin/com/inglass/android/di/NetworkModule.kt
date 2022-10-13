@@ -2,12 +2,18 @@ package com.inglass.android.di
 
 import com.inglass.android.BuildConfig
 import com.inglass.android.data.remote.api.IAuthApi
+import com.inglass.android.data.remote.api.IMakeOperationApi
 import com.inglass.android.data.remote.api.IPersonalInformationApi
+import com.inglass.android.data.remote.api.IReferenceBooksApi
 import com.inglass.android.data.remote.interceptors.AuthTokenInterceptor
 import com.inglass.android.data.remote.services.auth.AuthService
 import com.inglass.android.data.remote.services.auth.IAuthService
+import com.inglass.android.data.remote.services.make_operation.IMakeOperationService
+import com.inglass.android.data.remote.services.make_operation.MakeOperationService
 import com.inglass.android.data.remote.services.personal_information.IPersonalInformationService
 import com.inglass.android.data.remote.services.personal_information.PersonalInformationService
+import com.inglass.android.data.remote.services.reference_book.IReferenceBookService
+import com.inglass.android.data.remote.services.reference_book.ReferenceBookService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,5 +65,20 @@ object NetworkModule {
     @Provides
     fun providePersonalInformationService(api: IPersonalInformationApi): IPersonalInformationService =
         PersonalInformationService(api)
+
+    @Provides
+    fun provideReferenceBookApi(retrofit: Retrofit): IReferenceBooksApi =
+        retrofit.create(IReferenceBooksApi::class.java)
+
+    @Provides
+    fun provideReferenceBookService(api: IReferenceBooksApi): IReferenceBookService = ReferenceBookService(api)
+
+
+    @Provides
+    fun provideMakeOperationApi(retrofit: Retrofit): IMakeOperationApi = retrofit.create(IMakeOperationApi::class.java)
+
+    @Provides
+    fun provideMakeOperationService(api: IMakeOperationApi): IMakeOperationService = MakeOperationService(api)
+
 
 }

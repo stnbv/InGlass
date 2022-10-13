@@ -4,7 +4,7 @@ import com.inglass.android.data.remote.responses.reference_book.ReferenceBookRes
 import retrofit2.Response
 import retrofit2.http.GET
 
-interface IReferenceBooks {
+interface IReferenceBooksApi {
 
     @GET("refs")
     suspend fun getReferenceBook(): Response<ReferenceBookResponse>
