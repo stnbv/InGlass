@@ -74,8 +74,8 @@ class GraphicOverlay(context: Context?, attrs: AttributeSet?) : View(context, at
      * this and implement the [Graphic.draw] method to define the graphics element. Add
      * instances to the overlay using [GraphicOverlay.add].
      */
-    abstract class Graphic(overlay: GraphicOverlay) {
-        private val overlay: GraphicOverlay = overlay
+    abstract class Graphic(overlay: GraphicOverlay?) {
+        private val overlay: GraphicOverlay = overlay!!
 
         /**
          * Draw the graphic on the supplied canvas. Drawing should use the following methods to convert

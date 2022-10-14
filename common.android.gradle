@@ -110,6 +110,7 @@ dependencies {
     //ExoPlayer
     implementation libraries.exoplayer
     implementation libraries.exoplayerUi
+
 }
 
 codeQuality {

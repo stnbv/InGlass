@@ -1,18 +1,25 @@
 package com.inglass.android.presentation.main.desktop
 
+import android.Manifest
 import android.Manifest.permission
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import app.inglass.tasker.data.db.AppDatabase
 import com.inglass.android.AppActivity
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentDesktopBinding
+import com.inglass.android.presentation.CameraXLivePreviewActivity
 import com.inglass.android.utils.base.BaseFragment
-import com.inglass.android.utils.navigation.SCREENS.SCANNER
 import com.inglass.android.utils.ui.doOnClick
 import com.markodevcic.peko.Peko
 import com.markodevcic.peko.PermissionResult
@@ -34,6 +41,10 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
+
+        if (!allRuntimePermissionsGranted()) {
+            getRuntimePermissions()
+        }
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.setDataToItems(AppDatabase.getInstance(requireContext()))
@@ -48,7 +59,12 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
 
         binding.buttonScan.doOnClick {
-            viewModel.navigateToScreen(SCANNER)
+            activity?.let {
+                val intent = Intent(it, CameraXLivePreviewActivity::class.java)
+                it.startActivity(intent)
+            }
+
+//            viewModel.navigateToScreen(SCANNER)
         }
 
         viewModel.userInfo.observe(viewLifecycleOwner) {
@@ -56,6 +72,7 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
 
         populateOperations()
+        currentOperation = OPERATIONS[0]
     }
 
     private fun populateOperations() {
@@ -91,22 +108,65 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
     }
 
-    override fun onStart() {
-        super.onStart()
 
-        checkPermissionToGeolocation()
-    }
-
-    private fun checkPermissionToGeolocation() {
-        lifecycleScope.launch {
-            val result =
-                Peko.requestPermissionsAsync(
-                    requireContext(),
-                    permission.CAMERA
-                )
-            if (result is PermissionResult.Denied) {
-                viewModel.openGeolocationDialog()
+    private fun allRuntimePermissionsGranted(): Boolean {
+        for (permission in REQUIRED_RUNTIME_PERMISSIONS) {
+            permission.let {
+                if (!isPermissionGranted(requireContext(), it)) {
+                    return false
+                }
             }
         }
+        return true
     }
+
+    private fun getRuntimePermissions() {
+        val permissionsToRequest = ArrayList<String>()
+        for (permission in REQUIRED_RUNTIME_PERMISSIONS) {
+            permission.let {
+                if (!isPermissionGranted(requireContext(), it)) {
+                    permissionsToRequest.add(permission)
+                }
+            }
+        }
+
+        if (permissionsToRequest.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionsToRequest.toTypedArray(),
+                PERMISSION_REQUESTS
+            )
+        }
+    }
+
+    private fun isPermissionGranted(context: Context, permission: String): Boolean {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                permission
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.i("TAG", "Permission granted: $permission")
+            return true
+        }
+        Log.i("TAG", "Permission NOT granted: $permission")
+        return false
+    }
+
+//    override fun onStart() {
+//        super.onStart()
+//        checkPermissionToGeolocation()
+//    }
+
+//    private fun checkPermissionToGeolocation() {
+//        lifecycleScope.launch {
+//            val result =
+//                Peko.requestPermissionsAsync(
+//                    requireContext(),
+//                    permission.CAMERA
+//                )
+//            if (result is PermissionResult.Denied) {
+//                viewModel.openGeolocationDialog()
+//            }
+//        }
+//    }
 }
