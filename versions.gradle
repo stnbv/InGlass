@@ -35,9 +35,8 @@ ext.versions = [
         circle_image_view   : '3.1.0',
         dotsindicator       : '4.2',
         permissions_kotlin  : '2.1.4',
-        browser             :'1.3.0',
-        exoplayer           : '2.16.1',
-        leak_canary         : '2.8.1',
+        browser             : '1.3.0',
+        exoplayer           : '2.16.1'
 ]
 
 ext.gradlePlugins = [
@@ -130,9 +129,6 @@ ext.libraries = [
         //ExoPlayer
         exoplayer                : "com.google.android.exoplayer:exoplayer:$versions.exoplayer",
         exoplayerUi              : "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer",
-
-        //Debug
-        leakCanary               : "com.squareup.leakcanary:leakcanary-android:$versions.leak_canary",
 
         // CameraX
         camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",

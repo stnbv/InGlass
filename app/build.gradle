@@ -16,7 +16,7 @@ android {
         versionCode 5
         versionName "1.0.0"
         setProperty("archivesBaseName", "RealCosmetology" + "-v" + versionName + "(" + versionCode + ")")
-        buildConfigField 'String', 'BASE_URL', "\"http://192.168.24.109:8080\""
+        buildConfigField 'String', 'BASE_URL', "\"http://192.168.0.106:8080\""
         buildConfigField 'String', 'API_ENDPOINT', "\"/api/v1/\""
     }
 }

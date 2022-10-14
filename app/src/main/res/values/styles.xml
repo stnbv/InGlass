@@ -28,15 +28,10 @@
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:letterSpacing">0.03</item>
-        <item name="fontFamily">@font/times_new_roman</item>
     </style>
 
     <style name="Button.Rounded" parent="Button">
         <item name="cornerRadius">45dp</item>
-    </style>
-
-    <style name="Button.Rounded.Pink" parent="Button.Rounded">
-        <item name="backgroundTint">@color/pink</item>
     </style>
 
     <style name="RoundButton">
@@ -44,8 +39,6 @@
         <item name="textAllCaps">false</item>
         <item name="android:textSize">19dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="fontFamily">@font/times_new_roman</item>
-        <item name="android:focusable">false</item>
         <item name="android:lineSpacingExtra">0sp</item>
         <item name="android:letterSpacing">0.05</item>
     </style>
@@ -167,7 +160,6 @@
     <!--Times new roman bold -->
     <style name="timesNewRomanBold">
         <item name="android:textStyle">bold</item>
-        <item name="fontFamily">@font/times_new_roman</item>
         <item name="android:letterSpacing">0.02</item>
     </style>
 

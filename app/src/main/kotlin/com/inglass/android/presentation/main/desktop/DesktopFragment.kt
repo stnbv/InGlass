@@ -31,12 +31,10 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
     private lateinit var selectedMode: String
     var currentOperation: String = "Резка"
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
-
-
+        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.setDataToItems(AppDatabase.getInstance(requireContext()))
 
@@ -53,18 +51,21 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
             viewModel.navigateToScreen(SCANNER)
         }
 
-        viewModel.userInfo.observe (viewLifecycleOwner) {
+        viewModel.userInfo.observe(viewLifecycleOwner) {
             (activity as AppActivity).setMenuPersonalInformation(it)
         }
 
         populateOperations()
-        currentOperation = OPERATIONS[0]
     }
 
-    fun populateOperations() {
+    private fun populateOperations() {
         val featureSpinner = binding.sexSpinner
 
-        val dataAdapter = ArrayAdapter(requireContext(), R.layout.spinner_style, OPERATIONS)
+        val dataAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_style,
+            viewModel.operations.value ?: mutableListOf("Выберите операцию")
+        )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         featureSpinner.adapter = dataAdapter
         featureSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -74,15 +75,20 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                 pos: Int,
                 id: Long
             ) {
-                if (pos >= 0) {
+                if (pos == 0) {
+                    viewModel.isScanButtonEnable.postValue(false)
+                }
+                if (pos > 0) {
+                    viewModel.isScanButtonEnable.postValue(true)
                     selectedMode = parentView.getItemAtPosition(pos).toString()
                     currentOperation = selectedMode
                 }
             }
 
-            override fun onNothingSelected(arg0: AdapterView<*>?) {}
+            override fun onNothingSelected(arg0: AdapterView<*>?) {
+                viewModel.isScanButtonEnable.postValue(false)
+            }
         }
-
     }
 
     override fun onStart() {
