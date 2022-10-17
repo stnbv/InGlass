@@ -1,18 +1,14 @@
 package com.inglass.android.presentation.auth_screens.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.viewModels
-import com.inglass.android.AppActivity
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentLoginBinding
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
-import com.inglass.android.presentation.CameraXLivePreviewActivity
 import com.inglass.android.utils.base.BaseFragment
-import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

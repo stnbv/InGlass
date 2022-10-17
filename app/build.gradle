@@ -6,7 +6,6 @@ plugins {
     id 'androidx.navigation.safeargs.kotlin'
 
     id  'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
 }
 apply from: "${rootProject.projectDir}/common.android.gradle"
 
@@ -74,13 +73,6 @@ dependencies {
     //ExoPlayer
     implementation libraries.exoplayer
     implementation libraries.exoplayerUi
-
-    //Пока оставляем не через versions, не хочет через них / Alex(27.12.21)
-    // Firebase
-    implementation platform('com.google.firebase:firebase-bom:29.0.3')
-    implementation 'com.google.firebase:firebase-messaging-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
 
     // Facebook Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.1.0'

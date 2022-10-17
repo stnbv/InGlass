@@ -10,108 +10,122 @@
             type="com.inglass.android.presentation.main.desktop.DesktopVM" />
     </data>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/light_gray">
 
-
-
-        <TextView
-            android:id="@+id/receiveNewsAndOffersTextView"
+        <ScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/desktop_scan_scan_only_one_item"
-            android:textColor="@color/main_black"
-            android:textSize="18dp"
-            app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/receiveNewsAndOffersSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:paddingHorizontal="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/receiveNewsAndOffersTextView"
-            app:useMaterialThemeColors="false" />
-
-        <Spinner
-            android:id="@+id/sexSpinner"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_transpanent_text_view"
-            android:includeFontPadding="true"
-            android:spinnerMode="dropdown"
-            android:textSize="15dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/helpersTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sexSpinner"
-            tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/expandableButtonsRecyclerView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="20dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/helpersTextView"
-            app:setOnlyAdapter="@{vm.adapter}" />
+                <TextView
+                    android:id="@+id/receiveNewsAndOffersTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/desktop_scan_scan_only_one_item"
+                    android:textColor="@color/main_black"
+                    android:textSize="18dp"
+                    app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonScan"
-            style="@style/RoundButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginTop="20dp"
-            android:enabled="@{vm.isScanButtonEnable}"
-            android:text="@string/desktop_scan_barcode"
-            app:backgroundTint="@drawable/bg_tint_pressed_main_black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/expandableButtonsRecyclerView" />
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/receiveNewsAndOffersSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:paddingHorizontal="16dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/receiveNewsAndOffersTextView"
+                    app:useMaterialThemeColors="false" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonDelete"
-            style="@style/RoundButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/desktop_clear_cache"
-            app:backgroundTint="@drawable/bg_tint_pressed_main_black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/buttonScan" />
+                <Spinner
+                    android:id="@+id/sexSpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_transpanent_text_view"
+                    android:includeFontPadding="true"
+                    android:spinnerMode="dropdown"
+                    android:textSize="15dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
 
+                <TextView
+                    android:id="@+id/helpersTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sexSpinner"
+                    tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/expandableButtonsRecyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/buttonScan"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/helpersTextView"
+                    app:setOnlyAdapter="@{vm.adapter}"
+                    tools:listitem="@layout/item_scanned" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonScan"
+                    style="@style/RoundButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:enabled="@{vm.isScanButtonEnable}"
+                    android:onClick="@{()->vm.openCameraScreen()}"
+                    android:text="@string/desktop_scan_barcode"
+                    app:backgroundTint="@drawable/bg_tint_pressed_main_black"
+                    app:layout_constraintBottom_toTopOf="@id/buttonDelete"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonDelete"
+                    style="@style/RoundButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="16dp"
+                    android:onClick="@{()->vm.clearDatabase()}"
+                    android:text="@string/desktop_clear_cache"
+                    app:backgroundTint="@drawable/bg_tint_pressed_main_black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 </layout>
 

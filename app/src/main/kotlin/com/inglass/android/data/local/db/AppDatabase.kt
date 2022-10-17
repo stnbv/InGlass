@@ -1,8 +1,7 @@
-package app.inglass.tasker.data.db
+package com.inglass.android.data.local.db
 
 import android.content.Context
 import androidx.room.*
-import com.inglass.android.data.local.db.DbConverters
 import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.local.db.entities.ScanResult
 
@@ -11,8 +10,9 @@ import com.inglass.android.data.local.db.entities.ScanResult
         ScanResult::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
+
 @TypeConverters(DbConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun scanResultsDao(): ScanResultsDao
@@ -20,17 +20,16 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase? {
+        fun getInstance(context: Context): AppDatabase {
             if (INSTANCE == null) {
                 synchronized(this) {
-                    INSTANCE =
-                        Room.databaseBuilder(
-                            context.applicationContext,
-                            AppDatabase::class.java,
-                            "inglass_common_db"
-                        )
-                            .allowMainThreadQueries()
-                            .build()
+                    INSTANCE = Room.databaseBuilder(
+                        context.applicationContext,
+                        AppDatabase::class.java,
+                        "inGlass_common_db"
+                    )
+                        .allowMainThreadQueries()
+                        .build()
                 }
             }
             return INSTANCE!!
@@ -39,16 +38,5 @@ abstract class AppDatabase : RoomDatabase() {
         fun destroyInstance() {
             INSTANCE = null
         }
-//        private val MIGRATION_4_8: Migration = object : Migration(4, 8) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("CREATE TABLE IF NOT EXISTS `accumulativediscountonstart` (`spec_id` INTEGER NOT NULL, `current_discount` INTEGER, `next_month_discount` INTEGER, `next_month_discount_sum` REAL, PRIMARY KEY(`spec_id`))")
-//            }
-//        }
-//
-//        private val MIGRATION_7_8: Migration = object : Migration(7, 8) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("CREATE TABLE IF NOT EXISTS `accumulativediscountonstart` (`spec_id` INTEGER NOT NULL, `current_discount` INTEGER, `next_month_discount` INTEGER, `next_month_discount_sum` REAL, PRIMARY KEY(`spec_id`))")
-//            }
-//        }
     }
 }

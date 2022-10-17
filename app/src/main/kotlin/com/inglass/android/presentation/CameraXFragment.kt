@@ -1,27 +1,27 @@
 package com.inglass.android.presentation
 
-import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
+import androidx.fragment.app.viewModels
 import com.inglass.android.R
+import com.inglass.android.databinding.FragmentCameraXBinding
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
 import com.inglass.android.utils.barcodescanner.VisionImageProcessor
 import com.inglass.android.utils.barcodescanner.barcodescanner.BarcodeScannerProcessor
-import com.inglass.android.presentation.main.scan2.GraphicOverlay
+import com.inglass.android.utils.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-@RequiresApi(VERSION_CODES.LOLLIPOP)
-class CameraXLivePreviewActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class CameraXFragment :
+    BaseFragment<FragmentCameraXBinding, CameraXViewModel>(R.layout.fragment_camerax) {
+
+    override val viewModel: CameraXViewModel by viewModels()
 
     private var cameraProvider: ProcessCameraProvider? = null
     private var previewUseCase: Preview? = null
@@ -30,40 +30,34 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
     private var needUpdateGraphicOverlayImageSourceInfo = false
     private var lensFacing = CameraSelector.LENS_FACING_BACK
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.vm = viewModel
 
-        setContentView(R.layout.activity_vision_camerax_live_preview)
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
+        cameraProviderFuture.addListener(
+            {
+                cameraProvider = cameraProviderFuture.get()
+                bindAllCameraUseCases()
 
-        ViewModelProvider(
-            this,
-            AndroidViewModelFactory.getInstance(application)
-        )[CameraXViewModel::class.java]
-            .processCameraProvider
-            .observe(
-                this,
-                Observer { provider: ProcessCameraProvider? ->
-                    cameraProvider = provider
-                    bindAllCameraUseCases()
-                }
-            )
+            }, ContextCompat.getMainExecutor(requireContext())
+        )
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         bindAllCameraUseCases()
     }
 
     override fun onPause() {
         super.onPause()
-
-        imageProcessor?.run { this.stop() }
+        imageProcessor?.stop()
     }
 
-    public override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
-        imageProcessor?.run { this.stop() }
+        imageProcessor?.stop()
     }
 
     private fun bindAllCameraUseCases() {
@@ -75,7 +69,7 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
     }
 
     private fun bindPreviewUseCase() {
-        if (!PreferenceUtils.isCameraLiveViewportEnabled(this)) {
+        if (!PreferenceUtils.isCameraLiveViewportEnabled(requireContext())) {
             return
         }
         if (cameraProvider == null) {
@@ -86,13 +80,13 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
         }
 
         val builder = Preview.Builder()
-        val targetResolution = PreferenceUtils.getCameraXTargetResolution(this, lensFacing)
+        val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
         if (targetResolution != null) {
             builder.setTargetResolution(targetResolution)
         }
         previewUseCase = builder.build()
-        previewUseCase!!.setSurfaceProvider(findViewById<PreviewView>(R.id.preview_view).surfaceProvider)
-        cameraProvider!!.bindToLifecycle(/* lifecycleOwner= */ this, CameraSelector.DEFAULT_BACK_CAMERA, previewUseCase)
+        previewUseCase!!.setSurfaceProvider(binding.previewView.surfaceProvider)
+        cameraProvider!!.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, previewUseCase)
     }
 
     private fun bindAnalysisUseCase() {
@@ -105,10 +99,10 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
         if (imageProcessor != null) {
             imageProcessor!!.stop()
         }
-        imageProcessor = BarcodeScannerProcessor(this)
+        imageProcessor = BarcodeScannerProcessor(requireContext(), viewModel.scanResSet) { viewModel.checkBarcode(it) }
 
         val builder = ImageAnalysis.Builder()
-        val targetResolution = PreferenceUtils.getCameraXTargetResolution(this, lensFacing)
+        val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
         if (targetResolution != null) {
             builder.setTargetResolution(targetResolution)
         }
@@ -117,19 +111,19 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
         needUpdateGraphicOverlayImageSourceInfo = true
 
         analysisUseCase?.setAnalyzer(
-            ContextCompat.getMainExecutor(this)
+            ContextCompat.getMainExecutor(requireContext())
         ) { imageProxy: ImageProxy ->
             if (needUpdateGraphicOverlayImageSourceInfo) {
                 val isImageFlipped = lensFacing == CameraSelector.LENS_FACING_FRONT
                 val rotationDegrees = imageProxy.imageInfo.rotationDegrees
                 if (rotationDegrees == 0 || rotationDegrees == 180) {
-                    findViewById<GraphicOverlay>(R.id.graphic_overlay).setImageSourceInfo(
+                    binding.graphicOverlay.setImageSourceInfo(
                         imageProxy.width,
                         imageProxy.height,
                         isImageFlipped
                     )
                 } else {
-                    findViewById<GraphicOverlay>(R.id.graphic_overlay).setImageSourceInfo(
+                    binding.graphicOverlay.setImageSourceInfo(
                         imageProxy.height,
                         imageProxy.width,
                         isImageFlipped
@@ -137,9 +131,8 @@ class CameraXLivePreviewActivity : AppCompatActivity() {
                 }
                 needUpdateGraphicOverlayImageSourceInfo = false
             }
-            imageProcessor!!.processImageProxy(imageProxy, findViewById(R.id.graphic_overlay))
+            imageProcessor!!.processImageProxy(imageProxy, binding.graphicOverlay)
         }
         cameraProvider!!.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, analysisUseCase)
     }
 }
-

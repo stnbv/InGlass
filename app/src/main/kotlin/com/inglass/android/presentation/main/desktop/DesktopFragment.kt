@@ -1,9 +1,7 @@
 package com.inglass.android.presentation.main.desktop
 
 import android.Manifest
-import android.Manifest.permission
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -13,22 +11,22 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import app.inglass.tasker.data.db.AppDatabase
+import com.inglass.android.App
 import com.inglass.android.AppActivity
 import com.inglass.android.R
+import com.inglass.android.data.local.db.AppDatabase
 import com.inglass.android.databinding.FragmentDesktopBinding
-import com.inglass.android.presentation.CameraXLivePreviewActivity
 import com.inglass.android.utils.base.BaseFragment
-import com.inglass.android.utils.ui.doOnClick
-import com.markodevcic.peko.Peko
-import com.markodevcic.peko.PermissionResult
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
+private val REQUIRED_RUNTIME_PERMISSIONS =
+    arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
-private val OPERATIONS =
-    mutableListOf("Резка", "Полировка", "Полировка (фигурная)", "Фацет", "Фацет (фигурный)", "Вырез")
+private const val PERMISSION_REQUESTS = 1
 
 @AndroidEntryPoint
 class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout.fragment_desktop) {
@@ -45,34 +43,14 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         if (!allRuntimePermissionsGranted()) {
             getRuntimePermissions()
         }
-        binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.setDataToItems(AppDatabase.getInstance(requireContext()))
-
-        var scanResSet: MutableSet<String> = mutableSetOf<String>()
-
-        binding.buttonDelete.setOnClickListener {
-//            db?.scanResultsDao()?.deleteAllItems()
-            scanResSet.clear()
-//            adapter.refreshView(db?.scanResultsDao()?.getLast2001()!!)
-//            adapter.notifyDataSetChanged()
-        }
-
-        binding.buttonScan.doOnClick {
-            activity?.let {
-                val intent = Intent(it, CameraXLivePreviewActivity::class.java)
-                it.startActivity(intent)
-            }
-
-//            viewModel.navigateToScreen(SCANNER)
-        }
 
         viewModel.userInfo.observe(viewLifecycleOwner) {
             (activity as AppActivity).setMenuPersonalInformation(it)
         }
 
         populateOperations()
-        currentOperation = OPERATIONS[0]
     }
 
     private fun populateOperations() {
@@ -94,11 +72,13 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
             ) {
                 if (pos == 0) {
                     viewModel.isScanButtonEnable.postValue(false)
+                    viewModel.selectedOperations.postValue(pos)
                 }
                 if (pos > 0) {
                     viewModel.isScanButtonEnable.postValue(true)
                     selectedMode = parentView.getItemAtPosition(pos).toString()
                     currentOperation = selectedMode
+                    viewModel.selectedOperations.postValue(pos)
                 }
             }
 

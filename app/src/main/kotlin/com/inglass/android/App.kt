@@ -18,7 +18,6 @@ class App : Application() {
 
     companion object {
         private lateinit var instance: App
-        var scanResSet: MutableSet<String> = mutableSetOf<String>()
         var currentOperation: String = "Резка"
         var scanData = MutableLiveData<ScanResult>()
 

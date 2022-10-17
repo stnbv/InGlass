@@ -13,9 +13,6 @@ import androidx.core.view.GravityCompat.START
 import androidx.core.view.isVisible
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import com.inglass.android.databinding.ActivityMainBinding
 import com.inglass.android.databinding.MenuHeaderBinding
 import com.inglass.android.domain.models.PersonalInformationModel
@@ -35,7 +32,6 @@ class AppActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var menuHeader: MenuHeaderBinding
 
 //    fun createToolbarConfig() = ToolbarConfig(
@@ -50,7 +46,6 @@ class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        firebaseAnalytics = Firebase.analytics
         setContentView(binding.root)
         binding.vm = viewModel
         binding.menu.doOnClick { binding.drawerLayout.openDrawer(START) }

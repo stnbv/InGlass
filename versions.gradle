@@ -5,7 +5,7 @@ ext.versions = [
         core_ktx            : '1.7.0',
         core_runtime        : '2.1.0',
         coroutines          : '1.5.2',
-        nav_arch            : '2.3.5',
+        nav_arch            : '2.4.2',
         material_design     : '1.4.0',
         activity            : '1.4.0',
         fragment_version    : '1.4.0-rc01',

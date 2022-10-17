@@ -59,10 +59,6 @@ import java.util.*
  */
 abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 
-//    companion object {
-//        private const val TAG = "VisionProcessorBase"
-//    }
-
     private var activityManager: ActivityManager =
         context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     private val fpsTimer = Timer()
@@ -207,7 +203,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
             .addOnSuccessListener(executor) { processLatestImage(graphicOverlay) }
     }
 
-    @RequiresApi(VERSION_CODES.LOLLIPOP)
     @ExperimentalGetImage
     override fun processImageProxy(image: ImageProxy?, graphicOverlay: GraphicOverlay?) {
         val frameStartMs = SystemClock.elapsedRealtime()
@@ -244,15 +239,10 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
                 originalCameraImage =  bitmap,
                 shouldShowFps =  true,
                 frameStartMs = frameStartMs
-            )
-                // When the image is from CameraX analysis use case, must call image.close() on received
-                // images when finished using them. Otherwise, new images may not be received or the camera
-                // may stall.
-                .addOnCompleteListener { image.close() }
+            ).addOnCompleteListener { image.close() }
         }
     }
 
-    // -----------------Common processing logic-------------------------------------------------------
     private fun requestDetectInImage(
         image: InputImage,
         graphicOverlay: GraphicOverlay,
@@ -339,17 +329,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
                 OnFailureListener { e: Exception ->
                     graphicOverlay.clear()
                     graphicOverlay.postInvalidate()
-//                    val error = "Failed to process. Error: " + e.localizedMessage
-//                    Toast.makeText(
-//                        graphicOverlay.context,
-//                        """
-//          $error
-//          Cause: ${e.cause}
-//          """.trimIndent(),
-//                        Toast.LENGTH_SHORT
-//                    )
-//                        .show()
-//                    Log.d(TAG, error)
                     e.printStackTrace()
                     this@VisionProcessorBase.onFailure(e)
                 }

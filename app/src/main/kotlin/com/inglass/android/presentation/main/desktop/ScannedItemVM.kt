@@ -10,12 +10,12 @@ class ScannedItemVM(
     val data: ScannedItemData
 ) : CommonItemVM<ItemScannedBinding>(R.layout.item_scanned) {
     var dateTime = DateFormatHelper.FullDateTimeStamp.format(data.dateTime)
-    var operation = data.operation
+    var operation = data.operation.toString()
     var barcode = data.barcode + " в количестве 1 шт."
 }
 
 data class ScannedItemData(
     val dateTime: Date,
-    val operation: String,
+    val operation: Int,
     val barcode: String?
 )

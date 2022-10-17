@@ -16,5 +16,7 @@ enum class SCREENS(
     //Desktop
     DESKTOP(R.id.navigation_desktop, true),
 
-    SCANNER(R.id.navigation_scanner, true)
+    //Camera
+    CAMERA(R.id.navigation_camera, false)
+
 }

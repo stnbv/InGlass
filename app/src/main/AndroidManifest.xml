@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name="com.inglass.android.presentation.CameraXLivePreviewActivity"
+            android:name="com.inglass.android.presentation.CameraXFragment"
             android:theme="@style/AppTheme"
             android:exported="false"
             android:screenOrientation="portrait">
