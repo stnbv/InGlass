@@ -7,5 +7,6 @@ interface IPreferencesRepository {
     var token: String?
     var user: PersonalInformationModel?
     var isOnboardNotPassed: Boolean
+    var lastReceivedData: Long
     suspend fun clear()
 }
