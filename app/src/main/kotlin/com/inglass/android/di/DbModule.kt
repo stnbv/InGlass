@@ -21,4 +21,17 @@ object DbModule {
     @Singleton
     fun provideScanResultDao(appDatabase: AppDatabase) = appDatabase.scanResultsDao()
 
+    @Provides
+    @Singleton
+    fun provideOperationsDao(appDatabase: AppDatabase) = appDatabase.operationsDao()
+
+    @Provides
+    @Singleton
+    fun provideEmployeeDao(appDatabase: AppDatabase) = appDatabase.employeeDao()
+
+
+    @Provides
+    @Singleton
+    fun provideUserHelpersDao(appDatabase: AppDatabase) = appDatabase.userHelpersDao()
+
 }

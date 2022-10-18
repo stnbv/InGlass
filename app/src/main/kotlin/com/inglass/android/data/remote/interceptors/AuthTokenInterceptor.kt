@@ -8,7 +8,7 @@ import okhttp3.Response
 class AuthTokenInterceptor(private val preferences: IPreferencesRepository) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        //TODO Обработка скисшего токена (Бэкенд пока сделал на нескисаемом токене)(Alex 21/11/21)
+        //TODO Обработка скисшего токена
         val token = preferences.token
         val originalRequest = chain.request()
 

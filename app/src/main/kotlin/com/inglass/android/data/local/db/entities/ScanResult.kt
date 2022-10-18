@@ -1,7 +1,9 @@
 package com.inglass.android.data.local.db.entities
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import java.util.*
 
 @Entity(tableName = "scan_results")
@@ -13,8 +15,11 @@ data class ScanResult(
     var hasUploaded: Boolean = false
 )
 
-@Entity(tableName = "user_helpers")
-data class UserHelpers(
-    val helperId: Int,
-    val participationRate: Float
+data class ScanResultWithOperation(
+    @Embedded val scanResult: ScanResult,
+    @Relation(
+        parentColumn = "operationId",
+        entityColumn = "operationId"
+    )
+    val operation: Operation?
 )

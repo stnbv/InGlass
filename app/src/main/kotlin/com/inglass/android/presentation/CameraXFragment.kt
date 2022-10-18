@@ -99,6 +99,7 @@ class CameraXFragment :
         if (imageProcessor != null) {
             imageProcessor!!.stop()
         }
+
         imageProcessor = BarcodeScannerProcessor(requireContext(), viewModel.scanResSet) { viewModel.checkBarcode(it) }
 
         val builder = ImageAnalysis.Builder()

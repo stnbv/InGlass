@@ -13,6 +13,7 @@ import androidx.core.view.GravityCompat.START
 import androidx.core.view.isVisible
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
+import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.databinding.ActivityMainBinding
 import com.inglass.android.databinding.MenuHeaderBinding
 import com.inglass.android.domain.models.PersonalInformationModel
@@ -24,6 +25,8 @@ import com.inglass.android.utils.navigation.setCurrentScreenWithNavController
 import com.inglass.android.utils.ui.doOnClick
 import com.inglass.android.utils.ui.showSimpleDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.*
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity() {

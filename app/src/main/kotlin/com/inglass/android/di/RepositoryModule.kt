@@ -10,11 +10,13 @@ import com.inglass.android.domain.repository.MakeOperationRepository
 import com.inglass.android.domain.repository.PersonalInformationRepository
 import com.inglass.android.domain.repository.PreferencesRepository
 import com.inglass.android.domain.repository.ReferenceBookRepository
+import com.inglass.android.domain.repository.ScanResultsRepository
 import com.inglass.android.domain.repository.interfaces.IAuthRepository
 import com.inglass.android.domain.repository.interfaces.IMakeOperationRepository
 import com.inglass.android.domain.repository.interfaces.IPersonalInformationRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IReferenceBookRepository
+import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,5 +49,10 @@ object RepositoryModule {
     @Provides
     fun provideMakeOperationRepository(service: IMakeOperationService): IMakeOperationRepository =
         MakeOperationRepository(service)
+
+    @Provides
+    @Singleton
+    fun provideScanResultsRepository(): IScanResultsRepository =
+        ScanResultsRepository()
 
 }

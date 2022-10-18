@@ -4,5 +4,7 @@ import com.inglass.android.data.remote.responses.reference_book.ReferenceBookRes
 import com.inglass.android.utils.api.core.Answer
 
 interface IReferenceBookService {
+
     suspend fun getReferenceBook(): Answer<ReferenceBookResponse>
+
 }

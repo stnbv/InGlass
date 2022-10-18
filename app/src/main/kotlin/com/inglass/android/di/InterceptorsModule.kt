@@ -23,4 +23,5 @@ object InterceptorsModule {
     fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
 }

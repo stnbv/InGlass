@@ -2,8 +2,11 @@ package com.inglass.android.presentation.main.desktop
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.inglass.android.data.local.db.AppDatabase
+import com.inglass.android.data.local.db.dao.EmployeeDao
+import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
+import com.inglass.android.data.local.db.entities.Employee
+import com.inglass.android.data.local.db.entities.Operation
 import com.inglass.android.domain.models.EmployeeAndOperationModel
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
@@ -23,7 +26,10 @@ class DesktopVM @Inject constructor(
     private val getPersonalInformationUseCase: GetPersonalInformationUseCase,
     private val getReferenceBookUseCase: GetReferenceBookUseCase,
     private val preferencesRepository: IPreferencesRepository,
-    private val scanResultDao: ScanResultsDao
+    private val scanResultDao: ScanResultsDao,
+    private val operationsDao: OperationsDao,
+    private val employeeDao: EmployeeDao,
+    private val referenceBookUseCase: GetReferenceBookUseCase,
 ) : BaseViewModel() {
 
     val userInfo = MutableLiveData<PersonalInformationModel>()
@@ -37,19 +43,18 @@ class DesktopVM @Inject constructor(
         getUserInformation()
     }
 
-    fun setDataToItems(db: AppDatabase) {
+    fun setDataToItems() {
         viewModelScope.launch(Dispatchers.IO) {
-            val recs = db.scanResultsDao().getScannedItems()
-
-            setData(recs.map {
+            val scannedItems = scanResultDao.getScanResultWithOperation().map { scanResult ->
                 ScannedItemVM(
                     ScannedItemData(
-                        dateTime = it.dateAndTime,
-                        operation = it.operationId,
-                        barcode = it.barcode
+                        dateTime = scanResult.scanResult.dateAndTime,
+                        operation = scanResult.operation?.name ?: "",
+                        barcode = scanResult.scanResult.barcode
                     )
                 )
-            })
+            }
+            setData(scannedItems)
         }
     }
 
@@ -76,6 +81,24 @@ class DesktopVM @Inject constructor(
         }
     }
 
+    fun getReferenceBook() {
+        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 300000) return
+        else {
+            viewModelScope.launch {
+                referenceBookUseCase().onSuccess { referenceBook ->
+                    operationsDao.insertOperations(referenceBook.operations.map { operation ->
+                        Operation(operation.id, operation.name)
+                    })
+
+                    employeeDao.insertEmployee(referenceBook.employees.map { employee ->
+                        Employee(employee.id, employee.name)
+                    })
+                }
+            }
+            preferencesRepository.lastReceivedData = System.currentTimeMillis()
+        }
+    }
+
     fun openCameraScreen() {
         navigateToScreen(CAMERA.apply {
             navDirections = DesktopFragmentDirections.toCamerax(
@@ -88,6 +111,7 @@ class DesktopVM @Inject constructor(
     fun clearDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultDao.deleteAllItems()
+            setData(emptyList())
         }
     }
 }

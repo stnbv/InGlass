@@ -1,6 +1,7 @@
 package com.inglass.android.presentation.main.desktop
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,10 +12,8 @@ import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.inglass.android.App
 import com.inglass.android.AppActivity
 import com.inglass.android.R
-import com.inglass.android.data.local.db.AppDatabase
 import com.inglass.android.databinding.FragmentDesktopBinding
 import com.inglass.android.utils.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,13 +43,17 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
             getRuntimePermissions()
         }
 
-        viewModel.setDataToItems(AppDatabase.getInstance(requireContext()))
+        viewModel.setDataToItems()
 
         viewModel.userInfo.observe(viewLifecycleOwner) {
             (activity as AppActivity).setMenuPersonalInformation(it)
         }
-
         populateOperations()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getReferenceBook()
     }
 
     private fun populateOperations() {

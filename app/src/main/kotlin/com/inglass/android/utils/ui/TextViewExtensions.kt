@@ -8,12 +8,6 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.widget.doOnTextChanged
-import com.inglass.android.R
-import com.inglass.android.domain.models.Country
-import com.inglass.android.domain.repository.PreferencesRepository
-import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
-import ru.tinkoff.decoro.watchers.MaskFormatWatcher
 
 fun TextView.setDrawableStart(@DrawableRes drawableId: Int) {
     this.setCompoundDrawablesWithIntrinsicBounds(drawableId, 0, 0, 0)
@@ -48,22 +42,4 @@ fun TextView.setTextWithLinksAndArg(
 
     val spannableWithArgs = SpannableString(textWithArgs)
     text = context.setSpans(styledSpannable, spannableWithArgs, listener)
-}
-
-fun TextView.getOrCreatePhoneMaskWatcher(country: Country?): MaskFormatWatcher {
-    val currentWatcher = getTag(R.id.phone_mask_watcher) as? MaskFormatWatcher
-    if (currentWatcher != null) return currentWatcher
-    val prefs = PreferencesRepository(this.context)
-    val currentCountry = country ?:  Country.RUSSIA
-
-    val watcher = MaskFormatWatcher(
-        MaskImpl.createTerminated(UnderscoreDigitSlotsParser().parseSlots(currentCountry.countryCode + " " + currentCountry.rawMask))
-    ).apply {
-        maskOriginal.isShowingEmptySlots = false
-        maskOriginal.isForbidInputWhenFilled = true
-        maskOriginal.isHideHardcodedHead = true
-    }
-    watcher.installOn(this)
-    setTag(R.id.phone_mask_watcher, watcher)
-    return watcher
 }

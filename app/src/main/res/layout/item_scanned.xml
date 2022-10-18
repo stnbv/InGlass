@@ -14,10 +14,10 @@
         android:id="@+id/itemCareCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@drawable/bg_button_rounded"
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="8dp"
-        android:layout_marginTop="8dp"
         tools:ignore="SpUsage">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,10 +49,19 @@
                 android:text="@={vm.operation}"
                 android:textColor="@color/main_black"
                 android:textSize="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/statusImageView"
                 app:layout_constraintStart_toEndOf="@+id/dateTimeTextView"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Резка" />
+
+            <ImageView
+                android:id="@+id/statusImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cloud_upload"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/operationTextView"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/codeTextView"

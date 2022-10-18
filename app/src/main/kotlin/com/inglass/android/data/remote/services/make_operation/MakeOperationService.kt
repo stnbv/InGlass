@@ -5,6 +5,7 @@ import com.inglass.android.data.remote.requests.auth.Helper
 import com.inglass.android.data.remote.requests.auth.ItemOperationRequest
 import com.inglass.android.domain.models.ScannedItemModel
 import com.inglass.android.utils.api.BaseService
+import com.inglass.android.utils.helpers.DateFormatHelper
 
 class MakeOperationService(private val api: IMakeOperationApi) : IMakeOperationService, BaseService() {
 
@@ -13,7 +14,7 @@ class MakeOperationService(private val api: IMakeOperationApi) : IMakeOperationS
         val requestModel = ItemOperationRequest(
             employeeId = scannedItemModel.employeeId,
             operationId = scannedItemModel.operationId,
-            dateTime = scannedItemModel.dateTime,
+            dateTime = DateFormatHelper.CreateProcedureTimeStamp.format(scannedItemModel.dateTime),
             participationRate = scannedItemModel.participationRate,
             helpers = scannedItemModel.helpers.map {
                 Helper(id = it.id, participationRate = it.participationRate)
@@ -22,5 +23,4 @@ class MakeOperationService(private val api: IMakeOperationApi) : IMakeOperationS
         )
         api.makeOperation(itemId, requestModel)
     }
-
 }

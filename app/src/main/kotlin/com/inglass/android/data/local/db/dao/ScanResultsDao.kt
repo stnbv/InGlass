@@ -1,9 +1,11 @@
 package com.inglass.android.data.local.db.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
-import com.google.mlkit.vision.barcode.common.Barcode
+import androidx.room.Query
 import com.inglass.android.data.local.db.entities.ScanResult
+import com.inglass.android.data.local.db.entities.ScanResultWithOperation
 
 @Dao
 interface ScanResultsDao {
@@ -18,4 +20,7 @@ interface ScanResultsDao {
 
     @Query("select * from scan_results where barcode = :barcode")
     suspend fun getItemById(barcode: String): ScanResult?
+
+    @Query("SELECT * FROM scan_results")
+    fun getScanResultWithOperation(): List<ScanResultWithOperation>
 }

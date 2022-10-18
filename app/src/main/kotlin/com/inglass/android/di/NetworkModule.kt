@@ -80,5 +80,4 @@ object NetworkModule {
     @Provides
     fun provideMakeOperationService(api: IMakeOperationApi): IMakeOperationService = MakeOperationService(api)
 
-
 }

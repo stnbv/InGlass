@@ -21,7 +21,9 @@ import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class LoginVM @Inject constructor(private val logInUseCase: LogInUseCase) : BaseViewModel() {
+class LoginVM @Inject constructor(
+    private val logInUseCase: LogInUseCase
+) : BaseViewModel() {
 
     val showLoader = MutableLiveData(false)
     val phone = MutableLiveData("")

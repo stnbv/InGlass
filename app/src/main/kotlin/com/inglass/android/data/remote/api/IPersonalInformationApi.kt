@@ -8,4 +8,5 @@ interface IPersonalInformationApi {
 
     @GET("user")
     suspend fun getPersonalInformation(): Response<PersonalInformationResponse>
+
 }

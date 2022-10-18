@@ -3,9 +3,9 @@ package com.inglass.android.data.local.db.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "employees")
-data class Employee(
+@Entity(tableName = "user_helpers")
+data class UserHelpers(
     @PrimaryKey
-    val id: Int,
-    var name: String
+    val helperId: Int,
+    val participationRate: Float
 )
