@@ -107,6 +107,7 @@ ext.libraries = [
         roomCore                 : "androidx.room:room-runtime:$versions.room",
         roomCompiler             : "androidx.room:room-compiler:$versions.room",
         roomKtx                  : "androidx.room:room-ktx:$versions.room",
+        roomPaging               : "androidx.room:room-paging:2.4.0-alpha04",
 
         //Paging 3
         paging                   : "androidx.paging:paging-runtime-ktx:$versions.paging",

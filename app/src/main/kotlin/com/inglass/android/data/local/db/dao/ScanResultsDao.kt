@@ -1,9 +1,11 @@
 package com.inglass.android.data.local.db.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import com.inglass.android.data.local.db.entities.LoadingStatus
 import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.data.local.db.entities.ScanResultWithOperation
 
@@ -22,5 +24,8 @@ interface ScanResultsDao {
     suspend fun getItemById(barcode: String): ScanResult?
 
     @Query("SELECT * FROM scan_results")
-    fun getScanResultWithOperation(): List<ScanResultWithOperation>
+    fun getScanResultWithOperation(): PagingSource<Int, ScanResultWithOperation>
+
+    @Query("UPDATE scan_results SET loadingStatus = :loadingStatus WHERE barcode = :barcode")
+    fun updateScanResult(barcode: String, loadingStatus: LoadingStatus)
 }

@@ -3,6 +3,10 @@ package com.inglass.android
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.inglass.android.data.local.db.dao.ScanResultsDao
+import com.inglass.android.data.local.db.entities.LoadingStatus.InProgress
+import com.inglass.android.data.local.db.entities.LoadingStatus.Loaded
+import com.inglass.android.data.local.db.entities.LoadingStatus.NotLoaded
 import com.inglass.android.domain.models.ScannedItemModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
@@ -23,28 +27,30 @@ class AppActivityVM @Inject constructor(
     private val connectivityStatusProvider: ConnectivityStatusProvider,
     private val makeOperationUseCase: MakeOperationUseCase,
     private val prefs: IPreferencesRepository,
-    private val scanResultsRepository: IScanResultsRepository
+    private val scanResultsRepository: IScanResultsRepository,
+    private val scanResultDao: ScanResultsDao
 ) : BaseViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            scanResultsRepository.result.collect {
+            scanResultsRepository.result.collect { scanResult ->
+                scanResultDao.updateScanResult(scanResult.barcode, InProgress)
                 makeOperationUseCase.invoke(
                     Params(
-                        it.barcode,
+                        scanResult.barcode,
                         ScannedItemModel(
                             prefs.user?.id ?: return@collect,
-                            it.operationId,
-                            it.dateAndTime,
+                            scanResult.operationId,
+                            scanResult.dateAndTime,
                             1F,
                             emptyList(),
                             1
                         )
                     )
                 ).onSuccess {
-                    println("YRA")
+                    scanResultDao.updateScanResult(scanResult.barcode, Loaded)
                 }.onFailure {
-                    println("ASS")
+                    scanResultDao.updateScanResult(scanResult.barcode, NotLoaded)
                 }
             }
         }

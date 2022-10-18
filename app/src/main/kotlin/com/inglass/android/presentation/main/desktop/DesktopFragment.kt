@@ -32,9 +32,6 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
 
     override val viewModel: DesktopVM by viewModels()
 
-    private lateinit var selectedMode: String
-    var currentOperation: String = "Резка"
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
@@ -79,8 +76,6 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                 }
                 if (pos > 0) {
                     viewModel.isScanButtonEnable.postValue(true)
-                    selectedMode = parentView.getItemAtPosition(pos).toString()
-                    currentOperation = selectedMode
                     viewModel.selectedOperations.postValue(pos)
                 }
             }

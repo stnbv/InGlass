@@ -12,7 +12,7 @@ data class ScanResult(
     val barcode: String,
     val operationId: Int,
     val dateAndTime: Date,
-    var hasUploaded: Boolean = false
+    val loadingStatus: LoadingStatus
 )
 
 data class ScanResultWithOperation(
@@ -23,3 +23,10 @@ data class ScanResultWithOperation(
     )
     val operation: Operation?
 )
+
+enum class LoadingStatus {
+    NotLoaded,
+    Queue,
+    InProgress,
+    Loaded
+}

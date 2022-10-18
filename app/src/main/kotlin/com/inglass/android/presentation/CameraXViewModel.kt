@@ -3,6 +3,7 @@ package com.inglass.android.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.data.local.db.dao.ScanResultsDao
+import com.inglass.android.data.local.db.entities.LoadingStatus
 import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
@@ -38,7 +39,7 @@ class CameraXViewModel @Inject constructor(
                         barcode,
                         navArgs.operationId,
                         Calendar.getInstance().time,
-                        false
+                        LoadingStatus.Queue
                     )
                 )
             }
@@ -49,9 +50,9 @@ class CameraXViewModel @Inject constructor(
         scanResultDao.insertScanResult(
             ScanResult(
                 barcode = barcode,
-                hasUploaded = false,
                 operationId = navArgs.operationId,
                 dateAndTime = Calendar.getInstance().time,
+                loadingStatus = LoadingStatus.Queue
             )
         )
 }

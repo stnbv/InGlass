@@ -2,6 +2,10 @@ package com.inglass.android.presentation.main.desktop
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.inglass.android.data.local.db.dao.EmployeeDao
 import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
@@ -12,8 +16,9 @@ import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.personal_information.GetPersonalInformationUseCase
 import com.inglass.android.domain.usecase.reference_book.GetReferenceBookUseCase
+import com.inglass.android.utils.adapter.ItemVM
 import com.inglass.android.utils.api.core.onSuccess
-import com.inglass.android.utils.base.BaseViewModel
+import com.inglass.android.utils.base.paging.BasePagingViewModel
 import com.inglass.android.utils.navigation.SCREENS.CAMERA
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -30,7 +35,7 @@ class DesktopVM @Inject constructor(
     private val operationsDao: OperationsDao,
     private val employeeDao: EmployeeDao,
     private val referenceBookUseCase: GetReferenceBookUseCase,
-) : BaseViewModel() {
+) : BasePagingViewModel() {
 
     val userInfo = MutableLiveData<PersonalInformationModel>()
     val isScanButtonEnable = MutableLiveData(false)
@@ -44,17 +49,29 @@ class DesktopVM @Inject constructor(
     }
 
     fun setDataToItems() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val scannedItems = scanResultDao.getScanResultWithOperation().map { scanResult ->
-                ScannedItemVM(
-                    ScannedItemData(
-                        dateTime = scanResult.scanResult.dateAndTime,
-                        operation = scanResult.operation?.name ?: "",
-                        barcode = scanResult.scanResult.barcode
-                    )
-                )
+        viewModelScope.launch {
+            val items = Pager(
+                config = PagingConfig(
+                    pageSize = 3,
+                    enablePlaceholders = false,
+                    initialLoadSize = 5
+                ),
+                pagingSourceFactory = { scanResultDao.getScanResultWithOperation() }
+            ).flow.cachedIn(viewModelScope)
+
+            items.collect {
+                val a = it.map { scanResultWithOperation ->
+                    ScannedItemVM(
+                        ScannedItemData(
+                            dateTime = scanResultWithOperation.scanResult.dateAndTime,
+                            operation = scanResultWithOperation.operation?.name ?: "",
+                            barcode = scanResultWithOperation.scanResult.barcode,
+                            loadingStatus = scanResultWithOperation.scanResult.loadingStatus
+                        )
+                    ) as ItemVM
+                }
+                pagingAdapter.submitData(a)
             }
-            setData(scannedItems)
         }
     }
 
