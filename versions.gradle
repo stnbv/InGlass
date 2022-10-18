@@ -5,7 +5,7 @@ ext.versions = [
         core_ktx            : '1.7.0',
         core_runtime        : '2.1.0',
         coroutines          : '1.5.2',
-        nav_arch            : '2.3.5',
+        nav_arch            : '2.4.2',
         material_design     : '1.4.0',
         activity            : '1.4.0',
         fragment_version    : '1.4.0-rc01',
@@ -35,9 +35,8 @@ ext.versions = [
         circle_image_view   : '3.1.0',
         dotsindicator       : '4.2',
         permissions_kotlin  : '2.1.4',
-        browser             :'1.3.0',
-        exoplayer           : '2.16.1',
-        leak_canary         : '2.8.1',
+        browser             : '1.3.0',
+        exoplayer           : '2.16.1'
 ]
 
 ext.gradlePlugins = [
@@ -108,6 +107,7 @@ ext.libraries = [
         roomCore                 : "androidx.room:room-runtime:$versions.room",
         roomCompiler             : "androidx.room:room-compiler:$versions.room",
         roomKtx                  : "androidx.room:room-ktx:$versions.room",
+        roomPaging               : "androidx.room:room-paging:2.4.0-alpha04",
 
         //Paging 3
         paging                   : "androidx.paging:paging-runtime-ktx:$versions.paging",
@@ -130,9 +130,6 @@ ext.libraries = [
         //ExoPlayer
         exoplayer                : "com.google.android.exoplayer:exoplayer:$versions.exoplayer",
         exoplayerUi              : "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer",
-
-        //Debug
-        leakCanary               : "com.squareup.leakcanary:leakcanary-android:$versions.leak_canary",
 
         // CameraX
         camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",

@@ -16,7 +16,7 @@ fun NavController.setCurrentScreenWithNavController(screen: SCREENS) {
         runCatching { navigate(screen.screenId) }
     } else {
         runCatching {
-            navigate(screen.navDirections!!) // Использовать !! в данном случае можно, т.к. в 16 трочке мы проверяем navDirections на null
+            navigate(screen.navDirections!!)
             screen.navDirections = null
         }
     }
@@ -42,8 +42,8 @@ private fun SCREENS.getStartDestinationScreens(): Boolean {
 
 fun NavController.setStartDestination(@IdRes destinationId: Int) {
     val newGraph = navInflater.inflate(R.navigation.nav_graph).apply {
-        if (startDestination == destinationId) return
-        startDestination = destinationId
+        if (startDestinationId == destinationId) return
+        setStartDestination(destinationId)
     }
     graph = newGraph
 }

@@ -26,13 +26,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.inglass.android.R
-import com.inglass.android.domain.models.Country
 import com.inglass.android.utils.ErrorWrapper
 import com.inglass.android.utils.helpers.DateFormatHelper
 import com.inglass.android.utils.ui.BindingSpinnerListener
@@ -40,13 +36,8 @@ import com.inglass.android.utils.ui.Gender.Default
 import com.inglass.android.utils.ui.Gender.Female
 import com.inglass.android.utils.ui.Gender.Male
 import com.inglass.android.utils.ui.dp
-import com.inglass.android.utils.ui.getOrCreatePhoneMaskWatcher
 import java.math.BigDecimal
-import java.util.Date
-import ru.tinkoff.decoro.FormattedTextChangeListener
-import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
-import ru.tinkoff.decoro.watchers.FormatWatcher
+import java.util.*
 
 private const val DELAY_BEFORE_ALPHA_MS = 1000L
 private const val PROGRESS_BAR_WIDTH = 5f
@@ -180,53 +171,6 @@ fun bindErrorWrapper(view: View, error: ErrorWrapper, errorDisplayText: Boolean,
     }
 }
 
-@BindingAdapter(value = ["phone", "country"], requireAll = false)
-fun setFormattedPhone(view: TextView, rawPhone: String?, country: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(country)
-    if ((maskWatcher.mask.hasUserInput() || !rawPhone.isNullOrEmpty()) &&
-        maskWatcher.mask.toUnformattedString() != rawPhone
-    ) {
-        maskWatcher.mask.isShowingEmptySlots
-        maskWatcher.maskOriginal.clear()
-        maskWatcher.maskOriginal.insertFront(rawPhone)
-        maskWatcher.refreshMask()
-    }
-}
-
-@InverseBindingAdapter(attribute = "phone")
-fun getRawPhone(view: TextView): String {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(null)
-    return maskWatcher.mask.toUnformattedString().let { rawPhone ->
-        if (rawPhone.startsWith("+")) {
-            rawPhone.drop(1)
-        } else {
-            rawPhone
-        }
-    }
-}
-
-@BindingAdapter(value = ["phoneAttrChanged", "country"], requireAll = false)
-fun setPhoneListener(view: TextView, attrChange: InverseBindingListener?, country: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(country)
-    maskWatcher.setCallback(object : FormattedTextChangeListener {
-        override fun beforeFormatting(oldValue: String?, newValue: String?) = false
-
-        override fun onTextFormatted(formatter: FormatWatcher?, newFormattedText: String?) {
-            attrChange?.onChange()
-        }
-    })
-}
-
-@BindingAdapter(value = ["phoneMask", "countryState"], requireAll = false)
-fun setMask(view: TextView, mask: String?, countryState: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(countryState)
-    mask?.let {
-        maskWatcher.swapMask(MaskImpl.createTerminated(UnderscoreDigitSlotsParser().parseSlots(mask)).apply {
-            isHideHardcodedHead = true
-        })
-    }
-}
-
 // Не разобрался пока как без обязательного переопределения этого метода обойтись (Gerasimets 01/12/2021)
 @BindingAdapter("gender")
 fun setGender(view: Spinner, newGender: String?) = Unit
@@ -306,5 +250,5 @@ fun viewVisibility(view: View, price: BigDecimal) {
 
 @BindingAdapter("app:setClickablePinkButton")
 fun setClickablePinkButton(button: MaterialButton, isClickable: Boolean) {
-        button.isEnabled = isClickable
+    button.isEnabled = isClickable
 }

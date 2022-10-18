@@ -38,7 +38,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginVM>(R.layout.fragm
             addressesConfirmRootView.viewTreeObserver.addOnGlobalLayoutListener {
                 if ((addressesConfirmRootView.rootView.height - addressesConfirmRootView.height) > getDisplayHeight()) {
                     scrollView.post {
-                        scrollView.smoothScrollTo(0, resources.getDimension(R.dimen.scroll_value_for_login_screen).toInt())
+                        scrollView.smoothScrollTo(
+                            0,
+                            resources.getDimension(R.dimen.scroll_value_for_login_screen).toInt()
+                        )
                     }
                 }
             }

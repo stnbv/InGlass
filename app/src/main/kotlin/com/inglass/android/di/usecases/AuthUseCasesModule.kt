@@ -14,10 +14,12 @@ import dagger.hilt.components.SingletonComponent
 object AuthUseCasesModule {
 
     @Provides
-    fun provideGetAuthStateUseCase(iPreferencesRepository: IPreferencesRepository) = AuthStateUseCase(iPreferencesRepository)
+    fun provideGetAuthStateUseCase(iPreferencesRepository: IPreferencesRepository) =
+        AuthStateUseCase(iPreferencesRepository)
 
 
     @Provides
-    fun provideAuthUseCase(iAuthRepository: IAuthRepository) = LogInUseCase(iAuthRepository)
+    fun provideAuthUseCase(iAuthRepository: IAuthRepository, iPreferencesRepository: IPreferencesRepository) =
+        LogInUseCase(iAuthRepository, iPreferencesRepository)
 
 }

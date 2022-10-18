@@ -5,21 +5,19 @@ import com.inglass.android.R
 
 enum class SCREENS(
     val screenId: Int,
-    val bottomNavigationVisibility: Boolean,
+    val menuVisibility: Boolean,
     var navDirections: NavDirections? = null
 ) {
     //Auth
     SPLASH(R.id.navigation_splash, false),
     LOGIN(R.id.navigation_login, false),
-    SETTINGS(R.id.navigation_settings, false),
+    SETTINGS(R.id.navigation_settings, true),
 
     //Desktop
-    DESKTOP(R.id.navigation_desktop, false),
+    DESKTOP(R.id.navigation_desktop, true),
 
-    //Scan
-//    SCAN(R.id.navigation_scan, false),
-
-    SCANNER(R.id.navigation_scanner, false),
+    //Camera
+    CAMERA(R.id.navigation_camera, false),
 
     //Helpers
     HELPERS(R.id.navigation_helpers, false)

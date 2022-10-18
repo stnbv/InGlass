@@ -8,11 +8,7 @@ import retrofit2.http.POST
 
 interface IAuthApi {
 
-    // Login
-
-    @POST("sessions")
-    suspend fun logIn(
-        @Body logInRequest: LogInRequest
-    ): Response<AuthResponse>
+    @POST("token-auth")
+    suspend fun logIn(@Body logInRequest: LogInRequest): Response<AuthResponse>
 
 }

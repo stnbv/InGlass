@@ -15,13 +15,12 @@
         android:id="@+id/navigation_desktop"
         android:name="com.inglass.android.presentation.main.desktop.DesktopFragment"
         android:label="@string/title_desktop"
-        tools:layout="@layout/fragment_desktop" />
+        tools:layout="@layout/fragment_desktop">
 
-    <fragment
-        android:id="@+id/navigation_scanner"
-        android:name="com.inglass.android.presentation.main.scan2.ScannerFragment"
-        android:label="@string/desktop_scan_barcode"
-        tools:layout="@layout/fragment_scanner" />
+        <action
+            android:id="@+id/to_camerax"
+            app:destination="@id/navigation_camera" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_login"
@@ -32,7 +31,6 @@
         <action
             android:id="@+id/action_navigation_login_to_navigation_registration_by_phone"
             app:destination="@id/navigation_settings" />
-
     </fragment>
 
     <fragment
@@ -48,6 +46,21 @@
         android:name="com.inglass.android.presentation.dialogs.AccessToSettingsDialogFragment"
         android:label="@string/title_access_to_settings"
         tools:layout="@layout/dialog_access_to_settings" />
+
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.inglass.android.presentation.CameraXFragment"
+        android:label="@string/pref_category_key_camera"
+        tools:layout="@layout/fragment_camerax">
+
+        <argument
+            android:name="operationId"
+            app:argType="integer" />
+
+        <argument
+            android:name="isMultiScan"
+            app:argType="boolean" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_helpers"

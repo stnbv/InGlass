@@ -6,12 +6,7 @@ import com.inglass.android.utils.api.BaseService
 
 class AuthService(private val api: IAuthApi) : IAuthService, BaseService() {
 
-    override suspend fun logIn(phoneNumber: Long, password: String) = apiCall {
-        api.logIn(
-            LogInRequest(
-                phoneNumber,
-                password
-            )
-        )
+    override suspend fun logIn(phoneNumber: String, password: String) = apiCall {
+        api.logIn(LogInRequest(phoneNumber, password))
     }
 }

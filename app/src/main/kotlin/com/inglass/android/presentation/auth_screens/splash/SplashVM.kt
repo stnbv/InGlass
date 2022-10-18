@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.domain.models.AuthState
 import com.inglass.android.domain.usecase.auth.AuthStateUseCase
-import com.inglass.android.utils.analitics.AnalyticMessage.AnalyticsLogInEvent
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.base.BaseViewModel
@@ -48,7 +47,7 @@ class SplashVM @Inject constructor(private val authStateUseCase: AuthStateUseCas
                 .onSuccess { state ->
                     when (state) {
                         is AuthState.LoggedIn -> {
-                            analitycs.handleAnalyticMessage(AnalyticsLogInEvent)
+//                            analitycs.handleAnalyticMessage(AnalyticsLogInEvent)
                             navigateToScreen(SCREENS.DESKTOP)
                         }
                         else -> navigateToScreen(SCREENS.LOGIN)
