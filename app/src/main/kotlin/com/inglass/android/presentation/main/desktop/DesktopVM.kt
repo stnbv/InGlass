@@ -1,8 +1,6 @@
 package com.inglass.android.presentation.main.desktop
 
 import app.inglass.tasker.data.db.AppDatabase
-import com.inglass.android.presentation.main.scan2.ScannedItemData
-import com.inglass.android.presentation.main.scan2.ScannedItemVM
 import com.inglass.android.utils.base.BaseViewModel
 import com.inglass.android.utils.navigation.DIALOGS
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -11,9 +11,6 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat.START
 import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 import com.inglass.android.databinding.ActivityMainBinding
 import com.inglass.android.utils.navigation.DIALOGS
 import com.inglass.android.utils.navigation.SCREENS
@@ -31,7 +28,6 @@ class AppActivity : AppCompatActivity() {
 
     private var binding: ActivityMainBinding? = null
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 //    fun createToolbarConfig() = ToolbarConfig(
 //        binding!!.toolbar,
@@ -45,7 +41,6 @@ class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        firebaseAnalytics = Firebase.analytics
         setContentView(binding?.root)
         binding?.vm = viewModel
         binding?.menu?.doOnClick { binding?.drawerLayout?.openDrawer(START) }
@@ -87,7 +82,7 @@ class AppActivity : AppCompatActivity() {
             }
             R.id.nav_helpers -> {
                 binding?.drawerLayout?.closeDrawer(START)
-                navigateToScreen(SCREENS.SETTINGS)
+                navigateToScreen(SCREENS.HELPERS)
 
             }
             R.id.nav_change_user -> {

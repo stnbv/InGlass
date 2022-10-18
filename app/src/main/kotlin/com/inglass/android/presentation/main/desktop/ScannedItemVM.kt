@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.main.scan2
+package com.inglass.android.presentation.main.desktop
 
 import com.inglass.android.R
 import com.inglass.android.databinding.ItemScannedBinding

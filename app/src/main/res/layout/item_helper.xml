@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class="ItemHelperBinding">
+
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.helpers.HelperItemVM" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingHorizontal="10dp"
+        app:cardCornerRadius="8dp"
+        tools:ignore="SpUsage">
+
+        <TextView
+            android:id="@+id/fullNameTextView"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@={vm.fullName}"
+            android:textAlignment="textStart"
+            android:textColor="@color/main_black"
+            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Иванов Иван Иванович" />
+
+        <TextView
+            android:id="@+id/participationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2sp"
+            android:text="@={vm.participation}"
+            android:textColor="@color/main_black"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@+id/fullNameTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/deleteImageView"
+            tools:text="0.45" />
+
+        <ImageView
+            android:id="@+id/deleteImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_delete"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

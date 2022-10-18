@@ -21,5 +21,7 @@ enum class SCREENS(
 
     SCANNER(R.id.navigation_scanner, false),
 
+    //Helpers
+    HELPERS(R.id.navigation_helpers, false)
 
 }

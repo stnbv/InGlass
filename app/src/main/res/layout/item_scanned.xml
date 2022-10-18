@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.inglass.android.presentation.main.scan2.ScannedItemVM" />
+            type="com.inglass.android.presentation.main.desktop.ScannedItemVM" />
     </data>
 
     <androidx.cardview.widget.CardView
