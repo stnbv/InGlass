@@ -1,7 +1,6 @@
 package com.inglass.android.presentation.main.desktop
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -72,11 +71,11 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
             ) {
                 if (pos == 0) {
                     viewModel.isScanButtonEnable.postValue(false)
-                    viewModel.selectedOperations.postValue(pos)
+                    viewModel.selectedOperationsPosition.postValue(pos)
                 }
                 if (pos > 0) {
                     viewModel.isScanButtonEnable.postValue(true)
-                    viewModel.selectedOperations.postValue(pos)
+                    viewModel.selectedOperationsPosition.postValue(pos)
                 }
             }
 

@@ -11,7 +11,7 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/light_gray</item>
         <item name="colorSecondaryVariant">@color/normal_gray</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorOnSecondary">@color/main_black</item>
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
@@ -31,7 +31,7 @@
     <!-- Errors -->
     <style name="ErrorTextView">
         <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="android:textColor">@color/main_black</item>
+        <item name="android:textColor">@color/silver</item>
         <item name="android:textSize">15dp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_marginTop">26dp</item>

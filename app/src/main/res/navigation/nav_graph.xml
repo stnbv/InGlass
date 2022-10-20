@@ -50,7 +50,7 @@
     <fragment
         android:id="@+id/navigation_camera"
         android:name="com.inglass.android.presentation.CameraXFragment"
-        android:label="@string/pref_category_key_camera"
+        android:label="@string/desktop_scan_barcode"
         tools:layout="@layout/fragment_camerax">
 
         <argument
@@ -66,12 +66,18 @@
         android:id="@+id/navigation_helpers"
         android:name="com.inglass.android.presentation.helpers.HelpersFragment"
         android:label="@string/helpers_title"
-        tools:layout="@layout/fragment_helpers"/>
+        tools:layout="@layout/fragment_helpers" />
 
-<!--    <dialog-->
-<!--        android:id="@+id/addHelperDialog"-->
-<!--        android:name="com.inglass.android.presentation.helpers.HelpersFragment"-->
-<!--        android:label="@string/add_helper_title"-->
-<!--        tools:layout="@layout/dialog_access_to_settings" />-->
+    <dialog
+        android:id="@+id/addHelperDialog"
+        android:name="com.inglass.android.presentation.dialogs.add_helper.AddHelperDialogFragment"
+        android:label="@string/add_helper_title"
+        tools:layout="@layout/dialog_add_helper">
+
+        <action
+            android:id="@+id/to_navigation_helpers"
+            app:destination="@id/navigation_helpers" />
+
+    </dialog>
 
 </navigation>

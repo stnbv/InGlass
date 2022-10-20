@@ -14,26 +14,13 @@
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">24dp</item>
-        <item name="android:textColor">@color/main_black</item>
+        <item name="android:textColor">@color/silver</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginTop">38dp</item>
         <item name="android:lineSpacingExtra">0sp</item>
     </style>
 
     <!-- Кнопки -->
-    <style name="Button" parent="Widget.MaterialComponents.Button">
-        <item name="textAllCaps">false</item>
-        <item name="android:textSize">19dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:letterSpacing">0.03</item>
-    </style>
-
-    <style name="Button.Rounded" parent="Button">
-        <item name="cornerRadius">45dp</item>
-    </style>
-
     <style name="RoundButton">
         <item name="android:background">@drawable/bg_button_rounded</item>
         <item name="textAllCaps">false</item>
@@ -41,13 +28,6 @@
         <item name="android:textStyle">bold</item>
         <item name="android:lineSpacingExtra">0sp</item>
         <item name="android:letterSpacing">0.05</item>
-    </style>
-
-    <!-- Поля ввода -->
-    <style name="SimpleCenterTextInputLayout">
-        <item name="boxStrokeWidthFocused">0dp</item>
-        <item name="boxStrokeWidth">0dp</item>
-        <item name="hintEnabled">false</item>
     </style>
 
     <style name="DefaultTextInputLayout">
@@ -69,66 +49,6 @@
         <item name="android:lineSpacingExtra">4dp</item>
     </style>
 
-    <style name="BirthdayField" parent="DefaultTextInputEditText">
-        <item name="android:clickable">false</item>
-        <item name="android:cursorVisible">false</item>
-        <item name="android:focusable">false</item>
-        <item name="android:focusableInTouchMode">false</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:inputType">date</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="BirthdayLayout" parent="DefaultTextInputLayout">
-        <item name="android:clickable">false</item>
-        <item name="android:focusable">false</item>
-    </style>
-
-    <!-- Размеры округления ShapeableImageView -->
-    <style name="ShapeAppearanceOverlay.App.CornerSize9Percent" parent="">
-        <item name="cornerSize">9%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize18Percent" parent="">
-        <item name="cornerSize">18%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize13Percent" parent="">
-        <item name="cornerSize">13%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize12Percent" parent="">
-        <item name="cornerSize">12%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize14Percent" parent="">
-        <item name="cornerSize">12%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize10dp" parent="">
-        <item name="cornerSize">10dp</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
-        <item name="cornerSize">10%</item>
-        <item name="cornerFamily">rounded</item>
-    </style>
-
-    <!-- Items -->
-    <style name="SocialNetworksItem">
-        <item name="android:layout_width">70dp</item>
-        <item name="android:layout_height">70dp</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-    </style>
-
     <!--Простой текст в TextView-->
     <style name="simpleText">
         <item name="android:textSize">16dp</item>
@@ -137,61 +57,6 @@
         <item name="android:textColor">@color/main_black</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="DatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/pink</item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerDialog.ButtonStyle</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerDialog.ButtonStyle</item>
-    </style>
-
-    <style name="DatePickerDialog.ButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/pink</item>
-    </style>
-
-    <!-- Закругленные верхние края у ShapeableImageView -->
-    <style name="Widget.MaterialComponents.ShapeableImageView.TopCornersRounded" parent="">
-        <item name="cornerSizeTopRight">20dp</item>
-        <item name="cornerFamilyTopRight">rounded</item>
-        <item name="cornerSizeTopLeft">20dp</item>
-        <item name="cornerFamilyTopLeft">rounded</item>
-    </style>
-
-    <!--Times new roman bold -->
-    <style name="timesNewRomanBold">
-        <item name="android:textStyle">bold</item>
-        <item name="android:letterSpacing">0.02</item>
-    </style>
-
-    <!--BottomSheetTextView-->
-    <style name="NotificationTimeTextView">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">30dp</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:textSize">17dp</item>
-        <item name="android:textColor">@color/main_black</item>
-    </style>
-
-    <!--RadioButton-->
-    <style name="RadioButtons">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:button">@null</item>
-        <item name="android:fontFamily">@font/roboto_bold</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:textSize">15dp</item>
-        <item name="android:backgroundTint">@null</item>
-        <item name="android:textColor">@drawable/custom_text_color_selector</item>
-    </style>
-
-    <!--IconsOnFinishDialogDiagnosticDialog-->
-    <style name="IconsOnFinishDialogDiagnosticDialog">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">26dp</item>
-        <item name="android:layout_marginTop">20dp</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">

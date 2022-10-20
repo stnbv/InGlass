@@ -9,4 +9,7 @@ enum class DIALOGS(
 ) {
     //DeletePhoto
     ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog),
+
+    //AddHelper
+    ADD_HELPER(R.id.addHelperDialog)
 }

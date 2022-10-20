@@ -26,7 +26,6 @@
         android:id="@+id/toolbarParentLayout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/pink_second"
         tools:ignore="ContentDescription, spUsage"
         tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
@@ -48,7 +47,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/ic_back"
-            tools:tint="@color/black" />
+            tools:tint="@color/main_black" />
 
         <TextView
             android:id="@+id/titleTextView"
@@ -76,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@drawable/ic_like"
-            tools:tint="@color/black" />
+            tools:tint="@color/main_black" />
 
         <ImageView
             android:id="@+id/secondIconImageView"
@@ -87,8 +86,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/firstIconImageView"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_share"
-            tools:tint="@color/black" />
+            tools:srcCompat="@drawable/ic_delete"
+            tools:tint="@color/main_black" />
 
         <View
             android:id="@+id/divider"

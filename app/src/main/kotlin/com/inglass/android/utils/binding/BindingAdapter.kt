@@ -230,13 +230,6 @@ fun setVisibilityShimmer(shimmer: ShimmerFrameLayout, visibility: Boolean) {
     }
 }
 
-@BindingAdapter("app:isPriority")
-fun isPriority(view: CardView, isPriority: Boolean?) {
-    if (isPriority == true) {
-        view.setCardBackgroundColor(ContextCompat.getColor(view.context, R.color.light_pink))
-    }
-}
-
 @BindingAdapter("app:priceVisibility")
 fun priceVisibility(view: TextView, price: BigDecimal) {
     view.text = "$price ${view.context.getString(R.string.title_login)}"

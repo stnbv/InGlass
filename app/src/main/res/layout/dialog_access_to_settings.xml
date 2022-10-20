@@ -28,7 +28,7 @@
             android:gravity="center"
             android:lineSpacingExtra="6dp"
             android:text="@string/access_to_setting_title"
-            android:textColor="@color/main_black"
+            android:textColor="@color/silver"
             android:textSize="20dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -56,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="4dp"
+            android:textColor="@color/silver"
             android:text="@string/error_password_incorrect"
             app:visibility="@{vm.passwordError}" />
 

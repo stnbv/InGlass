@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_gray">
+        android:background="@color/dark_gray">
 
         <ScrollView
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
                     android:text="@string/desktop_scan_scan_only_one_item"
-                    android:textColor="@color/main_black"
+                    android:textColor="@color/silver"
                     android:textSize="18dp"
                     app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
                     app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/silver"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sexSpinner"

@@ -20,9 +20,6 @@ import com.inglass.android.utils.adapter.ItemVM
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.base.paging.BasePagingViewModel
 import com.inglass.android.utils.navigation.SCREENS.CAMERA
-import app.inglass.tasker.data.db.AppDatabase
-import com.inglass.android.utils.base.BaseViewModel
-import com.inglass.android.utils.navigation.DIALOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -43,8 +40,9 @@ class DesktopVM @Inject constructor(
     val userInfo = MutableLiveData<PersonalInformationModel>()
     val isScanButtonEnable = MutableLiveData(false)
     val operations = MutableLiveData(mutableListOf("Выберите операцию"))
-    val selectedOperations = MutableLiveData(0)
+    val selectedOperationsPosition = MutableLiveData(0)
     val isMultiScan = MutableLiveData(false)
+    var userAvailableOperations: List<EmployeeAndOperationModel?>? = null
 
     init {
         initViewModelWithRecycler()
@@ -63,7 +61,7 @@ class DesktopVM @Inject constructor(
             ).flow.cachedIn(viewModelScope)
 
             items.collect {
-                val a = it.map { scanResultWithOperation ->
+                val scannedItems = it.map { scanResultWithOperation ->
                     ScannedItemVM(
                         ScannedItemData(
                             dateTime = scanResultWithOperation.scanResult.dateAndTime,
@@ -73,7 +71,7 @@ class DesktopVM @Inject constructor(
                         )
                     ) as ItemVM
                 }
-                pagingAdapter.submitData(a)
+                pagingAdapter.submitData(scannedItems)
             }
         }
     }
@@ -85,7 +83,6 @@ class DesktopVM @Inject constructor(
             }
 
             val userAvailableOperationsIds = preferencesRepository.user?.availableOperations
-            var userAvailableOperations: List<EmployeeAndOperationModel?>? = null
 
             getReferenceBookUseCase.invoke().onSuccess { allOperations ->
                 userAvailableOperations = userAvailableOperationsIds?.mapNotNull { userOperation ->
@@ -120,9 +117,14 @@ class DesktopVM @Inject constructor(
     }
 
     fun openCameraScreen() {
+        val operationTitle = operations.value?.get(selectedOperationsPosition.value ?: return)
+        val operationId = userAvailableOperations?.find {
+            it?.name == operationTitle
+        }?.id
+
         navigateToScreen(CAMERA.apply {
             navDirections = DesktopFragmentDirections.toCamerax(
-                operationId = selectedOperations.value ?: return,
+                operationId = operationId ?: return,
                 isMultiScan = isMultiScan.value ?: return
             )
         })

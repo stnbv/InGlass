@@ -13,7 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_gray"
+        android:background="@color/dark_gray"
         tools:context=".android.presentation.auth_screens.splash.SplashFragment"
         tools:ignore="SpUsage">
 
@@ -25,18 +25,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/loadingPercentageTextView"
-            style="@style/timesNewRomanBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/black_text"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toTopOf="@id/loadDataProgressbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <com.inglass.android.utils.custom_view.SegmentedLoadingBar
             android:id="@+id/loadDataProgressbar"
