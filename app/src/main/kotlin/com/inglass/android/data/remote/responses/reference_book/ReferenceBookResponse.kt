@@ -10,12 +10,12 @@ data class ReferenceBookResponse(
 )
 
 data class Employees(
-    val id: Int,
+    val id: String,
     val name: String
 )
 
 data class Operations(
-    val id: Int,
+    val id: String,
     val name: String
 )
 

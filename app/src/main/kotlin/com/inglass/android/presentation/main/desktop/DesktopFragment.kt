@@ -10,11 +10,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
-import com.inglass.android.AppActivity
+import com.bumptech.glide.Glide
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentDesktopBinding
+import com.inglass.android.databinding.MenuHeaderBinding
+import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.utils.base.BaseFragment
+import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
 
 private val REQUIRED_RUNTIME_PERMISSIONS =
@@ -31,6 +35,8 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
 
     override val viewModel: DesktopVM by viewModels()
 
+    private lateinit var menuHeader: MenuHeaderBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
@@ -40,11 +46,24 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
 
         viewModel.setDataToItems()
+        binding.menu.doOnClick { binding.drawerLayout.openDrawer(GravityCompat.START) }
+        menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
 
         viewModel.userInfo.observe(viewLifecycleOwner) {
-            (activity as AppActivity).setMenuPersonalInformation(it)
+            setMenuPersonalInformation(it)
         }
         populateOperations()
+    }
+
+    private fun setMenuPersonalInformation(personalInformation: PersonalInformationModel) {
+        with(personalInformation) {
+            menuHeader.nameTextView.text = fullName
+            menuHeader.serverAddressTextView.text = lastName //TODO Заменить на адрес сервера
+            Glide
+                .with(requireActivity())
+                .load(photo)
+                .into(menuHeader.profileImageView)
+        }
     }
 
     override fun onResume() {

@@ -3,8 +3,8 @@ package com.inglass.android.domain.models
 import java.util.*
 
 data class ScannedItemModel(
-    val employeeId: Int,
-    val operationId: Int,
+    val employeeId: String,
+    val operationId: String,
     val dateTime: Date,
     val participationRate: Float,
     val helpers: List<Helper>,
@@ -12,6 +12,6 @@ data class ScannedItemModel(
 )
 
 data class Helper(
-    val id: Int,
+    val id: String,
     val participationRate: Float
 )

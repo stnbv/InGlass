@@ -10,7 +10,7 @@ import java.util.*
 data class ScanResult(
     @PrimaryKey
     val barcode: String,
-    val operationId: Int,
+    val operationId: String,
     val dateAndTime: Date,
     val loadingStatus: LoadingStatus
 )

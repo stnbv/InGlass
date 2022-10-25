@@ -1,6 +1,5 @@
 package com.inglass.android.data.local.db.dao
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -12,13 +11,13 @@ import com.inglass.android.data.local.db.entities.UserHelpersWithName
 interface UserHelpersDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertHelper(helper: UserHelpers)
+    suspend fun insertHelpers(helpers: List<UserHelpers>)
 
     @Query("SELECT * FROM user_helpers")
-    fun getAllHelpers(): PagingSource<Int, UserHelpersWithName>
+    fun getAllHelpers(): List<UserHelpersWithName>
 
     @Query("delete from user_helpers where helperId = :helperId ")
-    suspend fun deleteHelper(helperId: Int)
+    suspend fun deleteHelper(helperId: String)
 
     @Query("delete from user_helpers")
     suspend fun deleteAllHelpers()

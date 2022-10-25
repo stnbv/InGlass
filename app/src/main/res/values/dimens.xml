@@ -4,6 +4,11 @@
     <dimen name="appLogоHeight">160dp</dimen>
     <dimen name="screensHorizontalPadding">18dp</dimen>
 
+    //Toast
+    <dimen name="toast_margin_horizontal">12dp</dimen>
+    <dimen name="toast_margin_top">4dp</dimen>
+    <dimen name="toast_margin_bot">0dp</dimen>
+
     <!--Segmented Loading Bar-->
     <dimen name="segment_height">12dp</dimen>
     <dimen name="segment_gap_width">2dp</dimen>

@@ -11,7 +11,7 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
 
-        <item name="colorSecondary">@color/light_gray</item>
+        <item name="colorSecondary">@color/dim_gray</item>
         <item name="colorSecondaryVariant">@color/normal_gray</item>
         <item name="colorOnSecondary">@color/main_black</item>
         <!-- Status bar color. -->

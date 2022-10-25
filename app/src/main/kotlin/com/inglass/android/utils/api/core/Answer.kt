@@ -1,6 +1,7 @@
 package com.inglass.android.utils.api.core
 
 import com.inglass.android.utils.api.core.Answer.Failure
+import kotlinx.coroutines.delay
 
 @Suppress("unchecked_cast")
 class Answer<out T>(val value: Any?) {
@@ -112,6 +113,7 @@ suspend fun <T> retry(count: Int, operation: suspend () -> Answer<T>): Answer<T>
     repeat(count) {
         val result = operation()
         if (result.isSuccess) return result
+        delay(3000)
         lastAnswer = result
     }
     return lastAnswer!!

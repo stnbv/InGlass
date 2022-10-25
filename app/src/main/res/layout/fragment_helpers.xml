@@ -15,6 +15,44 @@
         android:layout_height="match_parent"
         android:background="@color/dark_gray">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:backgroundTint="@color/gray"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                app:srcCompat="@drawable/ic_back" />
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="60dp"
+                android:text="Title"
+                android:textColor="@color/silver"
+                android:textSize="20dp" />
+
+            <ImageView
+                android:id="@+id/deleteAllIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:onClick="@{()-> vm.removeAllHelpers()}"
+                android:paddingHorizontal="16dp"
+                app:srcCompat="@drawable/ic_delete" />
+        </androidx.cardview.widget.CardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/helpersRecyclerView"
             android:layout_width="0dp"
@@ -28,9 +66,9 @@
             app:layout_constraintBottom_toTopOf="@+id/addHelperButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_container"
             app:layout_constraintVertical_bias="0.0"
-            app:setPagingAdapter="@{vm.pagingAdapter}" />
+            app:setOnlyAdapter="@{vm.adapter}" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addHelperButton"
@@ -53,7 +91,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/helpers_delete"
+            android:enabled="@{vm.saveButtonEnabled}"
+            android:onClick="@{()->vm.saveHelpers()}"
+            android:text="@string/add_helper_save"
             app:backgroundTint="@drawable/bg_tint_pressed_main_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

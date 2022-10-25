@@ -4,12 +4,12 @@
     <style name="Theme.InGlass" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_gray</item>
+        <item name="colorPrimary">@color/dim_gray</item>
         <item name="colorPrimaryVariant">@color/light_grey</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/light_gray</item>
+        <item name="colorSecondary">@color/dim_gray</item>
         <item name="colorSecondaryVariant">@color/normal_gray</item>
         <item name="colorOnSecondary">@color/main_black</item>
 
@@ -45,7 +45,7 @@
 
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
-        <item name="android:backgroundTint">@color/very_light_blue</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 
     <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">

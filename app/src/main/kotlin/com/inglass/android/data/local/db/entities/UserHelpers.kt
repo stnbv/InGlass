@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import java.math.BigDecimal
 
 @Entity(
     tableName = "user_helpers",
@@ -17,8 +18,8 @@ import androidx.room.Relation
 )
 data class UserHelpers(
     @PrimaryKey
-    val helperId: Int,
-    val participationRate: Float
+    val helperId: String,
+    val participationRate: BigDecimal
 )
 
 data class UserHelpersWithName(

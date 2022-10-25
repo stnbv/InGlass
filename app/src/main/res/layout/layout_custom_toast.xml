@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/customToast"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded_textview"
+    android:backgroundTint="@color/red"
+    android:paddingVertical="14dp"
+    tools:ignore="SpUsage, ContentDescription">
+
+    <ImageView
+        android:id="@+id/statusIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:maxWidth="32dp"
+        android:maxHeight="32dp"
+        android:scaleType="centerInside"
+        tools:src="@drawable/ic_dismiss" />
+
+    <TextView
+        android:id="@+id/messageTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginHorizontal="16dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:textColor="@android:color/white"
+        tools:text="@string/no_internet_connection" />
+
+</LinearLayout>

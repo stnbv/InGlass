@@ -55,7 +55,7 @@
 
         <argument
             android:name="operationId"
-            app:argType="integer" />
+            app:argType="string" />
 
         <argument
             android:name="isMultiScan"
@@ -66,17 +66,43 @@
         android:id="@+id/navigation_helpers"
         android:name="com.inglass.android.presentation.helpers.HelpersFragment"
         android:label="@string/helpers_title"
-        tools:layout="@layout/fragment_helpers" />
+        tools:layout="@layout/fragment_helpers">
+
+        <action
+            android:id="@+id/to_navigation_add_helpers_bs"
+            app:destination="@id/addHelperBottomSheet" />
+
+        <action
+            android:id="@+id/to_navigation_add_participation_rate"
+            app:destination="@id/addParticipationRateDialog" />
+
+    </fragment>
 
     <dialog
-        android:id="@+id/addHelperDialog"
-        android:name="com.inglass.android.presentation.dialogs.add_helper.AddHelperDialogFragment"
+        android:id="@+id/addParticipationRateDialog"
+        android:name="com.inglass.android.presentation.dialogs.add_helper.AddParticipationRateDialogFragment"
         android:label="@string/add_helper_title"
         tools:layout="@layout/dialog_add_helper">
 
         <action
             android:id="@+id/to_navigation_helpers"
             app:destination="@id/navigation_helpers" />
+
+        <argument
+            android:name="employee"
+            app:argType="com.inglass.android.presentation.dialogs.add_helper.EmployeeItemData" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/addHelperBottomSheet"
+        android:name="com.inglass.android.presentation.dialogs.add_helper.AddHelperBottomSheetFragment"
+        android:label="AddHelperBottomSheetDialogFragment"
+        tools:layout="@layout/bottom_sheet_add_helper">
+
+        <argument
+            android:name="employees"
+            app:argType="com.inglass.android.presentation.dialogs.add_helper.EmployeeItemData[]" />
 
     </dialog>
 

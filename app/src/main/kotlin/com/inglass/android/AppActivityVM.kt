@@ -14,12 +14,14 @@ import com.inglass.android.domain.usecase.scanning.MakeOperationUseCase
 import com.inglass.android.domain.usecase.scanning.MakeOperationUseCase.Params
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
+import com.inglass.android.utils.api.core.retry
 import com.inglass.android.utils.base.BaseViewModel
 import com.inglass.android.utils.provider.ConnectivityStatusProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -31,32 +33,40 @@ class AppActivityVM @Inject constructor(
     private val scanResultDao: ScanResultsDao
 ) : BaseViewModel() {
 
+    val showToast = MutableLiveData(false)
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            scanResultsRepository.result.collect { scanResult ->
+            scanResultsRepository.result.receiveAsFlow().collect { scanResult ->
                 scanResultDao.updateScanResult(scanResult.barcode, InProgress)
-                makeOperationUseCase.invoke(
-                    Params(
-                        scanResult.barcode,
-                        ScannedItemModel(
-                            prefs.user?.id ?: return@collect,
-                            scanResult.operationId,
-                            scanResult.dateAndTime,
-                            1F,
-                            emptyList(),
-                            1
+
+                val isMakeOperation = retry(3) {
+                    makeOperationUseCase.invoke(
+                        Params(
+                            scanResult.barcode,
+                            ScannedItemModel(
+                                prefs.user?.id ?: "", //TODO добавить возврат из функции при null
+                                scanResult.operationId,
+                                scanResult.dateAndTime,
+                                1F,
+                                emptyList(),
+                                1
+                            )
                         )
                     )
-                ).onSuccess {
+                }
+
+                isMakeOperation.onSuccess {
                     scanResultDao.updateScanResult(scanResult.barcode, Loaded)
-                }.onFailure {
+                    showToast.postValue(false)
+                }
+                isMakeOperation.onFailure {
                     scanResultDao.updateScanResult(scanResult.barcode, NotLoaded)
+                    showToast.postValue(true)
                 }
             }
         }
     }
-
-    val showMenu = MutableLiveData(false)
 
     val connectivityLiveData: LiveData<ConnectivityStatusProvider.ConnectivityStatus>
         get() = connectivityStatusProvider.connectionStatusLiveData

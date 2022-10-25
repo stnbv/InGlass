@@ -11,5 +11,8 @@ enum class DIALOGS(
     ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog),
 
     //AddHelper
-    ADD_HELPER(R.id.addHelperDialog)
+    ADD_PARTICIPATION(R.id.addParticipationRateDialog),
+
+    //AddHelper
+    ADD_HELPER(R.id.addHelperBottomSheet)
 }

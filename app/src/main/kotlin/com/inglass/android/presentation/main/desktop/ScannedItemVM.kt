@@ -19,10 +19,10 @@ class ScannedItemVM(
     var barcode = data.barcode + " в количестве 1 шт."
 
     val loadStatusImage = when (data.loadingStatus) {
-        NotLoaded -> R.drawable.ic_attention_error
-        Queue -> R.drawable.ic_cloud_upload
-        InProgress -> R.drawable.ic_arrow_down //TODO Заменить иконку
-        Loaded -> R.drawable.ic_cloud_done
+        NotLoaded -> R.drawable.ic_error
+        Queue -> R.drawable.ic_upload
+        InProgress -> R.drawable.ic_load //TODO Заменить иконку
+        Loaded -> R.drawable.ic_done_in_circle
     }
 }
 

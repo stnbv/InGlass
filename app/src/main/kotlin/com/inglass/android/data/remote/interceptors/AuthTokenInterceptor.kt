@@ -12,7 +12,6 @@ class AuthTokenInterceptor(private val preferences: IPreferencesRepository) : In
         val token = preferences.token
         val originalRequest = chain.request()
 
-
         val newUrl: String = originalRequest.url.toString().replace(BuildConfig.BASE_URL, preferences.baseUrl)
 
         val newRequest = originalRequest.newBuilder().apply {
@@ -20,6 +19,9 @@ class AuthTokenInterceptor(private val preferences: IPreferencesRepository) : In
             if (!token.isNullOrEmpty()) {
                 addHeader("Accept", "application/json")
                 addHeader("Authorization", token)
+
+//                addHeader("Accept", "application/json") //TODO Заменить токен на строке ниже(сейчас тестовый предоставленный заказчиком)
+//                addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6ImI0MjMyYjc1LWQxZDYtMTFlYy1hNWU1LTAyMTEzMjI0MGRkMyIsIm5hbWUiOiLQktCw0YHQuNC70Y_QvdGB0LrQuNC5INCQ0YDRgtGR0Lwg0JDQu9C10LrRgdCw0L3QtNGA0L7QstC40YcifQ.qQDlDjKhxTOSYuh1Db7Qzi-1k5AUPR392bRSLoz2iYg")
             }
         }.build()
 

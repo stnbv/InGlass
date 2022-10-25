@@ -9,6 +9,7 @@ import androidx.paging.map
 import com.inglass.android.data.local.db.dao.EmployeeDao
 import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
+import com.inglass.android.data.local.db.dao.UserHelpersDao
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
 import com.inglass.android.domain.models.EmployeeAndOperationModel
@@ -34,6 +35,7 @@ class DesktopVM @Inject constructor(
     private val scanResultDao: ScanResultsDao,
     private val operationsDao: OperationsDao,
     private val employeeDao: EmployeeDao,
+    private val helpersDao: UserHelpersDao,
     private val referenceBookUseCase: GetReferenceBookUseCase,
 ) : BasePagingViewModel() {
 
@@ -42,11 +44,21 @@ class DesktopVM @Inject constructor(
     val operations = MutableLiveData(mutableListOf("Выберите операцию"))
     val selectedOperationsPosition = MutableLiveData(0)
     val isMultiScan = MutableLiveData(false)
+    val helpersNames = MutableLiveData("Помощники")
     var userAvailableOperations: List<EmployeeAndOperationModel?>? = null
 
     init {
         initViewModelWithRecycler()
         getUserInformation()
+        getHelpers()
+    }
+
+    fun getHelpers() {
+        viewModelScope.launch(Dispatchers.IO) {
+            helpersDao.getAllHelpers().forEach {
+                helpersNames.value = "${helpersNames.value} ${it.employee.name} - ${it.userHelpers.participationRate} /"
+            }
+        }
     }
 
     fun setDataToItems() {
@@ -133,7 +145,6 @@ class DesktopVM @Inject constructor(
     fun clearDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultDao.deleteAllItems()
-            setData(emptyList())
         }
     }
 }

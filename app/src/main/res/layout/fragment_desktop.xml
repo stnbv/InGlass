@@ -10,7 +10,8 @@
             type="com.inglass.android.presentation.main.desktop.DesktopVM" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_gray">
@@ -25,7 +26,37 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="0dp">
+
+                <LinearLayout
+                    android:id="@+id/toolbar_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/gray"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        app:srcCompat="@drawable/ic_menu" />
+
+                    <TextView
+                        android:id="@+id/titleTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/desktop_scan_barcode"
+                        android:textColor="@color/silver"
+                        android:textSize="20dp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/receiveNewsAndOffersTextView"
@@ -38,7 +69,7 @@
                     android:textSize="18dp"
                     app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/receiveNewsAndOffersSwitch"
@@ -71,6 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="8dp"
+                    android:text="@{vm.helpersNames}"
                     android:textColor="@color/silver"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +131,7 @@
                     style="@style/RoundButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="12dp"
                     android:enabled="@{vm.isScanButtonEnable}"
@@ -115,7 +147,7 @@
                     style="@style/RoundButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="18dp"
+                    android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="16dp"
                     android:onClick="@{()->vm.clearDatabase()}"
@@ -127,6 +159,18 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/silver"
+            app:headerLayout="@layout/menu_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
 

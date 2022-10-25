@@ -15,7 +15,6 @@
     <color name="pink">#FF97A2</color>
     <color name="prompt_black">#32362F</color>
     <color name="normal_gray">#95959E</color>
-    <color name="light_gray">#C2CDDB</color>
     <color name="main_green">#AFD838</color>
     <color name="grey">#525568</color>
     <color name="background_toolbar">#F1F7FF</color>
@@ -23,8 +22,8 @@
     <color name="light_grey">#96969F</color>
     <color name="translucent">#80FFFFFF</color>
     <color name="lavender_light">#DFE6F6</color>
-	<color name="white_96">#F5FFFFFF</color>
-	<color name="white_98">#FAFFFFFF</color>
+    <color name="white_96">#F5FFFFFF</color>
+    <color name="white_98">#FAFFFFFF</color>
     <color name="very_light_blue">#EFF7FF</color>
     <color name="light_blue">#AFBED8</color>
     <color name="red">#FF4143</color>

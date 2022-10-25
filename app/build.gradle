@@ -15,8 +15,8 @@ android {
         versionCode 5
         versionName "1.0.0"
         setProperty("archivesBaseName", "RealCosmetology" + "-v" + versionName + "(" + versionCode + ")")
-        buildConfigField 'String', 'BASE_URL', "\"http://192.168.0.106:8080\""
-        buildConfigField 'String', 'API_ENDPOINT', "\"/api/v1/\""
+        buildConfigField 'String', 'BASE_URL', "\"http://10.0.2.2:8080\""
+        buildConfigField 'String', 'API_ENDPOINT', "\"/iglass_malenova/hs/MobileClient/\"" //TODO Возможно удалить придется
     }
 }
 

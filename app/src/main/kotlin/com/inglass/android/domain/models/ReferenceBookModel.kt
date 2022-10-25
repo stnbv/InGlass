@@ -6,6 +6,6 @@ data class ReferenceBookModel(
 )
 
 data class EmployeeAndOperationModel(
-    val id: Int,
+    val id: String,
     val name: String
 )
