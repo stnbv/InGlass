@@ -3,13 +3,13 @@ package com.inglass.android.utils.errors.conditions
 import androidx.annotation.StringRes
 import androidx.lifecycle.MutableLiveData
 import com.inglass.android.R
-import com.inglass.android.utils.api.core.ErrorCode
-import com.inglass.android.utils.api.core.ErrorCode.InternalError
-import com.inglass.android.utils.api.core.Answer
-import com.inglass.android.utils.api.core.Answer.Failure
 import com.inglass.android.utils.ErrorWrapper
 import com.inglass.android.utils.REGEX_EMAIL
 import com.inglass.android.utils.REGEX_PASS
+import com.inglass.android.utils.api.core.Answer
+import com.inglass.android.utils.api.core.Answer.Failure
+import com.inglass.android.utils.api.core.ErrorCode
+import com.inglass.android.utils.api.core.ErrorCode.InternalError
 import com.inglass.android.utils.ui.Gender.Default
 
 const val ERR_MIN_PASS_LENGTH = 8
@@ -20,6 +20,14 @@ const val ERR_SUB_DOMEN_LENGTH = 64
 const val ERR_MAX_PHONE_LENGTH = 11
 
 const val ERR_SMS_CODE_LENGTH = 5
+
+class LoginAndPassCondition(@StringRes private val errorString: Int = R.string.error_login_or_pass) :
+    ICondition<String> {
+    override fun validate(data: String): ErrorWrapper {
+        val valid = data.isNotEmpty()
+        return if (valid) ErrorWrapper.None else ErrorWrapper.ResourceText(errorString)
+    }
+}
 
 class PhoneCondition(@StringRes private val stringId: Int = R.string.error_login_or_pass) : ICondition<String> {
     override fun validate(data: String): ErrorWrapper {

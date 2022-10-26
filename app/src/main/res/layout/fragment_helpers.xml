@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:onClick="@{()->vm.navigateBack()}"
                 android:paddingHorizontal="16dp"
                 app:srcCompat="@drawable/ic_back" />
 
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="60dp"
-                android:text="Title"
+                android:text="@string/helpers_title"
                 android:textColor="@color/silver"
                 android:textSize="20dp" />
 
@@ -77,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginBottom="8dp"
+            android:enabled="@{vm.addHelperButtonEnabled}"
             android:onClick="@{()->vm.navigateToAddHelper()}"
             android:text="@string/helpers_add_helper"
             app:backgroundTint="@drawable/bg_tint_pressed_main_black"

@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IPersonalInformationRepository {
 
-    suspend fun getPersonalInformation(): Flow<PersonalInformationModel>
+    val result: Flow<PersonalInformationModel?>
+
+    suspend fun getPersonalInformation()
 
 }

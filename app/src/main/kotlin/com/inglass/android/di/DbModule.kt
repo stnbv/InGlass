@@ -29,7 +29,6 @@ object DbModule {
     @Singleton
     fun provideEmployeeDao(appDatabase: AppDatabase) = appDatabase.employeeDao()
 
-
     @Provides
     @Singleton
     fun provideUserHelpersDao(appDatabase: AppDatabase) = appDatabase.userHelpersDao()

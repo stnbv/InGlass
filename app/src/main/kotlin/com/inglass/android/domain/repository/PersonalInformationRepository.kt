@@ -8,24 +8,21 @@ import com.inglass.android.domain.repository.interfaces.IPersonalInformationRepo
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.utils.api.core.map
 import com.inglass.android.utils.api.core.onSuccess
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class PersonalInformationRepository(
     private val service: IPersonalInformationService,
     private val preferencesRepository: IPreferencesRepository
 ) : IPersonalInformationRepository {
 
-    override suspend fun getPersonalInformation(): Flow<PersonalInformationModel> {
-        return flow {
-            preferencesRepository.user?.let { emit(it) }
+    override val result: MutableStateFlow<PersonalInformationModel?> = MutableStateFlow(preferencesRepository.user)
 
-            service.getPersonalInformation()
-                .map(PersonalInformationResponse::toModel)
-                .onSuccess {
-                    preferencesRepository.user = it
-                    emit(it)
-                }
-        }
+    override suspend fun getPersonalInformation() {
+        service.getPersonalInformation()
+            .map(PersonalInformationResponse::toModel)
+            .onSuccess {
+                preferencesRepository.user = it
+                result.emit(it)
+            }
     }
 }

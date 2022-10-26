@@ -33,25 +33,15 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userHelpersDao(): UserHelpersDao
 
     companion object {
-        private var INSTANCE: AppDatabase? = null
 
         fun getInstance(context: Context): AppDatabase {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        "inGlass_common_db"
-                    )
-                        .allowMainThreadQueries()
-                        .build()
-                }
-            }
-            return INSTANCE!!
-        }
-
-        fun destroyInstance() {
-            INSTANCE = null
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                "inGlass_common_db"
+            )
+                .allowMainThreadQueries()
+                .build()
         }
     }
 }

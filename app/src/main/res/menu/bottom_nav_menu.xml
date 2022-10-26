@@ -6,17 +6,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navChangeUser"
-            android:onClick="selectBottomNavigation"
+            android:onClick="selectMenuNavigation"
             android:title="@string/title_change_user" />
 
         <item
             android:id="@+id/navHelpers"
-            android:onClick="selectBottomNavigation"
+            android:onClick="selectMenuNavigation"
             android:title="@string/title_helpers" />
 
         <item
             android:id="@+id/navSettings"
-            android:onClick="selectBottomNavigation"
+            android:onClick="selectMenuNavigation"
             android:title="@string/setting_title" />
 
     </group>

@@ -10,8 +10,7 @@
             type="com.inglass.android.presentation.main.desktop.DesktopVM" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_gray">
@@ -83,7 +82,7 @@
                     app:useMaterialThemeColors="false" />
 
                 <Spinner
-                    android:id="@+id/sexSpinner"
+                    android:id="@+id/operationsSpinner"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="10dp"
@@ -106,7 +105,7 @@
                     android:textColor="@color/silver"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/sexSpinner"
+                    app:layout_constraintTop_toBottomOf="@id/operationsSpinner"
                     tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -160,17 +159,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/silver"
-            app:headerLayout="@layout/menu_header"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/bottom_nav_menu" />
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

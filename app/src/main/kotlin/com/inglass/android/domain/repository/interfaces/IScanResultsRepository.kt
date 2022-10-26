@@ -1,12 +1,12 @@
 package com.inglass.android.domain.repository.interfaces
 
-import com.inglass.android.data.local.db.entities.ScanResult
+import com.inglass.android.domain.models.FullScannedItemModel
 import kotlinx.coroutines.channels.Channel
 
 
 interface IScanResultsRepository {
 
-    val result: Channel<ScanResult>
+    val result: Channel<FullScannedItemModel>
 
-    suspend fun emitScanResult(scanResult: ScanResult)
+    suspend fun emitScanResult(scanResult: FullScannedItemModel)
 }

@@ -10,13 +10,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
+import com.inglass.android.AppActivity
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentDesktopBinding
-import com.inglass.android.databinding.MenuHeaderBinding
-import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.utils.base.BaseFragment
 import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +32,6 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
 
     override val viewModel: DesktopVM by viewModels()
 
-    private lateinit var menuHeader: MenuHeaderBinding
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
@@ -46,56 +41,35 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
 
         viewModel.setDataToItems()
-        binding.menu.doOnClick { binding.drawerLayout.openDrawer(GravityCompat.START) }
-        menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
-
-        viewModel.userInfo.observe(viewLifecycleOwner) {
-            setMenuPersonalInformation(it)
+        binding.menu.doOnClick {
+            (activity as? AppActivity)?.openMenu()
         }
-        populateOperations()
-    }
 
-    private fun setMenuPersonalInformation(personalInformation: PersonalInformationModel) {
-        with(personalInformation) {
-            menuHeader.nameTextView.text = fullName
-            menuHeader.serverAddressTextView.text = lastName //TODO Заменить на адрес сервера
-            Glide
-                .with(requireActivity())
-                .load(photo)
-                .into(menuHeader.profileImageView)
+        viewModel.operations.observe(viewLifecycleOwner) {
+            setupOperationsSpinner()
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getReferenceBook()
-    }
-
-    private fun populateOperations() {
-        val featureSpinner = binding.sexSpinner
+    private fun setupOperationsSpinner() {
+        val spinner = binding.operationsSpinner
 
         val dataAdapter = ArrayAdapter(
             requireContext(),
             R.layout.spinner_style,
-            viewModel.operations.value ?: mutableListOf("Выберите операцию")
+            viewModel.operations.value ?: mutableListOf("Нет доступных операций")
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        featureSpinner.adapter = dataAdapter
-        featureSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        spinner.adapter = dataAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>,
                 selectedItemView: View?,
                 pos: Int,
                 id: Long
             ) {
-                if (pos == 0) {
-                    viewModel.isScanButtonEnable.postValue(false)
-                    viewModel.selectedOperationsPosition.postValue(pos)
-                }
-                if (pos > 0) {
-                    viewModel.isScanButtonEnable.postValue(true)
-                    viewModel.selectedOperationsPosition.postValue(pos)
-                }
+                viewModel.isScanButtonEnable.postValue(viewModel.operations.value?.get(pos) != "Нет доступных операций")
+                viewModel.selectedOperationsPosition.postValue(pos)
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {

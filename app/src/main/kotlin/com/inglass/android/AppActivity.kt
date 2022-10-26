@@ -9,15 +9,18 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.inglass.android.R.color
-import com.inglass.android.R.drawable
 import com.inglass.android.databinding.ActivityMainBinding
-import com.inglass.android.presentation.auth_screens.splash.VALUE_LOADING_FINISH
-import com.inglass.android.presentation.auth_screens.splash.VALUE_LOADING_START
+import com.inglass.android.databinding.MenuHeaderBinding
+import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.utils.navigation.DIALOGS
+import com.inglass.android.utils.navigation.DIALOGS.ACCESS_TO_SETTINGS
 import com.inglass.android.utils.navigation.SCREENS
 import com.inglass.android.utils.navigation.findNavController
 import com.inglass.android.utils.navigation.setCurrentDialogScreenWithNavController
@@ -33,24 +36,55 @@ class AppActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
+    private lateinit var menuHeader: MenuHeaderBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.vm = viewModel
 
+        binding.navView.setupWithNavController(findNavController(R.id.navHostFragment))
+
+        menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
+
         lifecycleScope.launchWhenCreated {
             viewModel.showToast.observe(this@AppActivity as LifecycleOwner) {
-                if (it==true) {
-                    binding.root.makeToast(
+                if (it == true) {
+                    binding.drawerLayout.makeToast(
                         backgroundRes = getColor(color.red),
-                        imageStatusRes = drawable.ic_cloud_done,
                         message = "Штрихкод не отправлен"
                     )
                 }
             }
         }
+
+        binding.drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+
+        viewModel.userInfo.observe(this) {
+            setMenuPersonalInformation(it)
+        }
     }
+
+    private fun setMenuPersonalInformation(personalInformation: PersonalInformationModel) {
+        with(personalInformation) {
+            menuHeader.nameTextView.text = fullName
+            menuHeader.serverAddressTextView.text = viewModel.host.value
+            Glide
+                .with(this@AppActivity)
+                .load(photo)
+                .into(menuHeader.profileImageView)
+        }
+    }
+
+    fun openMenu() {
+        binding.drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    fun closeMenu() {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
 
     fun navigateToScreen(screen: SCREENS) {
         hideKeyboard()
@@ -70,13 +104,14 @@ class AppActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-    fun selectBottomNavigation(item: MenuItem) {
+    fun selectMenuNavigation(item: MenuItem) {
         if (findNavController(R.id.navHostFragment).currentDestination?.id == item.itemId) return
         when (item.itemId) {
-            R.id.navSettings -> navigateToScreen(SCREENS.SETTINGS)
+            R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
             R.id.navHelpers -> navigateToScreen(SCREENS.HELPERS)
             R.id.navChangeUser -> navigateToScreen(SCREENS.LOGIN)
         }
+        closeMenu()
     }
 
     private fun showDialogWithCurrentDescription(@StringRes description: Int, @StringRes buttonText: Int) {
@@ -87,7 +122,6 @@ class AppActivity : AppCompatActivity() {
         )
     }
 
-    //убирает клавиатуру,убирает фокус с EditText'a //Alexander Yanchelenko 20.12.2021
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
             val view = currentFocus

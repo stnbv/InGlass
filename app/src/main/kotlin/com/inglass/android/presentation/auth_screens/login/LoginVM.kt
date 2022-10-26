@@ -11,6 +11,7 @@ import com.inglass.android.utils.api.core.ErrorCode
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.base.BaseViewModel
+import com.inglass.android.utils.errors.conditions.LoginAndPassCondition
 import com.inglass.android.utils.errors.conditions.NetworkConditionMessagesLogin
 import com.inglass.android.utils.errors.observers.DefaultObserverValidate
 import com.inglass.android.utils.errors.validators.Validator
@@ -26,14 +27,24 @@ class LoginVM @Inject constructor(
 ) : BaseViewModel() {
 
     val showLoader = MutableLiveData(false)
-    val phone = MutableLiveData("")
+    val login = MutableLiveData("")
+
     val loginButtonVisibility = MutableLiveData(true)
 
     val password = MutableLiveData("")
-    val passErrorWrapper = MutableLiveData<ErrorWrapper>(ErrorWrapper.None)
 
     val currentError = MutableLiveData<ErrorWrapper>(ErrorWrapper.None)
     private val networkError = MutableLiveData<Answer.Failure?>(null)
+
+    private val loginValidator = Validator<String>(login).apply {
+        addCondition(LoginAndPassCondition())
+        setObserver(DefaultObserverValidate(currentError))
+    }
+
+    private val passValidator = Validator<String>(password).apply {
+        addCondition(LoginAndPassCondition())
+        setObserver(DefaultObserverValidate(currentError))
+    }
 
     private val networkConnectionValidator = Validator(networkError).apply {
         addCondition(
@@ -46,9 +57,14 @@ class LoginVM @Inject constructor(
     }
 
     fun onLoginClick() {
+        loginValidator.validation()
+        passValidator.validation()
+
+        if (loginValidator.getState().isThereError || passValidator.getState().isThereError) return
+
         viewModelScope.launch {
             val password = password.value ?: return@launch
-            val phone = phone.value ?: return@launch
+            val phone = login.value ?: return@launch
 
             showLoader.value = true
             logInUseCase(Params(phone, password))

@@ -12,7 +12,6 @@ import com.inglass.android.utils.adapter.ItemVM
 import com.inglass.android.utils.base.BaseViewModel
 import com.inglass.android.utils.navigation.DIALOGS.ADD_HELPER
 import com.inglass.android.utils.navigation.DIALOGS.ADD_PARTICIPATION
-import com.inglass.android.utils.navigation.SCREENS.DESKTOP
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.BigDecimal
 import java.math.BigDecimal.ZERO
@@ -31,12 +30,18 @@ class HelpersVM @Inject constructor(
     private var employeeData = mutableListOf<EmployeeItemData>()
     private var participationRateSummary = ZERO
     var saveButtonEnabled = MutableLiveData(false)
+    val addHelperButtonEnabled = MutableLiveData(true)
 
     init {
         initViewModelWithRecycler()
         initData()
     }
 
+    fun checkEmployeeListSize() {
+        addHelperButtonEnabled.postValue(employeeData.size != 0)
+    }
+
+    //Добавляет долю участия
     fun addParticipationRate(data: HelperItemData) {
         viewModelScope.launch(Dispatchers.Main) {
             val index = helpersItemData.indexOfFirst {
@@ -50,13 +55,13 @@ class HelpersVM @Inject constructor(
 
             participationRateSummary += data.participation
             checkParticipationRates()
-
             setAdapterData()
         }
     }
 
+    //Проверка валидности доли участия
     private fun checkParticipationRates() {
-        val isRateSumCorrect = participationRateSummary <= BigDecimal.ONE
+        val isRateSumCorrect = participationRateSummary < BigDecimal.ONE
 
         var isRateFilledCorrect = true
 
@@ -67,16 +72,17 @@ class HelpersVM @Inject constructor(
             helpersItemData[index] = helperItemData.copy(isParticipationValid = isRateSumCorrect && isRateNotNull)
         }
 
-        saveButtonEnabled.value = isRateFilledCorrect
+        saveButtonEnabled.value = isRateFilledCorrect && isRateSumCorrect
     }
 
     fun addHelper(data: EmployeeItemData) {
         viewModelScope.launch(Dispatchers.Main) {
-            helpersItemData += HelperItemData(data.id, data.fullName, BigDecimal.ZERO, true)
+            helpersItemData += HelperItemData(data.id, data.fullName, ZERO)
             employeeData.remove(employeeData.find {
                 it.id == data.id
             })
             checkParticipationRates()
+            checkEmployeeListSize()
             setAdapterData()
         }
     }
@@ -88,26 +94,33 @@ class HelpersVM @Inject constructor(
                 UserHelpers(it.id, it.participation)
             })
         }
-        navigateToScreen(DESKTOP)
+        navigateBack()
     }
 
     private fun initData() {
         viewModelScope.launch(Dispatchers.IO) {
-            userHelpersDao.getAllHelpers().forEach { helpersFullData ->
-                helpersItemData.add(
-                    HelperItemData(
-                        helpersFullData.userHelpers.helperId,
-                        helpersFullData.employee.name,
-                        helpersFullData.userHelpers.participationRate,
-                        true
-                    )
-                )
-            }
-
             employeeData = employeeDao.getEmployees().map {
                 EmployeeItemData(it.id, it.name)
             }.toMutableList()
 
+            userHelpersDao.getHelperFullInfo().forEach { employee ->
+                helpersItemData.add(
+                    HelperItemData(
+                        employee.id,
+                        employee.name,
+                        employee.participationRate
+                    )
+                )
+            }
+
+            helpersItemData.forEach { helper ->
+                participationRateSummary += helper.participation
+                val element = employeeData.find { employee ->
+                    helper.id == employee.id
+                }
+                employeeData.remove(element)
+            }
+            checkEmployeeListSize()
             withContext(Dispatchers.Main) {
                 setAdapterData()
             }
@@ -144,6 +157,7 @@ class HelpersVM @Inject constructor(
         participationRateSummary -= item.participation
         employeeData.add(EmployeeItemData(item.id, item.fullName))
         checkParticipationRates()
+        checkEmployeeListSize()
         setAdapterData()
     }
 
@@ -154,6 +168,7 @@ class HelpersVM @Inject constructor(
         participationRateSummary = ZERO
         helpersItemData.clear()
         checkParticipationRates()
+        checkEmployeeListSize()
         setAdapterData()
     }
 
