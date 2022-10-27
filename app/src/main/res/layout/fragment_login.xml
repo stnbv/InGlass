@@ -63,8 +63,6 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passTextInputEditText1"
                         style="@style/DefaultTextInputEditText"
-                        android:inputType="textPassword"
-                        android:maxLength="40"
                         android:text="@={vm.login}"
                         android:textColor="@color/main_black"
                         android:textColorHint="@color/normal_gray"

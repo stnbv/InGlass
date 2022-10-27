@@ -21,7 +21,7 @@ class AuthTokenInterceptor(private val preferences: IPreferencesRepository) : In
 //                addHeader("Authorization", token)
 
                 addHeader("Accept", "application/json") //TODO Заменить токен на строке ниже(сейчас тестовый предоставленный заказчиком)
-                addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJJRCI6ImI0MjMyYjc1LWQxZDYtMTFlYy1hNWU1LTAyMTEzMjI0MGRkMyIsIm5hbWUiOiLQktCw0YHQuNC70Y_QvdGB0LrQuNC5INCQ0YDRgtGR0Lwg0JDQu9C10LrRgdCw0L3QtNGA0L7QstC40YcifQ.qQDlDjKhxTOSYuh1Db7Qzi-1k5AUPR392bRSLoz2iYg")
+                addHeader("Authorization", "Bearer $token")
             }
         }.build()
 

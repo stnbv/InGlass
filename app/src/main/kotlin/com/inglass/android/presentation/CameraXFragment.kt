@@ -1,6 +1,10 @@
 package com.inglass.android.presentation
 
+import android.content.Context.VIBRATOR_SERVICE
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -100,7 +104,11 @@ class CameraXFragment :
             imageProcessor!!.stop()
         }
 
-        imageProcessor = BarcodeScannerProcessor(requireContext(), viewModel.scanResSet) { viewModel.checkBarcode(it) }
+        imageProcessor = BarcodeScannerProcessor(
+            requireContext(),
+            viewModel.scanResSet,
+            { viewModel.checkBarcode(it) },
+            { vibration() })
 
         val builder = ImageAnalysis.Builder()
         val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
@@ -135,5 +143,25 @@ class CameraXFragment :
             imageProcessor!!.processImageProxy(imageProxy, binding.graphicOverlay)
         }
         cameraProvider!!.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, analysisUseCase)
+    }
+
+    private fun vibration() {
+        val vibrator = requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val canVibrate: Boolean = vibrator.hasVibrator()
+        val milliseconds = 1000L
+
+        if (canVibrate) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // API 26
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        milliseconds,
+                        VibrationEffect.DEFAULT_AMPLITUDE
+                    )
+                )
+            } else {
+                vibrator.vibrate(milliseconds)
+            }
+        }
     }
 }

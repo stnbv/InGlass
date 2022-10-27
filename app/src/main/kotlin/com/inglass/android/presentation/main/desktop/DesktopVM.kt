@@ -131,7 +131,8 @@ class DesktopVM @Inject constructor(
     }
 
     private fun getReferenceBook() {
-        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 300000) return
+//        300000
+        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 30) return
         else {
             viewModelScope.launch {
 
