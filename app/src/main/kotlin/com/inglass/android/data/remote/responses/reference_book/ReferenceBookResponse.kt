@@ -5,8 +5,8 @@ import com.inglass.android.domain.models.EmployeeAndOperationModel
 import com.inglass.android.domain.models.ReferenceBookModel
 
 data class ReferenceBookResponse(
-    @SerializedName("employees") val employees: List<Employees>,
-    @SerializedName("operations") val operations: List<Operations>
+    @SerializedName("employees") val employees: List<Employees>?,
+    @SerializedName("operations") val operations: List<Operations>?
 )
 
 data class Employees(
@@ -20,12 +20,10 @@ data class Operations(
 )
 
 fun ReferenceBookResponse.toModel() = ReferenceBookModel(
-    employees = employees.map {
+    employees = employees?.map {
         EmployeeAndOperationModel(it.id, it.name)
-    },
-    operations = operations.map {
+    } ?: emptyList(),
+    operations = operations?.map {
         EmployeeAndOperationModel(it.id, it.name)
-    }
+    } ?: emptyList()
 )
-
-
