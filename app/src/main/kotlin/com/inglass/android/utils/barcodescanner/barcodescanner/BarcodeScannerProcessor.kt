@@ -9,7 +9,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import com.inglass.android.presentation.main.scan2.GraphicOverlay
+import com.inglass.android.utils.barcodescanner.GraphicOverlay
 
 private const val TAG = "BarcodeProcessor"
 
@@ -17,7 +17,8 @@ class BarcodeScannerProcessor(
     context: Context,
     private val scanned: Set<String>,
     private val onScanned: (String) -> Unit,
-    private val onScannedVibrate: () -> Unit
+    private val onScannedVibrate: () -> Unit,
+    private val onScannedMusic: () -> Unit
 ) : VisionProcessorBase<List<Barcode>>(context) {
 
     private val options = BarcodeScannerOptions.Builder()
@@ -39,13 +40,14 @@ class BarcodeScannerProcessor(
         return barcodeScanner.process(image)
     }
 
-    override fun onSuccess(barcodes: List<Barcode>, graphicOverlay: GraphicOverlay) {
-        barcodes.forEach { barcode ->
+    override fun onSuccess(results: List<Barcode>, graphicOverlay: GraphicOverlay) {
+        results.forEach { barcode ->
             if (barcode.rawValue in scanned) {
                 graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode, Color.GREEN))
             } else {
                 barcode.rawValue?.let { onScanned(it) }
-                onScannedVibrate.invoke()
+                onScannedVibrate()
+                onScannedMusic()
                 graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode))
             }
         }
@@ -54,5 +56,4 @@ class BarcodeScannerProcessor(
     override fun onFailure(e: Exception) {
         Log.e(TAG, "Barcode detection failed $e")
     }
-
 }

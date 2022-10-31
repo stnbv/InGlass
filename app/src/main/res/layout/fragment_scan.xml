@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-<!--    <data class="ScanFargmentBinding">-->
+    <!--    <data class="ScanFargmentBinding">-->
 
-<!--        <variable-->
-<!--            name="vm"-->
-<!--            type="com.inglass.android.presentation.main.scan.ScanVM" />-->
-<!--    </data>-->
+    <!--        <variable-->
+    <!--            name="vm"-->
+    <!--            type="com.inglass.android.presentation.main.scan.ScanVM" />-->
+    <!--    </data>-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -25,7 +25,7 @@
         <!--      app:layout_constraintBottom_toTopOf="@+id/control"-->
 
 
-        <com.inglass.android.presentation.main.scan2.GraphicOverlay
+        <com.inglass.android.utils.barcodescanner.GraphicOverlay
             android:id="@+id/graphic_overlay"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -1,6 +1,7 @@
 package com.inglass.android.presentation
 
 import android.content.Context.VIBRATOR_SERVICE
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -108,7 +109,8 @@ class CameraXFragment :
             requireContext(),
             viewModel.scanResSet,
             { viewModel.checkBarcode(it) },
-            { vibration() })
+            { vibration() },
+            { music() })
 
         val builder = ImageAnalysis.Builder()
         val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
@@ -163,5 +165,11 @@ class CameraXFragment :
                 vibrator.vibrate(milliseconds)
             }
         }
+    }
+
+    private fun music() {
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val r = RingtoneManager.getRingtone(context, notification)
+        r.play()
     }
 }

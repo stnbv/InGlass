@@ -5,8 +5,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import com.google.mlkit.vision.barcode.common.Barcode
-import com.inglass.android.presentation.main.scan2.GraphicOverlay
-import com.inglass.android.presentation.main.scan2.GraphicOverlay.Graphic
+import com.inglass.android.utils.barcodescanner.GraphicOverlay
+import com.inglass.android.utils.barcodescanner.GraphicOverlay.Graphic
 import kotlin.math.max
 import kotlin.math.min
 

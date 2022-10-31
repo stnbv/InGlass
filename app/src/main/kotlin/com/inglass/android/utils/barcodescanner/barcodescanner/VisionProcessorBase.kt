@@ -20,10 +20,8 @@ import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build.VERSION_CODES
 import android.os.SystemClock
 import androidx.annotation.GuardedBy
-import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import com.google.android.gms.tasks.OnFailureListener
@@ -39,12 +37,12 @@ import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.common.InputImage
 import com.inglass.android.utils.barcodescanner.BitmapUtils
 import com.inglass.android.utils.barcodescanner.FrameMetadata
+import com.inglass.android.utils.barcodescanner.GraphicOverlay
+import com.inglass.android.utils.barcodescanner.GraphicOverlay.Graphic
 import com.inglass.android.utils.barcodescanner.InferenceInfoGraphic
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
 import com.inglass.android.utils.barcodescanner.ScopedExecutor
 import com.inglass.android.utils.barcodescanner.VisionImageProcessor
-import com.inglass.android.presentation.main.scan2.GraphicOverlay
-import com.inglass.android.presentation.main.scan2.GraphicOverlay.Graphic
 import java.lang.Math.max
 import java.lang.Math.min
 import java.nio.ByteBuffer
@@ -217,8 +215,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
         }
 
         if (isMlImageEnabled(graphicOverlay?.context)) {
-            val mlImage =
-                MediaMlImageBuilder(image?.image!!).setRotation(image.imageInfo.rotationDegrees).build()
+            val mlImage = MediaMlImageBuilder(image?.image!!).setRotation(image.imageInfo.rotationDegrees).build()
             graphicOverlay?.let {
                 requestDetectInImage(
                     image = mlImage,
@@ -236,8 +233,8 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
             requestDetectInImage(
                 image = InputImage.fromMediaImage(image?.image!!, image.imageInfo.rotationDegrees),
                 graphicOverlay = it,
-                originalCameraImage =  bitmap,
-                shouldShowFps =  true,
+                originalCameraImage = bitmap,
+                shouldShowFps = true,
                 frameStartMs = frameStartMs
             ).addOnCompleteListener { image.close() }
         }

@@ -3,8 +3,7 @@ package com.inglass.android.utils.barcodescanner
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import com.inglass.android.presentation.main.scan2.GraphicOverlay
-import com.inglass.android.presentation.main.scan2.GraphicOverlay.Graphic
+import com.inglass.android.utils.barcodescanner.GraphicOverlay.Graphic
 
 class InferenceInfoGraphic(
     private val overlay: GraphicOverlay,

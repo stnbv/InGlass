@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <data class="FragmentCameraXBinding">
+    <data class="FragmentCameraXBinding">
 
-            <variable
-                name="vm"
-                type="com.inglass.android.presentation.CameraXViewModel" />
-        </data>
+        <variable
+            name="vm"
+            type="com.inglass.android.presentation.CameraXViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -20,9 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:scaleType="fitCenter" />
 
-        <com.inglass.android.presentation.main.scan2.GraphicOverlay
+        <com.inglass.android.utils.barcodescanner.GraphicOverlay
             android:id="@+id/graphic_overlay"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -30,6 +31,16 @@
             app:layout_constraintLeft_toLeftOf="@id/preview_view"
             app:layout_constraintRight_toRightOf="@id/preview_view"
             app:layout_constraintTop_toTopOf="@id/preview_view" />
+
+        <View
+            android:id="@+id/barcodeScannerZone"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:background="@drawable/ic_scan_area"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
