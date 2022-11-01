@@ -50,9 +50,6 @@ class BarcodeScannerProcessor(
                 barcode.rawValue?.let { onScanned(it) }
                 onScannedVibrate()
                 onScannedMusic()
-//                scannerOverlay.drawBlueRect
-//                scannerOverlay.drawBlueRect = false
-//                scannerOverlay.drawBlueRect
             }
         }
     }
