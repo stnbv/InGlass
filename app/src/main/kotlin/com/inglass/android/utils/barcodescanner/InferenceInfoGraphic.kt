@@ -61,5 +61,4 @@ class InferenceInfoGraphic(
         textPaint.setShadowLayer(5.0f, 0f, 0f, Color.BLACK)
         postInvalidate()
     }
-
 }

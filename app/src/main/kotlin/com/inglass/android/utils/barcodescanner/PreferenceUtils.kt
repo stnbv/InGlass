@@ -17,7 +17,8 @@ object PreferenceUtils {
         Preconditions.checkArgument(
             (lensfacing == CameraSelector.LENS_FACING_BACK || lensfacing == CameraSelector.LENS_FACING_FRONT)
         )
-        val prefKey = if (lensfacing == CameraSelector.LENS_FACING_BACK) context.getString(string.pref_key_camerax_rear_camera_target_resolution) else context.getString(
+        val prefKey =
+            if (lensfacing == CameraSelector.LENS_FACING_BACK) context.getString(string.pref_key_camerax_rear_camera_target_resolution) else context.getString(
                 string.pref_key_camerax_front_camera_target_resolution
             )
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/navigation_camera"
-        android:name="com.inglass.android.presentation.CameraXFragment"
+        android:name="com.inglass.android.presentation.scan.CameraXFragment"
         android:label="@string/desktop_scan_barcode"
         tools:layout="@layout/fragment_camerax">
 

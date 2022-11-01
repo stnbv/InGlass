@@ -9,7 +9,9 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
+import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
 import com.inglass.android.utils.barcodescanner.GraphicOverlay
+import timber.log.Timber
 
 private const val TAG = "BarcodeProcessor"
 
@@ -40,20 +42,22 @@ class BarcodeScannerProcessor(
         return barcodeScanner.process(image)
     }
 
-    override fun onSuccess(results: List<Barcode>, graphicOverlay: GraphicOverlay) {
+    override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl) {
         results.forEach { barcode ->
             if (barcode.rawValue in scanned) {
-                graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode, Color.GREEN))
+                scannerOverlay.drawBlueRect = true
             } else {
                 barcode.rawValue?.let { onScanned(it) }
                 onScannedVibrate()
                 onScannedMusic()
-                graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode))
+//                scannerOverlay.drawBlueRect
+//                scannerOverlay.drawBlueRect = false
+//                scannerOverlay.drawBlueRect
             }
         }
     }
 
     override fun onFailure(e: Exception) {
-        Log.e(TAG, "Barcode detection failed $e")
+        Timber.e("Barcode detection failed $e")
     }
 }

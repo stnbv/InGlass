@@ -1,4 +1,4 @@
-package com.inglass.android.presentation
+package com.inglass.android.presentation.scan
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope

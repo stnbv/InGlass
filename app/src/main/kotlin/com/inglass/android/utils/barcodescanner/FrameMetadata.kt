@@ -1,6 +1,6 @@
 package com.inglass.android.utils.barcodescanner
 
-class FrameMetadata private constructor(val width: Int, val height: Int, val rotation: Int) {
+class FrameMetadata constructor(val width: Int, val height: Int, val rotation: Int) {
 
     /** Builder of [FrameMetadata].  */
     class Builder {

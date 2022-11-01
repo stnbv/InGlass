@@ -19,6 +19,22 @@ import java.nio.ByteBuffer
 object BitmapUtils {
 //    private const val TAG = "BitmapUtils"
 
+    fun getBitmap(data: ByteArray, metadata: FrameMetadata): Bitmap {
+
+        val image = YuvImage(
+            data, ImageFormat.NV21, metadata.width, metadata.height, null
+        )
+        val stream = ByteArrayOutputStream()
+        image.compressToJpeg(
+            Rect(0, 0, metadata.width, metadata.height),
+            80,
+            stream
+        )
+        val bmp = BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.size())
+        stream.close()
+        return rotateBitmap(bmp, metadata.rotation, false, false)
+    }
+
     /** Converts NV21 format byte buffer to bitmap.  */
     fun getBitmap(data: ByteBuffer, metadata: FrameMetadata): Bitmap? {
         data.rewind()
