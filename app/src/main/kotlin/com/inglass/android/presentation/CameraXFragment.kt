@@ -48,6 +48,11 @@ class CameraXFragment :
 
             }, ContextCompat.getMainExecutor(requireContext())
         )
+
+        viewModel.onScannedFlow observe {
+            vibration()
+            music()
+        }
     }
 
     override fun onResume() {
@@ -108,9 +113,7 @@ class CameraXFragment :
         imageProcessor = BarcodeScannerProcessor(
             requireContext(),
             viewModel.scanResSet,
-            { viewModel.checkBarcode(it) },
-            { vibration() },
-            { music() })
+            { viewModel.checkBarcode(it) })
 
         val builder = ImageAnalysis.Builder()
         val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
@@ -150,7 +153,7 @@ class CameraXFragment :
     private fun vibration() {
         val vibrator = requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
         val canVibrate: Boolean = vibrator.hasVibrator()
-        val milliseconds = 1000L
+        val milliseconds = 500L
 
         if (canVibrate) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -169,7 +172,7 @@ class CameraXFragment :
 
     private fun music() {
         val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val r = RingtoneManager.getRingtone(context, notification)
-        r.play()
+        val ringtone = RingtoneManager.getRingtone(context, notification)
+        ringtone.play()
     }
 }

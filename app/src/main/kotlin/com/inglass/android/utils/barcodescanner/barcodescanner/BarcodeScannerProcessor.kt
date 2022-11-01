@@ -16,9 +16,7 @@ private const val TAG = "BarcodeProcessor"
 class BarcodeScannerProcessor(
     context: Context,
     private val scanned: Set<String>,
-    private val onScanned: (String) -> Unit,
-    private val onScannedVibrate: () -> Unit,
-    private val onScannedMusic: () -> Unit
+    private val onScanned: (String) -> Unit
 ) : VisionProcessorBase<List<Barcode>>(context) {
 
     private val options = BarcodeScannerOptions.Builder()
@@ -46,8 +44,6 @@ class BarcodeScannerProcessor(
                 graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode, Color.GREEN))
             } else {
                 barcode.rawValue?.let { onScanned(it) }
-                onScannedVibrate()
-                onScannedMusic()
                 graphicOverlay.add(BarcodeGraphic(graphicOverlay, barcode))
             }
         }

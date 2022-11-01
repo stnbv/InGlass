@@ -17,6 +17,8 @@ import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -38,6 +40,9 @@ class CameraXViewModel @Inject constructor(
     var userRate = BigDecimal.ONE
     val helpers = mutableListOf<Helper>()
 
+    private val onScannedChannel = Channel<Unit>()
+    val onScannedFlow = onScannedChannel.receiveAsFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             helpersDao.getHelperFullInfo().forEach { helper ->
@@ -54,6 +59,7 @@ class CameraXViewModel @Inject constructor(
         scanResSet.add(barcode)
         viewModelScope.launch(Dispatchers.IO) {
             if (scanResultDao.getItemById(barcode) == null) {
+                onScannedChannel.send(Unit)
                 saveBarcode(barcode)
                 scanResultsRepository.emitScanResult(
                     FullScannedItemModel(
