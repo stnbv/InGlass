@@ -9,7 +9,6 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import android.os.Build
 import android.util.AttributeSet
 import android.util.Size
 import android.view.View
@@ -41,7 +40,7 @@ class ScannerOverlayImpl @JvmOverloads constructor(
         }
     }
 
-    var drawBlueRect: Boolean = false
+    var drawGreenRect: Boolean = false
         set(value) {
             field = value
             invalidate()
@@ -49,16 +48,10 @@ class ScannerOverlayImpl @JvmOverloads constructor(
 
     private var graphicBlocks: List<GraphicBlock>? = null
 
-    private val blueColor = Color.BLUE
-
 //    lateinit var mlService: BaseAnalyser.MLService
 
     init {
         setWillNotDraw(false)
-
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
-            setLayerType(LAYER_TYPE_HARDWARE, null)
-        }
     }
 
     @SuppressLint("DrawAllocation")
@@ -68,7 +61,7 @@ class ScannerOverlayImpl @JvmOverloads constructor(
         val radius = context.px(4f)
         val rectF = scanRect
         canvas.drawRoundRect(rectF, radius, radius, transparentPaint)
-        strokePaint.color = if (drawBlueRect) blueColor else Color.WHITE
+        strokePaint.color = if (drawGreenRect) Color.GREEN else Color.WHITE
         canvas.drawRoundRect(rectF, radius, radius, strokePaint)
 
         graphicBlocks?.forEach { block ->

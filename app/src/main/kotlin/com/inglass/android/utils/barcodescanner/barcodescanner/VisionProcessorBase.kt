@@ -248,8 +248,8 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
                         val mi = ActivityManager.MemoryInfo()
                         activityManager.getMemoryInfo(mi)
                     }
-                    scannerOverlay.drawBlueRect = false
-//                    scannerOverlay.clear()
+                    scannerOverlay.drawGreenRect = false
+//                    scannerOverlay.invalidate()
 //                    if (originalCameraImage != null) {
 //                        graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
 //                    }

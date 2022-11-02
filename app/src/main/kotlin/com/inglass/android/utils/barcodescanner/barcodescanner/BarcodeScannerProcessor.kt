@@ -1,8 +1,6 @@
 package com.inglass.android.utils.barcodescanner.barcodescanner
 
 import android.content.Context
-import android.graphics.Color
-import android.util.Log
 import com.google.android.gms.tasks.Task
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
@@ -10,7 +8,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
-import com.inglass.android.utils.barcodescanner.GraphicOverlay
 import timber.log.Timber
 
 private const val TAG = "BarcodeProcessor"
@@ -45,9 +42,10 @@ class BarcodeScannerProcessor(
     override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl) {
         results.forEach { barcode ->
             if (barcode.rawValue in scanned) {
-                scannerOverlay.drawBlueRect = true
+                scannerOverlay.drawGreenRect = true
             } else {
                 barcode.rawValue?.let { onScanned(it) }
+                scannerOverlay.drawGreenRect = false
                 onScannedVibrate()
                 onScannedMusic()
             }
