@@ -20,6 +20,9 @@ enum class SCREENS(
     CAMERA(R.id.navigation_camera, false),
 
     //Helpers
-    HELPERS(R.id.navigation_helpers, false)
+    HELPERS(R.id.navigation_helpers, false),
+
+    //Camera preview preference
+    PREVIEW_PREFERENCE(R.id.navigation_preview_preference, false)
 
 }

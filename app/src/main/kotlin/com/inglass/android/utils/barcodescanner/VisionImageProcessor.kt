@@ -1,7 +1,6 @@
 package com.inglass.android.utils.barcodescanner
 
 import android.graphics.Bitmap
-import androidx.camera.core.ImageProxy
 import com.google.mlkit.common.MlKitException
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
 import java.nio.ByteBuffer
@@ -15,4 +14,10 @@ interface VisionImageProcessor {
 
     /** Stops the underlying machine learning model and release resources.  */
     fun stop()
+
+    /** Processes ByteBuffer image data, e.g. used for Camera1 live preview case.  */
+    @Throws(MlKitException::class)
+    fun processByteBuffer(
+        data: ByteBuffer?, frameMetadata: FrameMetadata?, scannerOverlayImpl: ScannerOverlayImpl
+    )
 }

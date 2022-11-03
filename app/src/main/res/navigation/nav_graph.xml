@@ -78,6 +78,11 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_preview_preference"
+        android:name="com.inglass.android.presentation.scan.camera_settings.LivePreviewPreferenceFragment"
+        android:label="LivePreviewPreference" />
+
     <dialog
         android:id="@+id/addParticipationRateDialog"
         android:name="com.inglass.android.presentation.dialogs.add_helper.AddParticipationRateDialogFragment"

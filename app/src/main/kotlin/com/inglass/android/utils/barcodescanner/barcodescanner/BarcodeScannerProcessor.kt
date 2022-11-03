@@ -10,14 +10,13 @@ import com.google.mlkit.vision.common.InputImage
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
 import timber.log.Timber
 
-private const val TAG = "BarcodeProcessor"
-
 class BarcodeScannerProcessor(
     context: Context,
     private val scanned: Set<String>,
     private val onScanned: (String) -> Unit,
     private val onScannedVibrate: () -> Unit,
-    private val onScannedMusic: () -> Unit
+    private val onScannedMusic: () -> Unit,
+    private val setCameraInfo: (String) -> Unit
 ) : VisionProcessorBase<List<Barcode>>(context) {
 
     private val options = BarcodeScannerOptions.Builder()
@@ -39,7 +38,7 @@ class BarcodeScannerProcessor(
         return barcodeScanner.process(image)
     }
 
-    override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl) {
+    override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl, info: CameraXInfo?) {
         results.forEach { barcode ->
             if (barcode.rawValue in scanned) {
                 scannerOverlay.drawGreenRect = true
@@ -49,6 +48,18 @@ class BarcodeScannerProcessor(
                 onScannedVibrate()
                 onScannedMusic()
             }
+
+            if (info != null) { //TODO заменить на строковые ресурсы
+                var text = "InputImage size: ${scannerOverlay.getImageWidth()}x${scannerOverlay.getImageHeight()}\n"
+                text += if (info.shouldShowFps != null) {
+                    "FPS: ${info.shouldShowFps}, Frame latency: ${info.currentFrameLatencyMs} ms\n"
+                } else {
+                    "Frame latency: ${info.currentFrameLatencyMs} ms\n"
+                }
+                text += "Detector latency: ${info.currentDetectorLatencyMs} ms"
+
+                setCameraInfo(text)
+            }
         }
     }
 
@@ -56,3 +67,9 @@ class BarcodeScannerProcessor(
         Timber.e("Barcode detection failed $e")
     }
 }
+
+data class CameraXInfo(
+    val currentFrameLatencyMs: Long,
+    val currentDetectorLatencyMs: Long,
+    val shouldShowFps: Int?
+)

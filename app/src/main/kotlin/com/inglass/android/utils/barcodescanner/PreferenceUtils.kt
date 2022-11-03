@@ -5,12 +5,21 @@ import android.os.Build.VERSION_CODES
 import android.preference.PreferenceManager
 import android.util.Size
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.camera.core.CameraSelector
 import com.google.common.base.Preconditions
 import com.inglass.android.R
 import com.inglass.android.R.string
 
 object PreferenceUtils {
+
+
+    fun saveString(context: Context, @StringRes prefKeyId: Int, value: String?) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(context.getString(prefKeyId), value)
+            .apply()
+    }
 
     @RequiresApi(VERSION_CODES.LOLLIPOP)
     fun getCameraXTargetResolution(context: Context, lensfacing: Int): Size? {
@@ -40,5 +49,4 @@ object PreferenceUtils {
         val prefKey = context.getString(R.string.pref_key_camera_live_viewport)
         return sharedPreferences.getBoolean(prefKey, false)
     }
-
 }

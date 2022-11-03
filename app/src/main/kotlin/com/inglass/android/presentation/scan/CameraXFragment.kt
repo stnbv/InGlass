@@ -59,6 +59,11 @@ class CameraXFragment :
         )
     }
 
+
+    fun setCameraInfo(text: String) {
+        binding.cameraInfoTextView.text = text
+    }
+
     override fun onResume() {
         super.onResume()
         bindAllCameraUseCases()
@@ -120,7 +125,8 @@ class CameraXFragment :
             viewModel.scanResSet,
             { viewModel.checkBarcode(it) },
             { vibration() },
-            { music() })
+            { music() },
+            { setCameraInfo(it) })
 
         val builder = ImageAnalysis.Builder()
         val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
@@ -135,6 +141,7 @@ class CameraXFragment :
             ContextCompat.getMainExecutor(requireContext())
         ) { imageProxy: ImageProxy ->
             try {
+                binding.barcodeScannerZone.setHeightAndWidth(imageProxy.height, imageProxy.width)
                 val rotation = imageProxy.imageInfo.rotationDegrees
                 val scannerRect =
                     getScannerRectToPreviewViewRelation(Size(imageProxy.width, imageProxy.height), rotation)

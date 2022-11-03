@@ -12,6 +12,7 @@ import com.inglass.android.domain.models.Helper
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.utils.base.BaseViewModel
+import com.inglass.android.utils.navigation.SCREENS.PREVIEW_PREFERENCE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.BigDecimal
 import java.util.*
@@ -79,4 +80,8 @@ class CameraXViewModel @Inject constructor(
                 loadingStatus = Queue
             )
         )
+
+    fun navigateToPreferences() {
+        navigateToScreen(PREVIEW_PREFERENCE)
+    }
 }

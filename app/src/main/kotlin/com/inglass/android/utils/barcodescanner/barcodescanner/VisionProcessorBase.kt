@@ -111,6 +111,19 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
         }
     }
 
+    @Synchronized
+    override fun processByteBuffer(
+        data: ByteBuffer?,
+        frameMetadata: FrameMetadata?,
+        scannerOverlay: ScannerOverlayImpl
+    ) {
+        latestImage = data
+        latestImageMetaData = frameMetadata
+        if (processingImage == null && processingMetaData == null) {
+            processLatestImage(scannerOverlay)
+        }
+    }
+
     private fun processImage(
         data: ByteBuffer,
         frameMetadata: FrameMetadata,
@@ -253,17 +266,18 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 //                    if (originalCameraImage != null) {
 //                        graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
 //                    }
-                    this@VisionProcessorBase.onSuccess(results, scannerOverlay)
-//                    if (!PreferenceUtils.shouldHideDetectionInfo(scannerOverlay.context)) {
-//                        scannerOverlay.add(
-//                            InferenceInfoGraphic(
-//                                graphicOverlay,
-//                                currentFrameLatencyMs,
-//                                currentDetectorLatencyMs,
-//                                if (shouldShowFps) framesPerSecond else null
-//                            )
-//                        )
-//                    }
+                    if (!PreferenceUtils.shouldHideDetectionInfo(scannerOverlay.context)) {
+                        this@VisionProcessorBase.onSuccess(
+                            results, scannerOverlay, CameraXInfo(
+                                currentFrameLatencyMs,
+                                currentDetectorLatencyMs,
+                                if (shouldShowFps) framesPerSecond else null
+                            )
+                        )
+
+                    } else {
+                        this@VisionProcessorBase.onSuccess(results, scannerOverlay, null)
+                    }
                     scannerOverlay.postInvalidate()
                 }
             )
@@ -306,7 +320,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
         )
     }
 
-    protected abstract fun onSuccess(results: T, scannerOverlay: ScannerOverlayImpl)
+    protected abstract fun onSuccess(results: T, scannerOverlay: ScannerOverlayImpl, info: CameraXInfo?)
 
     protected abstract fun onFailure(e: Exception)
 

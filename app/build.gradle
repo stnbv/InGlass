@@ -64,6 +64,7 @@ dependencies {
     implementation libraries.roomCore
     implementation libraries.roomKtx
     implementation libraries.roomPaging
+    implementation 'androidx.preference:preference:1.2.0'
     kapt libraries.roomCompiler
 
     //Paging 3

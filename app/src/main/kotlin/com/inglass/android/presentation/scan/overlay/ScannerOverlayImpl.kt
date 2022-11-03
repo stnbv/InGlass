@@ -24,6 +24,9 @@ class ScannerOverlayImpl @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr), ScannerOverlay {
 
+    private var imageWidth = 0
+    private var imageHeight = 0
+
     private val transparentPaint: Paint by lazy {
         Paint().apply {
             isAntiAlias = true
@@ -48,11 +51,18 @@ class ScannerOverlayImpl @JvmOverloads constructor(
 
     private var graphicBlocks: List<GraphicBlock>? = null
 
-//    lateinit var mlService: BaseAnalyser.MLService
-
     init {
         setWillNotDraw(false)
     }
+
+    fun setHeightAndWidth(height: Int, width: Int) {
+        imageHeight = height
+        imageWidth = width
+    }
+
+    fun getImageWidth() = imageWidth
+
+    fun getImageHeight() = imageHeight
 
     @SuppressLint("DrawAllocation")
     override fun onDraw(canvas: Canvas) {
