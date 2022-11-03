@@ -43,8 +43,6 @@ class BarcodeScannerProcessor(
             } else {
                 barcode.rawValue?.let { onScanned(it) }
                 scannerOverlay.drawGreenRect = false
-                onScannedVibrate()
-                onScannedMusic()
             }
 
             if (info != null) { //TODO заменить на строковые ресурсы

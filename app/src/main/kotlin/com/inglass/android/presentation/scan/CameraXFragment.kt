@@ -1,6 +1,7 @@
 package com.inglass.android.presentation.scan
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.graphics.ImageFormat
 import android.graphics.Rect
@@ -10,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Size
 import android.view.View
 import androidx.camera.core.CameraSelector
@@ -57,6 +59,11 @@ class CameraXFragment :
 
             }, ContextCompat.getMainExecutor(requireContext())
         )
+
+        viewModel.onScannedFlow observe {
+            vibration()
+            music()
+        }
     }
 
 
@@ -124,8 +131,6 @@ class CameraXFragment :
             requireContext(),
             viewModel.scanResSet,
             { viewModel.checkBarcode(it) },
-            { vibration() },
-            { music() },
             { setCameraInfo(it) })
 
         val builder = ImageAnalysis.Builder()
@@ -215,11 +220,16 @@ class CameraXFragment :
         }
     }
 
-
     private fun vibration() {
-        val vibrator = requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            requireContext().getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
+
         val canVibrate: Boolean = vibrator.hasVibrator()
-        val milliseconds = 1000L
+        val milliseconds = 500L
 
         if (canVibrate) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
