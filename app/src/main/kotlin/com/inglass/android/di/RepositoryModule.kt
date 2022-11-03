@@ -2,10 +2,12 @@ package com.inglass.android.di
 
 import android.content.Context
 import com.inglass.android.data.remote.services.auth.IAuthService
+import com.inglass.android.data.remote.services.companions.ICompanionsService
 import com.inglass.android.data.remote.services.make_operation.IMakeOperationService
 import com.inglass.android.data.remote.services.personal_information.IPersonalInformationService
 import com.inglass.android.data.remote.services.reference_book.IReferenceBookService
 import com.inglass.android.domain.repository.AuthRepository
+import com.inglass.android.domain.repository.CompanionsRepository
 import com.inglass.android.domain.repository.MakeOperationRepository
 import com.inglass.android.domain.repository.NetworkRepository
 import com.inglass.android.domain.repository.PersonalInformationRepository
@@ -13,6 +15,7 @@ import com.inglass.android.domain.repository.PreferencesRepository
 import com.inglass.android.domain.repository.ReferenceBookRepository
 import com.inglass.android.domain.repository.ScanResultsRepository
 import com.inglass.android.domain.repository.interfaces.IAuthRepository
+import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
 import com.inglass.android.domain.repository.interfaces.IMakeOperationRepository
 import com.inglass.android.domain.repository.interfaces.INetworkRepository
 import com.inglass.android.domain.repository.interfaces.IPersonalInformationRepository
@@ -47,6 +50,10 @@ object RepositoryModule {
     @Provides
     fun provideReferenceBookRepository(service: IReferenceBookService): IReferenceBookRepository =
         ReferenceBookRepository(service)
+
+    @Provides
+    fun provideCompanionsRepository(service: ICompanionsService): ICompanionsRepository =
+        CompanionsRepository(service)
 
     @Provides
     fun provideMakeOperationRepository(service: IMakeOperationService): IMakeOperationRepository =
