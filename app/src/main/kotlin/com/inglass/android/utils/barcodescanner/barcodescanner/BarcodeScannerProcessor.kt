@@ -14,8 +14,6 @@ class BarcodeScannerProcessor(
     context: Context,
     private val scanned: Set<String>,
     private val onScanned: (String) -> Unit,
-    private val onScannedVibrate: () -> Unit,
-    private val onScannedMusic: () -> Unit,
     private val setCameraInfo: (String) -> Unit
 ) : VisionProcessorBase<List<Barcode>>(context) {
 
