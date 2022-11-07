@@ -1,6 +1,5 @@
 package com.inglass.android.domain.models
 
-import com.inglass.android.data.local.db.entities.LoadingStatus
 import java.util.*
 
 data class ScannedItemModel(

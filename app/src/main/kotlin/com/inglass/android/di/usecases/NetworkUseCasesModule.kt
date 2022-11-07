@@ -14,4 +14,5 @@ object NetworkUseCasesModule {
     @Provides
     fun provideNetworkUseCase(iNetworkRepository: INetworkRepository) =
         WaitNetworkUseCase(iNetworkRepository)
+
 }

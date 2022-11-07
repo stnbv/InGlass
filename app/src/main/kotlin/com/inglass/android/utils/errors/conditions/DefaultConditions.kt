@@ -53,7 +53,6 @@ class NetworkCondition(
 ) :
     ICondition<Failure?> {
     override fun validate(data: Failure?): ErrorWrapper {
-        //TODO when по кодам ошибок от api (Gerasimets / 24.11.2021)
         return when (data?.code) {
             InternalError -> ErrorWrapper.ResourceText(R.string.error_internal_error)
             else -> {
@@ -78,7 +77,6 @@ class RepeatedCondition(
 }
 
 class EmailCondition : ICondition<String> {
-    //TODO проверить учет длинны поддоменов от 1 до 64 (Gerasimets / 24.11.2021)
     override fun validate(data: String): ErrorWrapper {
         val valid =
             data.contains(Regex(REGEX_EMAIL)) && data.length <= ERR_MAX_LOGIN_LENGTH + ERR_MAX_DOMEN_LENGTH

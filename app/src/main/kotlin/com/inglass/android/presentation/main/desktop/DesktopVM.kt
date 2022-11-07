@@ -12,17 +12,18 @@ import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.local.db.dao.UserHelpersDao
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
-import com.inglass.android.domain.models.EmployeeAndOperationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.WaitNetworkUseCase
 import com.inglass.android.domain.usecase.personal_information.GetPersonalInformationUseCase
 import com.inglass.android.domain.usecase.reference_book.GetReferenceBookUseCase
 import com.inglass.android.utils.adapter.ItemVM
+import com.inglass.android.utils.api.core.ErrorCode.AuthorizationError
 import com.inglass.android.utils.api.core.ErrorCode.InternalError
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.base.paging.BasePagingViewModel
 import com.inglass.android.utils.navigation.SCREENS.CAMERA
+import com.inglass.android.utils.navigation.SCREENS.LOGIN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -39,16 +40,15 @@ class DesktopVM @Inject constructor(
     private val operationsDao: OperationsDao,
     private val employeeDao: EmployeeDao,
     private val helpersDao: UserHelpersDao,
-    private val referenceBookUseCase: GetReferenceBookUseCase,
     private val networkUseCase: WaitNetworkUseCase
 ) : BasePagingViewModel() {
 
     val isScanButtonEnable = MutableLiveData(false)
     val operations = MutableLiveData(listOf("Нет доступных операций"))
     val selectedOperationsPosition = MutableLiveData(0)
-    val isMultiScan = MutableLiveData(false)
+    val isSingleScan = MutableLiveData(false)
     val helpersNames = MutableLiveData("")
-    var userAvailableOperations: List<EmployeeAndOperationModel?>? = null
+    var userAvailableOperations: List<Operation?>? = null
 
     init {
         initViewModelWithRecycler()
@@ -82,13 +82,13 @@ class DesktopVM @Inject constructor(
             ).flow.cachedIn(viewModelScope)
 
             items.collect {
-                val scannedItems = it.map { scanResultWithOperation ->
+                val scannedItems = it.map { scanResultFullInfo ->
                     ScannedItemVM(
                         ScannedItemData(
-                            dateTime = scanResultWithOperation.scanResult.dateAndTime,
-                            operation = scanResultWithOperation.operation?.name ?: "",
-                            barcode = scanResultWithOperation.scanResult.barcode,
-                            loadingStatus = scanResultWithOperation.scanResult.loadingStatus
+                            dateTime = scanResultFullInfo.dateAndTime,
+                            operation = scanResultFullInfo.operationName,
+                            barcode = scanResultFullInfo.barcode,
+                            loadingStatus = scanResultFullInfo.loadingStatus
                         )
                     ) as ItemVM
                 }
@@ -99,55 +99,52 @@ class DesktopVM @Inject constructor(
 
     private fun getUserInformation() {
         viewModelScope.launch {
-            getPersonalInformationUseCase.invoke()
+            getPersonalInformationUseCase()
 
             val userAvailableOperationsIds = preferencesRepository.user?.availableOperations
+            val allOperations = operationsDao.getOperations()
 
-            do {
-                val result = getReferenceBookUseCase.invoke().onSuccess { allOperations ->
-                    userAvailableOperations = userAvailableOperationsIds?.mapNotNull { userOperation ->
-                        allOperations.operations.find {
-                            userOperation == it.id
-                        }
-                    }
-
-                    val userOperations: List<String> = userAvailableOperations?.map {
-                        it!!.name
-                    } ?: listOf("Нет доступных операций")
-
-                    if (userOperations.isNotEmpty()) {
-                        operations.value = userOperations
-                    }
+            userAvailableOperations = userAvailableOperationsIds?.mapNotNull {
+                allOperations.find { operation ->
+                    operation.operationId == it
                 }
-                    .onFailure {
-                        if (it.code == InternalError) {
-                            networkUseCase.invoke()
-                        } else {
-                            delay(3000)
-                        }
-                    }
-            } while (result.isFailure)
+            }
+
+            val userOperations: List<String> = userAvailableOperations?.map {
+                it!!.name
+            } ?: listOf("Нет доступных операций")
+
+            if (userOperations.isNotEmpty()) {
+                operations.value = userOperations
+            }
         }
     }
 
     private fun getReferenceBook() {
-//        300000
-        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 30) return
+        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 300000) return
         else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
+                do {
+                    val result = getReferenceBookUseCase().onSuccess { referenceBook ->
 
-                referenceBookUseCase().onSuccess { referenceBook ->
+                        operationsDao.insertOperations(referenceBook.operations.map { operation ->
+                            Operation(operation.id, operation.name)
+                        })
 
-                    operationsDao.insertOperations(referenceBook.operations.map { operation ->
-                        Operation(operation.id, operation.name)
-                    })
-
-                    employeeDao.insertEmployee(referenceBook.employees.map { employee ->
-                        Employee(employee.id, employee.name)
-                    })
-                }
+                        employeeDao.insertEmployee(referenceBook.employees.map { employee ->
+                            Employee(employee.id, employee.name)
+                        })
+                    }
+                        .onFailure {
+                            when (it.code) {
+                                AuthorizationError -> navigateToScreen(LOGIN)
+                                InternalError -> networkUseCase.invoke()
+                                else -> delay(3000)
+                            }
+                        }
+                } while (result.isFailure && result.errorOrNull()?.code != AuthorizationError)
+                preferencesRepository.lastReceivedData = System.currentTimeMillis()
             }
-            preferencesRepository.lastReceivedData = System.currentTimeMillis()
         }
     }
 
@@ -155,19 +152,17 @@ class DesktopVM @Inject constructor(
         val operationTitle = operations.value?.get(selectedOperationsPosition.value ?: return)
         val operationId = userAvailableOperations?.find {
             it?.name == operationTitle
-        }?.id
+        }?.operationId
 
         navigateToScreen(CAMERA.apply {
             navDirections = DesktopFragmentDirections.toCamerax(
                 operationId = operationId ?: return,
-                isMultiScan = isMultiScan.value ?: return
+                isSingleScan = isSingleScan.value ?: return
             )
         })
     }
 
-    fun clearDatabase() {
-        viewModelScope.launch(Dispatchers.IO) {
-            scanResultDao.deleteAllItems()
-        }
+    fun changeScanCount(isChecked: Boolean) {
+        isSingleScan.value = isChecked
     }
 }

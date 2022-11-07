@@ -3,6 +3,7 @@ package com.inglass.android.presentation.auth_screens.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.R
+import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.auth.LogInUseCase
 import com.inglass.android.domain.usecase.auth.LogInUseCase.Params
 import com.inglass.android.utils.ErrorWrapper
@@ -23,15 +24,16 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class LoginVM @Inject constructor(
-    private val logInUseCase: LogInUseCase
+    private val logInUseCase: LogInUseCase,
+    private val preferencesRepository: IPreferencesRepository
 ) : BaseViewModel() {
 
     val showLoader = MutableLiveData(false)
-    val login = MutableLiveData("")
+    val login = MutableLiveData(preferencesRepository.userLogin)
 
     val loginButtonVisibility = MutableLiveData(true)
 
-    val password = MutableLiveData("")
+    val password = MutableLiveData(preferencesRepository.userPassword)
 
     val currentError = MutableLiveData<ErrorWrapper>(ErrorWrapper.None)
     private val networkError = MutableLiveData<Answer.Failure?>(null)
@@ -64,11 +66,13 @@ class LoginVM @Inject constructor(
 
         viewModelScope.launch {
             val password = password.value ?: return@launch
-            val phone = login.value ?: return@launch
+            val login = login.value ?: return@launch
 
             showLoader.value = true
-            logInUseCase(Params(phone, password))
+            logInUseCase(Params(login, password))
                 .onSuccess {
+                    preferencesRepository.userLogin = login
+                    preferencesRepository.userPassword = password
                     navigateToScreen(DESKTOP)
                 }.onFailure {
                     showLoader.value = false

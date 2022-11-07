@@ -3,20 +3,23 @@ package com.inglass.android
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.data.local.db.dao.ScanResultsDao
-import com.inglass.android.data.local.db.entities.LoadingStatus.InProgress
-import com.inglass.android.data.local.db.entities.LoadingStatus.Loaded
-import com.inglass.android.data.local.db.entities.LoadingStatus.NotLoaded
+import com.inglass.android.domain.models.LoadingStatus.InProgress
+import com.inglass.android.domain.models.LoadingStatus.Loaded
+import com.inglass.android.domain.models.LoadingStatus.NotLoaded
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.models.ScannedItemModel
+import com.inglass.android.domain.repository.interfaces.IAuthRepository
 import com.inglass.android.domain.repository.interfaces.IPersonalInformationRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.domain.usecase.scanning.MakeOperationUseCase
 import com.inglass.android.domain.usecase.scanning.MakeOperationUseCase.Params
+import com.inglass.android.utils.api.core.ErrorCode.AuthorizationError
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.api.core.retry
 import com.inglass.android.utils.base.BaseViewModel
+import com.inglass.android.utils.navigation.SCREENS.LOGIN
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +34,8 @@ class AppActivityVM @Inject constructor(
     private val prefs: IPreferencesRepository,
     private val scanResultsRepository: IScanResultsRepository,
     private val scanResultDao: ScanResultsDao,
-    private val personalInformationRepository: IPersonalInformationRepository
+    private val personalInformationRepository: IPersonalInformationRepository,
+    private val authRepository: IAuthRepository
 ) : BaseViewModel() {
 
     val showToast = MutableLiveData(false)
@@ -65,17 +69,45 @@ class AppActivityVM @Inject constructor(
                 isMakeOperation.onFailure {
                     scanResultDao.updateScanResult(scanResult.barcode, NotLoaded)
                     showToast.postValue(true)
+                    if (it.code == AuthorizationError) navigateToScreen(LOGIN)
                 }
             }
         }
         observePersonalInformation()
+        observeLogout()
         host.postValue(prefs.baseUrl)
+    }
+
+    fun clearPrefs() {
+        viewModelScope.launch {
+            prefs.clear()
+        }
+    }
+
+    fun clearScanResultsDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            scanResultDao.deleteAllItems()
+        }
+    }
+
+    fun changeToken() {
+        prefs.token = "dbvhbdfbvdfbvhdbfjv"
     }
 
     private fun observePersonalInformation() {
         viewModelScope.launch(Dispatchers.IO) {
             personalInformationRepository.result.filterNotNull().collect {
                 userInfo.postValue(it)
+            }
+        }
+    }
+
+    private fun observeLogout() {
+        viewModelScope.launch(Dispatchers.IO) {
+            authRepository.logOut.filterNotNull().collect {
+                clearScanResultsDatabase()
+                prefs.clear()
+                navigateToScreen(LOGIN)
             }
         }
     }

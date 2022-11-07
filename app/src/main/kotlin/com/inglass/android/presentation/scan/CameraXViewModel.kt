@@ -2,13 +2,12 @@ package com.inglass.android.presentation.scan
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.inglass.android.data.local.db.dao.EmployeeDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.local.db.dao.UserHelpersDao
-import com.inglass.android.data.local.db.entities.LoadingStatus.Queue
 import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.domain.models.FullScannedItemModel
 import com.inglass.android.domain.models.Helper
+import com.inglass.android.domain.models.LoadingStatus.Queue
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.utils.base.BaseViewModel
@@ -28,13 +27,10 @@ class CameraXViewModel @Inject constructor(
     private val preferences: IPreferencesRepository,
     private val scanResultsRepository: IScanResultsRepository,
     private val helpersDao: UserHelpersDao,
-    private val employeeDao: EmployeeDao,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
     private val navArgs = CameraXFragmentArgs.fromSavedStateHandle(savedStateHandle)
-
-    val isMultiScan = navArgs.isMultiScan
 
     val scanResSet: MutableSet<String> = mutableSetOf()
     var helpersRateSum = BigDecimal.ZERO
@@ -73,6 +69,9 @@ class CameraXViewModel @Inject constructor(
                         helpers = helpers
                     )
                 )
+                if (navArgs.isSingleScan) {
+                    navigateBack()
+                }
             }
         }
     }

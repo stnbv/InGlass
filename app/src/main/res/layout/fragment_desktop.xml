@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_gray">
@@ -18,7 +19,8 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="6dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonScan"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -75,6 +77,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:checked="@{vm.isSingleScan}"
+                    android:onCheckedChanged="@{(view, value)->vm.changeScanCount(value)}"
                     android:paddingHorizontal="16dp"
                     app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -118,47 +122,30 @@
                     android:clipToPadding="false"
                     android:overScrollMode="never"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/buttonScan"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/helpersTextView"
                     app:setPagingAdapter="@{vm.pagingAdapter}"
                     tools:listitem="@layout/item_scanned" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonScan"
-                    style="@style/RoundButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="12dp"
-                    android:enabled="@{vm.isScanButtonEnable}"
-                    android:onClick="@{()->vm.openCameraScreen()}"
-                    android:text="@string/desktop_scan_barcode"
-                    app:backgroundTint="@drawable/bg_tint_pressed_main_black"
-                    app:layout_constraintBottom_toTopOf="@id/buttonDelete"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonDelete"
-                    style="@style/RoundButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="16dp"
-                    android:onClick="@{()->vm.clearDatabase()}"
-                    android:text="@string/desktop_clear_cache"
-                    app:backgroundTint="@drawable/bg_tint_pressed_main_black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonScan"
+            style="@style/RoundButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="12dp"
+            android:enabled="@{vm.isScanButtonEnable}"
+            android:onClick="@{()->vm.openCameraScreen()}"
+            android:text="@string/desktop_scan_barcode"
+            app:backgroundTint="@drawable/bg_tint_pressed_main_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

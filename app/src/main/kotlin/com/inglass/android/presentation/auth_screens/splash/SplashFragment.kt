@@ -17,14 +17,5 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashVM>(R.layout.fr
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         viewModel.getAuthState()
-//        lifecycleScope.launchWhenCreated {
-//            viewModel.valuePercentLoad.observe {
-//                binding.loadDataProgressbar.setFill(
-//                    it.toInt(),
-//                    VALUE_LOADING_START.toInt(),
-//                    VALUE_LOADING_FINISH.toInt()
-//                )
-//            }
-//        }
     }
 }

@@ -1,9 +1,8 @@
 package com.inglass.android.data.local.db.entities
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
+import com.inglass.android.domain.models.LoadingStatus
 import java.util.*
 
 @Entity(tableName = "scan_results")
@@ -15,18 +14,10 @@ data class ScanResult(
     val loadingStatus: LoadingStatus
 )
 
-data class ScanResultWithOperation(
-    @Embedded val scanResult: ScanResult,
-    @Relation(
-        parentColumn = "operationId",
-        entityColumn = "operationId"
-    )
-    val operation: Operation?
+data class ScanResultFullInfo(
+    val barcode: String,
+    val operationId: String,
+    val dateAndTime: Date,
+    val loadingStatus: LoadingStatus,
+    var operationName: String
 )
-
-enum class LoadingStatus {
-    NotLoaded,
-    Queue,
-    InProgress,
-    Loaded
-}

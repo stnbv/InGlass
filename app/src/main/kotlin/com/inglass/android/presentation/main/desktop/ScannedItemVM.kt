@@ -1,12 +1,12 @@
 package com.inglass.android.presentation.main.desktop
 
 import com.inglass.android.R
-import com.inglass.android.data.local.db.entities.LoadingStatus
-import com.inglass.android.data.local.db.entities.LoadingStatus.InProgress
-import com.inglass.android.data.local.db.entities.LoadingStatus.Loaded
-import com.inglass.android.data.local.db.entities.LoadingStatus.NotLoaded
-import com.inglass.android.data.local.db.entities.LoadingStatus.Queue
 import com.inglass.android.databinding.ItemScannedBinding
+import com.inglass.android.domain.models.LoadingStatus
+import com.inglass.android.domain.models.LoadingStatus.InProgress
+import com.inglass.android.domain.models.LoadingStatus.Loaded
+import com.inglass.android.domain.models.LoadingStatus.NotLoaded
+import com.inglass.android.domain.models.LoadingStatus.Queue
 import com.inglass.android.utils.adapter.CommonItemVM
 import com.inglass.android.utils.helpers.DateFormatHelper
 import java.util.*
@@ -21,7 +21,7 @@ class ScannedItemVM(
     val loadStatusImage = when (data.loadingStatus) {
         NotLoaded -> R.drawable.ic_error
         Queue -> R.drawable.ic_upload
-        InProgress -> R.drawable.ic_load //TODO Заменить иконку
+        InProgress -> R.drawable.ic_load
         Loaded -> R.drawable.ic_done_in_circle
     }
 }

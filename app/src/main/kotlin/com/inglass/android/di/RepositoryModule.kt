@@ -39,23 +39,28 @@ object RepositoryModule {
         PreferencesRepository(context)
 
     @Provides
+    @Singleton
     fun provideAuthRepository(service: IAuthService): IAuthRepository = AuthRepository(service)
 
     @Provides
+    @Singleton
     fun providePersonalInformationRepository(
         service: IPersonalInformationService,
         prefRepository: IPreferencesRepository
     ): IPersonalInformationRepository = PersonalInformationRepository(service, prefRepository)
 
     @Provides
+    @Singleton
     fun provideReferenceBookRepository(service: IReferenceBookService): IReferenceBookRepository =
         ReferenceBookRepository(service)
 
     @Provides
+    @Singleton
     fun provideCompanionsRepository(service: ICompanionsService): ICompanionsRepository =
         CompanionsRepository(service)
 
     @Provides
+    @Singleton
     fun provideMakeOperationRepository(service: IMakeOperationService): IMakeOperationRepository =
         MakeOperationRepository(service)
 

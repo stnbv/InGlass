@@ -37,24 +37,23 @@ class BarcodeScannerProcessor(
     }
 
     override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl, info: CameraXInfo?) {
+        if (info != null) { //TODO заменить на строковые ресурсы
+            var text = "InputImage size: ${scannerOverlay.getImageWidth()}x${scannerOverlay.getImageHeight()}\n"
+            text += if (info.shouldShowFps != null) {
+                "FPS: ${info.shouldShowFps}, Frame latency: ${info.currentFrameLatencyMs} ms\n"
+            } else {
+                "Frame latency: ${info.currentFrameLatencyMs} ms\n"
+            }
+            text += "Detector latency: ${info.currentDetectorLatencyMs} ms"
+
+            setCameraInfo(text)
+        }
         results.forEach { barcode ->
             if (barcode.rawValue in scanned) {
                 scannerOverlay.drawGreenRect = true
             } else {
                 barcode.rawValue?.let { onScanned(it) }
                 scannerOverlay.drawGreenRect = false
-            }
-
-            if (info != null) { //TODO заменить на строковые ресурсы
-                var text = "InputImage size: ${scannerOverlay.getImageWidth()}x${scannerOverlay.getImageHeight()}\n"
-                text += if (info.shouldShowFps != null) {
-                    "FPS: ${info.shouldShowFps}, Frame latency: ${info.currentFrameLatencyMs} ms\n"
-                } else {
-                    "Frame latency: ${info.currentFrameLatencyMs} ms\n"
-                }
-                text += "Detector latency: ${info.currentDetectorLatencyMs} ms"
-
-                setCameraInfo(text)
             }
         }
     }

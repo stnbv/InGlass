@@ -10,9 +10,7 @@ import androidx.annotation.StringRes
 import androidx.camera.core.CameraSelector
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import com.inglass.android.R
 import com.inglass.android.R.string
 import com.inglass.android.R.xml
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
@@ -28,7 +26,6 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     fun setUpCameraPreferences() {
-        val cameraPreference = findPreference<PreferenceCategory>(getString(R.string.pref_category_key_camera))
         setUpCameraXTargetAnalysisSizePreference(
             string.pref_key_camerax_rear_camera_target_resolution, CameraSelector.LENS_FACING_BACK
         )

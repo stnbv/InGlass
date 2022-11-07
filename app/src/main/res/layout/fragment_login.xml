@@ -92,7 +92,6 @@
                         android:textColor="@color/main_black"
                         android:textColorHint="@color/normal_gray"
                         android:textSize="16dp"
-                        app:hasMediumWeightInput="@{true}"
                         app:unfocusedHint="@{@string/login_hint_pass}"
                         tools:hint="@string/login_hint_pass" />
                 </com.google.android.material.textfield.TextInputLayout>

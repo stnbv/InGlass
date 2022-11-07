@@ -13,7 +13,6 @@ import com.inglass.android.R.string
 
 object PreferenceUtils {
 
-
     fun saveString(context: Context, @StringRes prefKeyId: Int, value: String?) {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()

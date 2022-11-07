@@ -15,9 +15,16 @@
             android:title="@string/title_helpers" />
 
         <item
+            android:id="@+id/clearDatabase"
+            android:onClick="selectMenuNavigation"
+            android:title="@string/desktop_clear_cache" />
+
+        <!--Заказчик сказал скрыть настройки в меню-->
+        <item
             android:id="@+id/navSettings"
             android:onClick="selectMenuNavigation"
-            android:title="@string/setting_title" />
+            android:title="@string/setting_title"
+            android:visible="false" />
 
     </group>
 </menu>

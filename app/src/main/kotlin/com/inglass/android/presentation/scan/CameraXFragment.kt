@@ -3,8 +3,10 @@ package com.inglass.android.presentation.scan
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
+import android.content.res.Configuration
 import android.graphics.ImageFormat
 import android.graphics.Rect
+import android.hardware.camera2.CameraMetadata.LENS_FACING_BACK
 import android.media.Image
 import android.media.RingtoneManager
 import android.os.Build
@@ -43,8 +45,6 @@ class CameraXFragment :
     private var previewUseCase: Preview? = null
     private var analysisUseCase: ImageAnalysis? = null
     private var imageProcessor: VisionImageProcessor? = null
-    private var needUpdateGraphicOverlayImageSourceInfo = false
-    private var lensFacing = CameraSelector.LENS_FACING_BACK
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -95,9 +95,7 @@ class CameraXFragment :
     }
 
     private fun bindPreviewUseCase() {
-//        if (!PreferenceUtils.isCameraLiveViewportEnabled(requireContext())) {
-//            return //TODO Проверить для чего это, если не закоментить черный экран вместо камеры
-//        }
+
         if (cameraProvider == null) {
             return
         }
@@ -106,7 +104,13 @@ class CameraXFragment :
         }
 
         val builder = Preview.Builder()
-        val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
+        val targetResolution =
+            PreferenceUtils.getCameraXTargetResolution(requireContext(), LENS_FACING_BACK)?.let { res ->
+                when (resources.configuration.orientation) {
+                    Configuration.ORIENTATION_PORTRAIT -> Size(res.height, res.width)
+                    else -> Size(res.width, res.height)
+                }
+            }
         if (targetResolution != null) {
             builder.setTargetResolution(targetResolution)
         }
@@ -131,16 +135,21 @@ class CameraXFragment :
             requireContext(),
             viewModel.scanResSet,
             { viewModel.checkBarcode(it) },
-            { setCameraInfo(it) })
+            { setCameraInfo(it) }
+        )
 
         val builder = ImageAnalysis.Builder()
-        val targetResolution = PreferenceUtils.getCameraXTargetResolution(requireContext(), lensFacing)
+        val targetResolution =
+            PreferenceUtils.getCameraXTargetResolution(requireContext(), LENS_FACING_BACK)?.let { res ->
+                when (resources.configuration.orientation) {
+                    Configuration.ORIENTATION_PORTRAIT -> Size(res.height, res.width)
+                    else -> Size(res.width, res.height)
+                }
+            }
         if (targetResolution != null) {
             builder.setTargetResolution(targetResolution)
         }
         analysisUseCase = builder.build()
-
-        needUpdateGraphicOverlayImageSourceInfo = true
 
         analysisUseCase?.setAnalyzer(
             ContextCompat.getMainExecutor(requireContext())
@@ -159,8 +168,6 @@ class CameraXFragment :
                 val bitmap = getBitmap(byteArray, FrameMetadata(cropRect.width(), cropRect.height(), rotation))
 
                 imageProcessor!!.processImageProxy(bitmap, binding.barcodeScannerZone)
-
-//                onBitmapPrepared(bitmap)
 
                 imageProxy.close()
             } catch (e: Exception) {

@@ -53,7 +53,29 @@ object NetworkModule {
         .build()
 
     @Provides
-    fun provideAuthApi(retrofit: Retrofit): IAuthApi = retrofit.create(IAuthApi::class.java)
+    @Singleton
+    @AuthQualifier
+    fun provideAuthClient(httpLoggingInterceptor: HttpLoggingInterceptor) =
+        OkHttpClient.Builder().apply {
+            followRedirects(false)
+            followSslRedirects(false)
+            connectTimeout(TIMEOUT, TimeUnit.SECONDS)
+            readTimeout(TIMEOUT, TimeUnit.SECONDS)
+            writeTimeout(TIMEOUT, TimeUnit.SECONDS)
+            addInterceptor(httpLoggingInterceptor) //Всегда должен быть последним
+        }.build()
+
+    @Provides
+    @Singleton
+    @AuthQualifier
+    fun provideAuthRetrofit(@AuthQualifier client: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl("${BuildConfig.BASE_URL}${BuildConfig.API_ENDPOINT}")
+        .client(client)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    @Provides
+    fun provideAuthApi(@AuthQualifier retrofit: Retrofit): IAuthApi = retrofit.create(IAuthApi::class.java)
 
     @Provides
     fun provideAuthService(api: IAuthApi): IAuthService = AuthService(api)

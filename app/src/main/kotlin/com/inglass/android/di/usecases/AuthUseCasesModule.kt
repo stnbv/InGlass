@@ -17,7 +17,6 @@ object AuthUseCasesModule {
     fun provideGetAuthStateUseCase(iPreferencesRepository: IPreferencesRepository) =
         AuthStateUseCase(iPreferencesRepository)
 
-
     @Provides
     fun provideAuthUseCase(iAuthRepository: IAuthRepository, iPreferencesRepository: IPreferencesRepository) =
         LogInUseCase(iAuthRepository, iPreferencesRepository)

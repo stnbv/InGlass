@@ -31,6 +31,16 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navGraph="@navigation/nav_graph" />
 
+            <View
+                android:id="@+id/remove"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@color/silver"
+                android:layout_marginTop="80dp"
+                android:onClick="@{()->vm.changeToken()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView

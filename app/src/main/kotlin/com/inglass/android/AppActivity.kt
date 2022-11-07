@@ -28,6 +28,7 @@ import com.inglass.android.utils.navigation.setCurrentScreenWithNavController
 import com.inglass.android.utils.ui.makeToast
 import com.inglass.android.utils.ui.showSimpleDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
@@ -59,6 +60,12 @@ class AppActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.screenFlow.collect {
+                navigateToScreen(it)
+            }
+        }
+
         binding.drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
 
         viewModel.userInfo.observe(this) {
@@ -81,7 +88,7 @@ class AppActivity : AppCompatActivity() {
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
-    fun closeMenu() {
+    private fun closeMenu() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
 
@@ -107,9 +114,14 @@ class AppActivity : AppCompatActivity() {
     fun selectMenuNavigation(item: MenuItem) {
         if (findNavController(R.id.navHostFragment).currentDestination?.id == item.itemId) return
         when (item.itemId) {
+            R.id.clearDatabase -> viewModel.clearScanResultsDatabase()
             R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
             R.id.navHelpers -> navigateToScreen(SCREENS.HELPERS)
-            R.id.navChangeUser -> navigateToScreen(SCREENS.LOGIN)
+            R.id.navChangeUser -> {
+                viewModel.clearPrefs()
+                viewModel.clearScanResultsDatabase()
+                navigateToScreen(SCREENS.LOGIN)
+            }
         }
         closeMenu()
     }
