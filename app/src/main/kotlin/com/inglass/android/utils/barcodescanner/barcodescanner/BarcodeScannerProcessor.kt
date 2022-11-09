@@ -6,9 +6,17 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_CODABAR
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_CODE_128
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_DATA_MATRIX
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_13
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_8
+import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_QR_CODE
 import com.google.mlkit.vision.common.InputImage
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
 import timber.log.Timber
+
+const val REQUIRED_COUNT = 3
 
 class BarcodeScannerProcessor(
     context: Context,
@@ -17,11 +25,17 @@ class BarcodeScannerProcessor(
     private val setCameraInfo: (String) -> Unit
 ) : VisionProcessorBase<List<Barcode>>(context) {
 
+    var lastBarcode: String = ""
+    var counter: Int = 0
+
     private val options = BarcodeScannerOptions.Builder()
         .setBarcodeFormats(
-            Barcode.FORMAT_EAN_8,
-            Barcode.FORMAT_EAN_13,
-            Barcode.FORMAT_CODE_128
+            FORMAT_EAN_8,
+            FORMAT_EAN_13,
+            FORMAT_CODE_128,
+            FORMAT_CODABAR,
+            FORMAT_DATA_MATRIX,
+            FORMAT_QR_CODE
         )
         .build()
 
@@ -48,14 +62,42 @@ class BarcodeScannerProcessor(
 
             setCameraInfo(text)
         }
-        results.forEach { barcode ->
-            if (barcode.rawValue in scanned) {
-                scannerOverlay.drawGreenRect = true
-            } else {
-                barcode.rawValue?.let { onScanned(it) }
-                scannerOverlay.drawGreenRect = false
+
+        scannerOverlay.drawGreenRect = results.firstOrNull()?.rawValue in scanned
+
+        when {
+            results.size != 1 -> {
+                counter = 0
+            }
+            results.first().rawValue == lastBarcode && counter + 1 == REQUIRED_COUNT -> {
+                onScanned(lastBarcode)
+            }
+            results.first().rawValue == lastBarcode -> {
+                counter += 1
+            }
+            else -> {
+                lastBarcode = results.first().rawValue ?: ""
+                counter = 0
             }
         }
+//
+//
+//
+//
+//        results.forEach { barcode ->
+//            if (previousScannedCode.filter { it == barcode.rawValue }.size >= 2) {
+//                if (barcode.rawValue in scanned) {
+//                    scannerOverlay.drawGreenRect = true
+//                } else {
+//                    barcode.rawValue?.let { previousScannedCode.add(it) }
+//                    barcode.rawValue?.let { onScanned(it, previousScannedCode) }
+//                    scannerOverlay.drawGreenRect = false
+//                }
+//            } else {
+//                barcode.rawValue?.let { previousScannedCode.add(it) }
+//                onScanned(null, previousScannedCode)
+//            }
+//        }
     }
 
     override fun onFailure(e: Exception) {

@@ -24,13 +24,13 @@ class AddParticipationRateDialogFragment :
         binding.vm = viewModel
         binding.cancelMaterialButton.doOnClick(::dismiss)
 
-        viewModel.fullHelperInfo.observe(viewLifecycleOwner) {
-            setFragmentResult(
-                ADD_PARTICIPATION_RATE, bundleOf(
-                    ADD_PARTICIPATION_RATE to it
-                )
-            )
-            dismiss()
-        }
+//        viewModel.fullHelperInfo.observe(viewLifecycleOwner) {
+//            setFragmentResult(
+//                ADD_PARTICIPATION_RATE, bundleOf(
+//                    ADD_PARTICIPATION_RATE to it
+//                )
+//            )
+//            dismiss()
+//        }
     }
 }

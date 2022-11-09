@@ -2,12 +2,15 @@ package com.inglass.android.di
 
 import com.inglass.android.BuildConfig
 import com.inglass.android.data.remote.api.IAuthApi
+import com.inglass.android.data.remote.api.ICompanionsApi
 import com.inglass.android.data.remote.api.IMakeOperationApi
 import com.inglass.android.data.remote.api.IPersonalInformationApi
 import com.inglass.android.data.remote.api.IReferenceBooksApi
 import com.inglass.android.data.remote.interceptors.AuthTokenInterceptor
 import com.inglass.android.data.remote.services.auth.AuthService
 import com.inglass.android.data.remote.services.auth.IAuthService
+import com.inglass.android.data.remote.services.companions.CompanionsService
+import com.inglass.android.data.remote.services.companions.ICompanionsService
 import com.inglass.android.data.remote.services.make_operation.IMakeOperationService
 import com.inglass.android.data.remote.services.make_operation.MakeOperationService
 import com.inglass.android.data.remote.services.personal_information.IPersonalInformationService
@@ -101,5 +104,11 @@ object NetworkModule {
 
     @Provides
     fun provideMakeOperationService(api: IMakeOperationApi): IMakeOperationService = MakeOperationService(api)
+
+    @Provides
+    fun provideCompanionsApi(retrofit: Retrofit): ICompanionsApi = retrofit.create(ICompanionsApi::class.java)
+
+    @Provides
+    fun provideCompanionsService(api: ICompanionsApi): ICompanionsService = CompanionsService(api)
 
 }

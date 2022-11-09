@@ -5,6 +5,6 @@ import com.inglass.android.utils.api.core.Answer
 
 interface ICompanionsService {
 
-    suspend fun getCompanions(): Answer<CompanionsResponse>
+    suspend fun getCompanions(): Answer<List<CompanionsResponse>>
 
 }

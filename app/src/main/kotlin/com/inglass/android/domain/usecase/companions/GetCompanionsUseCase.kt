@@ -6,9 +6,7 @@ import kotlinx.coroutines.withContext
 
 class GetCompanionsUseCase(private val repository: ICompanionsRepository) {
 
-    suspend operator fun invoke() {
-        withContext(Dispatchers.IO) {
-            repository.getCompanions()
-        }
+    suspend operator fun invoke() = withContext(Dispatchers.IO) {
+        repository.getCompanions()
     }
 }

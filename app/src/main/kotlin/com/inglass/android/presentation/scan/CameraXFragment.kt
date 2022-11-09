@@ -115,7 +115,7 @@ class CameraXFragment :
             builder.setTargetResolution(targetResolution)
         }
         previewUseCase = builder.build()
-        previewUseCase!!.setSurfaceProvider(binding.previewView.surfaceProvider)
+        previewUseCase!!.setSurfaceProvider(binding.previewView.surfaceProvider) //выше есть проверки на нулабельность
         cameraProvider!!.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, previewUseCase)
     }
 
@@ -134,7 +134,7 @@ class CameraXFragment :
         imageProcessor = BarcodeScannerProcessor(
             requireContext(),
             viewModel.scanResSet,
-            { viewModel.checkBarcode(it) },
+            { code -> viewModel.checkBarcode(code) },
             { setCameraInfo(it) }
         )
 
@@ -167,7 +167,7 @@ class CameraXFragment :
                 val byteArray = YuvNV21Util.yuv420toNV21(image)
                 val bitmap = getBitmap(byteArray, FrameMetadata(cropRect.width(), cropRect.height(), rotation))
 
-                imageProcessor!!.processImageProxy(bitmap, binding.barcodeScannerZone)
+                imageProcessor!!.processImageBitmap(bitmap, binding.barcodeScannerZone)
 
                 imageProxy.close()
             } catch (e: Exception) {

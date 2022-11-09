@@ -5,21 +5,21 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.inglass.android.data.local.db.dao.CompanionsDao
 import com.inglass.android.data.local.db.dao.EmployeeDao
 import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
-import com.inglass.android.data.local.db.dao.UserHelpersDao
+import com.inglass.android.data.local.db.entities.Companions
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
 import com.inglass.android.data.local.db.entities.ScanResult
-import com.inglass.android.data.local.db.entities.UserHelpers
 
 @Database(
     entities = [
         ScanResult::class,
         Employee::class,
         Operation::class,
-        UserHelpers::class
+        Companions::class
     ],
     version = 1,
     exportSchema = false
@@ -30,7 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun scanResultsDao(): ScanResultsDao
     abstract fun employeeDao(): EmployeeDao
     abstract fun operationsDao(): OperationsDao
-    abstract fun userHelpersDao(): UserHelpersDao
+    abstract fun companionDao(): CompanionsDao
 
     companion object {
 

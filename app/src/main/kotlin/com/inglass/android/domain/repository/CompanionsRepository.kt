@@ -10,7 +10,9 @@ import com.inglass.android.utils.api.core.map
 
 class CompanionsRepository(private val service: ICompanionsService) : ICompanionsRepository {
 
-    override suspend fun getCompanions(): Answer<CompanionsModel> {
-        return service.getCompanions().map(CompanionsResponse::toModel)
+    override suspend fun getCompanions(): Answer<List<CompanionsModel>> {
+        return service.getCompanions().map {
+            it.map(CompanionsResponse::toModel)
+        }
     }
 }

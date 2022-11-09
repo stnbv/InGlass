@@ -2,6 +2,7 @@ package com.inglass.android
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.inglass.android.data.local.db.dao.CompanionsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.domain.models.LoadingStatus.InProgress
 import com.inglass.android.domain.models.LoadingStatus.Loaded
@@ -33,9 +34,10 @@ class AppActivityVM @Inject constructor(
     private val makeOperationUseCase: MakeOperationUseCase,
     private val prefs: IPreferencesRepository,
     private val scanResultsRepository: IScanResultsRepository,
-    private val scanResultDao: ScanResultsDao,
     private val personalInformationRepository: IPersonalInformationRepository,
-    private val authRepository: IAuthRepository
+    private val authRepository: IAuthRepository,
+    private val scanResultDao: ScanResultsDao,
+    private val companionsDao: CompanionsDao
 ) : BaseViewModel() {
 
     val showToast = MutableLiveData(false)
@@ -73,9 +75,9 @@ class AppActivityVM @Inject constructor(
                 }
             }
         }
+        host.postValue(prefs.baseUrl)
         observePersonalInformation()
         observeLogout()
-        host.postValue(prefs.baseUrl)
     }
 
     fun clearPrefs() {
@@ -84,14 +86,21 @@ class AppActivityVM @Inject constructor(
         }
     }
 
-    fun clearScanResultsDatabase() {
+    fun clearScanResultDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultDao.deleteAllItems()
         }
     }
 
+    fun clearDatabase() {
+        viewModelScope.launch(Dispatchers.IO) {
+            scanResultDao.deleteAllItems()
+            companionsDao.deleteAllCompanions()
+        }
+    }
+
     fun changeToken() {
-        prefs.token = "dbvhbdfbvdfbvhdbfjv"
+        prefs.token = "dbvhbdfbvdfbvhdbfjv" //TODO REMOVE
     }
 
     private fun observePersonalInformation() {
@@ -105,7 +114,7 @@ class AppActivityVM @Inject constructor(
     private fun observeLogout() {
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.logOut.filterNotNull().collect {
-                clearScanResultsDatabase()
+                clearDatabase()
                 prefs.clear()
                 navigateToScreen(LOGIN)
             }

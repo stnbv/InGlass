@@ -92,7 +92,6 @@ class AppActivity : AppCompatActivity() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
 
-
     fun navigateToScreen(screen: SCREENS) {
         hideKeyboard()
         findNavController(R.id.navHostFragment).apply {
@@ -114,12 +113,12 @@ class AppActivity : AppCompatActivity() {
     fun selectMenuNavigation(item: MenuItem) {
         if (findNavController(R.id.navHostFragment).currentDestination?.id == item.itemId) return
         when (item.itemId) {
-            R.id.clearDatabase -> viewModel.clearScanResultsDatabase()
+            R.id.clearDatabase -> viewModel.clearScanResultDatabase()
             R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
             R.id.navHelpers -> navigateToScreen(SCREENS.HELPERS)
             R.id.navChangeUser -> {
                 viewModel.clearPrefs()
-                viewModel.clearScanResultsDatabase()
+                viewModel.clearDatabase()
                 navigateToScreen(SCREENS.LOGIN)
             }
         }

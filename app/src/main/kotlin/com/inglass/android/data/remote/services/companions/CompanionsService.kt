@@ -8,7 +8,7 @@ import com.inglass.android.utils.api.core.Answer
 
 class CompanionsService(private val api: ICompanionsApi) : ICompanionsService, BaseService() {
 
-    override suspend fun getCompanions(): Answer<CompanionsResponse> = apiCall {
+    override suspend fun getCompanions(): Answer<List<CompanionsResponse>> = apiCall {
         api.getCompanions()
     }
 }

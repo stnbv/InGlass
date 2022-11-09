@@ -2,6 +2,8 @@
     <string name="app_name">InGlass</string>
 
     <!--Generals-->
+    <string name="app_name_logo">inGlass Производство</string>
+    <string name="app_version">Версия 1.0</string>
     <string name="comment_text">Комментировать</string>
     <string name="text_your_comment">Ваш комментарий</string>
     <string name="text_send">Отправить</string>

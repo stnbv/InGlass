@@ -6,14 +6,16 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.inglass.android.data.local.db.dao.CompanionsDao
 import com.inglass.android.data.local.db.dao.EmployeeDao
 import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
-import com.inglass.android.data.local.db.dao.UserHelpersDao
+import com.inglass.android.data.local.db.entities.Companions
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.WaitNetworkUseCase
+import com.inglass.android.domain.usecase.companions.GetCompanionsUseCase
 import com.inglass.android.domain.usecase.personal_information.GetPersonalInformationUseCase
 import com.inglass.android.domain.usecase.reference_book.GetReferenceBookUseCase
 import com.inglass.android.utils.adapter.ItemVM
@@ -30,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 class DesktopVM @Inject constructor(
@@ -39,8 +42,9 @@ class DesktopVM @Inject constructor(
     private val scanResultDao: ScanResultsDao,
     private val operationsDao: OperationsDao,
     private val employeeDao: EmployeeDao,
-    private val helpersDao: UserHelpersDao,
-    private val networkUseCase: WaitNetworkUseCase
+    private val companionsDao: CompanionsDao,
+    private val networkUseCase: WaitNetworkUseCase,
+    private val getCompanionsUseCase: GetCompanionsUseCase
 ) : BasePagingViewModel() {
 
     val isScanButtonEnable = MutableLiveData(false)
@@ -54,14 +58,23 @@ class DesktopVM @Inject constructor(
         initViewModelWithRecycler()
         getReferenceBook()
         getUserInformation()
-        getHelpers()
+        getCompanions()
     }
 
-    private fun getHelpers() {
+    private fun getCompanions() {
         viewModelScope.launch(Dispatchers.IO) {
-            helpersDao.getHelperFullInfoFlow().collect {
-                helpersNames.postValue("")
+            getCompanionsUseCase().onSuccess { referenceBook ->
+                companionsDao.insertCompanions(referenceBook.map {
+                    Companions(it.id, it.participationRate)
+                }) //TODO Вот тут может меняться последовательнось?
+            }
+                .onFailure {
+                    Timber.e(it.message)
+                }
+
+            companionsDao.getCompanionsFullInfoFlow().collect {
                 var helpersText = ""
+                helpersNames.postValue("")
                 it.forEach { helper ->
                     helpersText += "${helper.name} - ${helper.participationRate} /"
                     helpersNames.postValue("Помощники: $helpersText".trim().dropLast(1))

@@ -2,7 +2,6 @@ package com.inglass.android.presentation.dialogs.add_helper
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import com.inglass.android.presentation.helpers.HelperItemData
 import com.inglass.android.utils.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.BigDecimal
@@ -21,7 +20,7 @@ class AddParticipationRateDialogVM @Inject constructor(
 
     val participation = MutableStateFlow("")
     val isSaveButtonEnable = MutableStateFlow(false)
-    val fullHelperInfo = MutableLiveData<HelperItemData>()
+//    val fullHelperInfo = MutableLiveData<HelperItemData>()
 
     fun checkFields() {
         if (participation.value == "") return
@@ -33,13 +32,13 @@ class AddParticipationRateDialogVM @Inject constructor(
     }
 
     fun saveParticipationRate() {
-        fullHelperInfo.postValue(
-            HelperItemData(
-                navArgs.employee.id,
-                navArgs.employee.fullName,
-                BigDecimal(participation.value)
-            )
-        )
+//        fullHelperInfo.postValue(
+//            HelperItemData(
+//                navArgs.employee.id,
+//                navArgs.employee.fullName,
+//                BigDecimal(participation.value)
+//            )
+//        )
     }
 
     fun selectedChipText(text: String) {

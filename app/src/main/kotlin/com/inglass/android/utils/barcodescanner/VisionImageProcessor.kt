@@ -10,14 +10,9 @@ interface VisionImageProcessor {
 
     /** Processes ImageProxy image data, e.g. used for CameraX live preview case.  */
     @Throws(MlKitException::class)
-    fun processImageProxy(image: Bitmap, scannerOverlayImpl: ScannerOverlayImpl)
+    fun processImageBitmap(image: Bitmap, scannerOverlayImpl: ScannerOverlayImpl)
 
     /** Stops the underlying machine learning model and release resources.  */
     fun stop()
 
-    /** Processes ByteBuffer image data, e.g. used for Camera1 live preview case.  */
-    @Throws(MlKitException::class)
-    fun processByteBuffer(
-        data: ByteBuffer?, frameMetadata: FrameMetadata?, scannerOverlayImpl: ScannerOverlayImpl
-    )
 }

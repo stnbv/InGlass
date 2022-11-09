@@ -1,19 +1,3 @@
-/*
- * Copyright 2020 Google LLC. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.inglass.android.utils.barcodescanner.barcodescanner
 
 import android.app.ActivityManager
@@ -26,13 +10,8 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskExecutors
-import com.google.android.gms.tasks.Tasks
-import com.google.android.odml.image.ByteBufferMlImageBuilder
-import com.google.android.odml.image.MlImage
-import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.common.InputImage
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
-import com.inglass.android.utils.barcodescanner.BitmapUtils
 import com.inglass.android.utils.barcodescanner.FrameMetadata
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
 import com.inglass.android.utils.barcodescanner.ScopedExecutor
@@ -42,13 +21,6 @@ import java.lang.Math.min
 import java.nio.ByteBuffer
 import java.util.*
 
-/**
- * Abstract base class for ML Kit frame processors. Subclasses need to implement {@link
- * #onSuccess(T, FrameMetadata, GraphicOverlay)} to define what they want to with the detection
- * results and {@link #detectInImage(VisionImage)} to specify the detector object.
- *
- * @param <T> The type of the detected feature.
- */
 abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 
     private var activityManager: ActivityManager =
@@ -100,144 +72,29 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
     }
 
 
-    @Synchronized
-    private fun processLatestImage(scannerOverlay: ScannerOverlayImpl) {
-        processingImage = latestImage
-        processingMetaData = latestImageMetaData
-        latestImage = null
-        latestImageMetaData = null
-        if (processingImage != null && processingMetaData != null && !isShutdown) {
-            processImage(processingImage!!, processingMetaData!!, scannerOverlay)
-        }
-    }
-
-    @Synchronized
-    override fun processByteBuffer(
-        data: ByteBuffer?,
-        frameMetadata: FrameMetadata?,
-        scannerOverlay: ScannerOverlayImpl
-    ) {
-        latestImage = data
-        latestImageMetaData = frameMetadata
-        if (processingImage == null && processingMetaData == null) {
-            processLatestImage(scannerOverlay)
-        }
-    }
-
-    private fun processImage(
-        data: ByteBuffer,
-        frameMetadata: FrameMetadata,
-        scannerOverlay: ScannerOverlayImpl
-    ) {
-        val frameStartMs = SystemClock.elapsedRealtime()
-        // If live viewport is on (that is the underneath surface view takes care of the camera preview
-        // drawing), skip the unnecessary bitmap creation that used for the manual preview drawing.
-        val bitmap =
-            if (PreferenceUtils.isCameraLiveViewportEnabled(scannerOverlay.context)) null
-            else BitmapUtils.getBitmap(data, frameMetadata)
-
-        if (isMlImageEnabled(scannerOverlay.context)) {
-            val mlImage =
-                ByteBufferMlImageBuilder(
-                    data,
-                    frameMetadata.width,
-                    frameMetadata.height,
-                    MlImage.IMAGE_FORMAT_NV21
-                )
-                    .setRotation(frameMetadata.rotation)
-                    .build()
-            requestDetectInMlImage(mlImage, scannerOverlay, bitmap, /* shouldShowFps= */ true, frameStartMs)
-                .addOnSuccessListener(executor) { processLatestImage(scannerOverlay) }
-
-            // This is optional. Java Garbage collection can also close it eventually.
-            mlImage.close()
-            return
-        }
-
-        requestDetectInInputImage(
-            InputImage.fromByteBuffer(
-                data,
-                frameMetadata.width,
-                frameMetadata.height,
-                frameMetadata.rotation,
-                InputImage.IMAGE_FORMAT_NV21
-            ),
-            scannerOverlay,
-            bitmap,
-            shouldShowFps = true,
-            frameStartMs
-        )
-            .addOnSuccessListener(executor) { processLatestImage(scannerOverlay) }
-    }
-
     @ExperimentalGetImage
-    override fun processImageProxy(image: Bitmap, scannerOverlay: ScannerOverlayImpl) {
+    override fun processImageBitmap(image: Bitmap, scannerOverlay: ScannerOverlayImpl) {
         val inputImage = InputImage.fromBitmap(image, 0)
         val frameStartMs = SystemClock.elapsedRealtime()
         if (isShutdown) {
             return
         }
 
-        if (isMlImageEnabled(scannerOverlay.context)) {
-            requestDetectInInputImage(
-                image = inputImage,
-                scannerOverlay = scannerOverlay,
-                originalCameraImage = image,
-                shouldShowFps = true,
-                frameStartMs = frameStartMs
-            )
-            return
-        }
-
-        requestDetectInInputImage(
-            image = inputImage,
+        setUpListener(
+            task = detectInImage(inputImage),
             scannerOverlay = scannerOverlay,
-            originalCameraImage = image,
-            shouldShowFps = true,
             frameStartMs = frameStartMs
-        )
-    }
-
-    private fun requestDetectInInputImage(
-        image: InputImage,
-        scannerOverlay: ScannerOverlayImpl,
-        originalCameraImage: Bitmap?,
-        shouldShowFps: Boolean,
-        frameStartMs: Long
-    ): Task<T> {
-        return setUpListener(
-            detectInImage(image),
-            scannerOverlay,
-            originalCameraImage,
-            shouldShowFps,
-            frameStartMs
-        )
-    }
-
-    private fun requestDetectInMlImage(
-        image: MlImage,
-        scannerOverlay: ScannerOverlayImpl,
-        originalCameraImage: Bitmap?,
-        shouldShowFps: Boolean,
-        frameStartMs: Long
-    ): Task<T> {
-        return setUpListener(
-            detectInImage(image),
-            scannerOverlay,
-            originalCameraImage,
-            shouldShowFps,
-            frameStartMs
         )
     }
 
     private fun setUpListener(
         task: Task<T>,
         scannerOverlay: ScannerOverlayImpl,
-        originalCameraImage: Bitmap?,
-        shouldShowFps: Boolean,
+        shouldShowFps: Boolean = true,
         frameStartMs: Long
     ): Task<T> {
         val detectorStartMs = SystemClock.elapsedRealtime()
+
         return task
             .addOnSuccessListener(
                 executor,
@@ -262,10 +119,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
                         activityManager.getMemoryInfo(mi)
                     }
                     scannerOverlay.drawGreenRect = false
-//                    scannerOverlay.invalidate()
-//                    if (originalCameraImage != null) {
-//                        graphicOverlay.add(CameraImageGraphic(graphicOverlay, originalCameraImage))
-//                    }
                     if (!PreferenceUtils.shouldHideDetectionInfo(scannerOverlay.context)) {
                         this@VisionProcessorBase.onSuccess(
                             results, scannerOverlay, CameraXInfo(
@@ -311,66 +164,8 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 
     protected abstract fun detectInImage(image: InputImage): Task<T>
 
-    protected open fun detectInImage(image: MlImage): Task<T> {
-        return Tasks.forException(
-            MlKitException(
-                "MlImage is currently not demonstrated for this feature",
-                MlKitException.INVALID_ARGUMENT
-            )
-        )
-    }
-
     protected abstract fun onSuccess(results: T, scannerOverlay: ScannerOverlayImpl, info: CameraXInfo?)
 
     protected abstract fun onFailure(e: Exception)
 
-    protected open fun isMlImageEnabled(context: Context?): Boolean {
-        return false
-    }
 }
-
-//class CameraImageGraphic(overlay: GraphicOverlay?, private val bitmap: Bitmap) : Graphic(overlay!!) {
-//
-//    override fun draw(canvas: Canvas?) {
-//        canvas?.drawBitmap(bitmap, getTransformationMatrix(), null)
-//    }
-//}
-
-//override fun processBitmap(bitmap: Bitmap?, graphicOverlay: GraphicOverlay?) {
-//        val mlImage = BitmapMlImageBuilder(bitmap!!).build()
-//        val frameStartMs = SystemClock.elapsedRealtime()
-//        if (graphicOverlay != null) {
-//            if (isMlImageEnabled(graphicOverlay.context)) {
-//
-//                requestDetectInMlImage(
-//                    image = mlImage,
-//                    graphicOverlay,
-//                    originalCameraImage = null,
-//                    shouldShowFps = false,
-//                    frameStartMs = frameStartMs
-//                )
-//
-//                mlImage.close()
-//                return
-//            }
-//
-//            if (bitmap != null) {
-//                requestDetectInInputImage(
-//                    InputImage.fromBitmap(bitmap, 0),
-//                    graphicOverlay,
-//                    originalCameraImage = null,
-//                    shouldShowFps = false,
-//                    frameStartMs
-//                )
-//            }
-//        }
-//    }
-//
-//    @Synchronized
-//    override fun processByteBuffer(data: ByteBuffer?, frameMetadata: FrameMetadata?, graphicOverlay: GraphicOverlay?) {
-//        latestImage = data
-//        latestImageMetaData = frameMetadata
-//        if (processingImage == null && processingMetaData == null && graphicOverlay != null) {
-//            processLatestImage(graphicOverlay)
-//        }
-//    }

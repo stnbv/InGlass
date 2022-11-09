@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface ICompanionsApi {
 
     @GET("companions")
-    suspend fun getCompanions(): Response<CompanionsResponse>
+    suspend fun getCompanions(): Response<List<CompanionsResponse>>
 
 }

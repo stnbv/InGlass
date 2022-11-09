@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.inglass.android.BuildConfig
+import com.inglass.android.domain.models.CompanionsFullInfoModel
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.utils.helpers.fromJson

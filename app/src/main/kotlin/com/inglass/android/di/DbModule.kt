@@ -31,6 +31,6 @@ object DbModule {
 
     @Provides
     @Singleton
-    fun provideUserHelpersDao(appDatabase: AppDatabase) = appDatabase.userHelpersDao()
+    fun provideCompanionsDao(appDatabase: AppDatabase) = appDatabase.companionDao()
 
 }

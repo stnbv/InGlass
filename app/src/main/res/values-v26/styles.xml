@@ -6,16 +6,16 @@
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_grey</item>
-        <item name="colorPrimaryVariant">@color/grey</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryVariant">@color/onyx</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
 
-        <item name="colorSecondary">@color/dim_gray</item>
-        <item name="colorSecondaryVariant">@color/normal_gray</item>
-        <item name="colorOnSecondary">@color/main_black</item>
-        <!-- Status bar color. -->
+        <item name="colorSecondary">@color/silver</item>
+        <item name="colorSecondaryVariant">@color/silver</item>
 
+        <item name="android:textColor">@color/silver</item>
+        <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
@@ -27,4 +27,5 @@
     <style name="SplashTheme" parent="Theme.InGlass">
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
 </resources>

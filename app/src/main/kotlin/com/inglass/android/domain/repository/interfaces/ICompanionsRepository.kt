@@ -5,6 +5,6 @@ import com.inglass.android.utils.api.core.Answer
 
 interface ICompanionsRepository {
 
-    suspend fun getCompanions(): Answer<CompanionsModel>
+    suspend fun getCompanions(): Answer<List<CompanionsModel>>
 
 }
