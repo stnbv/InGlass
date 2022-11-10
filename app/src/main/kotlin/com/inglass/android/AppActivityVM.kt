@@ -100,7 +100,7 @@ class AppActivityVM @Inject constructor(
     }
 
     fun changeToken() {
-        prefs.token = "dbvhbdfbvdfbvhdbfjv" //TODO REMOVE
+        prefs.token = "dbvhbdfbvdfbvhdbfjv" //TODO REMOVE Для теста скисшего токена
     }
 
     private fun observePersonalInformation() {

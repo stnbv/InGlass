@@ -63,7 +63,7 @@ class CameraXViewModel @Inject constructor(
                         loadingStatus = Queue,
                         employeeId = preferences.user?.id ?: return@launch,
                         operationId = navArgs.operationId,
-                        dateTime = Calendar.getInstance().time, //TODO Перепроверить
+                        dateTime = Calendar.getInstance().time,
                         participationRate = userRate,
                         helpers = helpers
                     )

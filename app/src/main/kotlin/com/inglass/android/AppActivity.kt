@@ -1,13 +1,9 @@
 package com.inglass.android
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -26,7 +22,6 @@ import com.inglass.android.utils.navigation.findNavController
 import com.inglass.android.utils.navigation.setCurrentDialogScreenWithNavController
 import com.inglass.android.utils.navigation.setCurrentScreenWithNavController
 import com.inglass.android.utils.ui.makeToast
-import com.inglass.android.utils.ui.showSimpleDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -46,7 +41,6 @@ class AppActivity : AppCompatActivity() {
         binding.vm = viewModel
 
         binding.navView.setupWithNavController(findNavController(R.id.navHostFragment))
-
         menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
 
         lifecycleScope.launchWhenCreated {
@@ -54,7 +48,7 @@ class AppActivity : AppCompatActivity() {
                 if (it == true) {
                     binding.drawerLayout.makeToast(
                         backgroundRes = getColor(color.red),
-                        message = "Штрихкод не отправлен"
+                        message = getString(R.string.error_code_not_send)
                     )
                 }
             }
@@ -84,14 +78,6 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    fun openMenu() {
-        binding.drawerLayout.openDrawer(GravityCompat.START)
-    }
-
-    private fun closeMenu() {
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
-    }
-
     fun navigateToScreen(screen: SCREENS) {
         hideKeyboard()
         findNavController(R.id.navHostFragment).apply {
@@ -110,12 +96,19 @@ class AppActivity : AppCompatActivity() {
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
+    fun openMenu() {
+        binding.drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    private fun closeMenu() {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
     fun selectMenuNavigation(item: MenuItem) {
         if (findNavController(R.id.navHostFragment).currentDestination?.id == item.itemId) return
         when (item.itemId) {
             R.id.clearDatabase -> viewModel.clearScanResultDatabase()
             R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
-            R.id.navHelpers -> navigateToScreen(SCREENS.HELPERS)
             R.id.navChangeUser -> {
                 viewModel.clearPrefs()
                 viewModel.clearDatabase()
@@ -123,28 +116,5 @@ class AppActivity : AppCompatActivity() {
             }
         }
         closeMenu()
-    }
-
-    private fun showDialogWithCurrentDescription(@StringRes description: Int, @StringRes buttonText: Int) {
-        showSimpleDialogFragment(
-            R.string.access_to_setting_title,
-            description,
-            buttonText
-        )
-    }
-
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
-            val view = currentFocus
-            hideKeyboard()
-            if (view is EditText) {
-                val outRect = Rect()
-                view.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    view.clearFocus()
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event)
     }
 }

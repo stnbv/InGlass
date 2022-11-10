@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.dialogs
+package com.inglass.android.presentation.settings.access_dialog
 
 import android.os.Bundle
 import android.view.View

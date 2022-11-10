@@ -66,7 +66,7 @@ class DesktopVM @Inject constructor(
             getCompanionsUseCase().onSuccess { referenceBook ->
                 companionsDao.insertCompanions(referenceBook.map {
                     Companions(it.id, it.participationRate)
-                }) //TODO Вот тут может меняться последовательнось?
+                })
             }
                 .onFailure {
                     Timber.e(it.message)

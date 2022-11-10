@@ -33,7 +33,7 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
-        view.setBackgroundColor(requireContext().getColor(R.color.dark_gray))
+        view.setBackgroundColor(requireContext().getColor(R.color.dim_gray))
         return view
     }
 

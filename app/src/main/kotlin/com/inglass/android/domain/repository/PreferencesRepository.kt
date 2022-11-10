@@ -5,7 +5,6 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.inglass.android.BuildConfig
-import com.inglass.android.domain.models.CompanionsFullInfoModel
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.utils.helpers.fromJson
@@ -30,11 +29,11 @@ class PreferencesRepository(context: Context) : IPreferencesRepository {
     )
 
     override var userLogin: String
-        get() = settings.getString(LOGIN_KEY, null) ?: "" //TODO проконсультироваться корректо ли
+        get() = settings.getString(LOGIN_KEY, null) ?: ""
         set(value) = settings.edit().putString(LOGIN_KEY, value).apply()
 
     override var userPassword: String
-        get() = settings.getString(PASSWORD_KEY, null) ?: "" //TODO проконсультироваться корректо ли
+        get() = settings.getString(PASSWORD_KEY, null) ?: ""
         set(value) = settings.edit().putString(PASSWORD_KEY, value).apply()
 
     override var baseUrl: String

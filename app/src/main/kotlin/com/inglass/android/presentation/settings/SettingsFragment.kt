@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.auth_screens.settings
+package com.inglass.android.presentation.settings
 
 import android.os.Bundle
 import android.view.View

@@ -8,11 +8,5 @@ enum class DIALOGS(
     var navDirections: NavDirections? = null
 ) {
     //DeletePhoto
-    ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog),
-
-    //AddHelper
-    ADD_PARTICIPATION(R.id.addParticipationRateDialog),
-
-    //AddHelper
-    ADD_HELPER(R.id.addHelperBottomSheet)
+    ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog)
 }

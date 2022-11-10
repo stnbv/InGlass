@@ -23,7 +23,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_ripple_button"
+            android:background="@drawable/bg_button_rounded"
+            android:backgroundTint="@color/main_white"
             android:padding="8dp">
 
             <TextView

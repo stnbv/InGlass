@@ -2,6 +2,8 @@ package com.inglass.android.data.remote.services
 
 import com.google.gson.annotations.SerializedName
 
+//TODO Поменять риспонс
+
 data class ServerErrorResponse(
     @SerializedName("errors") val error: Error?
 ) {

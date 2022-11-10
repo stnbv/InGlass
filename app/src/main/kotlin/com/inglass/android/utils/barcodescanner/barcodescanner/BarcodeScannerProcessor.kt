@@ -80,24 +80,6 @@ class BarcodeScannerProcessor(
                 counter = 0
             }
         }
-//
-//
-//
-//
-//        results.forEach { barcode ->
-//            if (previousScannedCode.filter { it == barcode.rawValue }.size >= 2) {
-//                if (barcode.rawValue in scanned) {
-//                    scannerOverlay.drawGreenRect = true
-//                } else {
-//                    barcode.rawValue?.let { previousScannedCode.add(it) }
-//                    barcode.rawValue?.let { onScanned(it, previousScannedCode) }
-//                    scannerOverlay.drawGreenRect = false
-//                }
-//            } else {
-//                barcode.rawValue?.let { previousScannedCode.add(it) }
-//                onScanned(null, previousScannedCode)
-//            }
-//        }
     }
 
     override fun onFailure(e: Exception) {

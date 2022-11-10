@@ -18,12 +18,7 @@ import com.inglass.android.utils.base.BaseFragment
 import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
 
-private val REQUIRED_RUNTIME_PERMISSIONS =
-    arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
+private val REQUIRED_RUNTIME_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 private const val PERMISSION_REQUESTS = 1
 
@@ -56,7 +51,7 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         val dataAdapter = ArrayAdapter(
             requireContext(),
             R.layout.spinner_style,
-            viewModel.operations.value ?: mutableListOf("Нет доступных операций")
+            viewModel.operations.value ?: mutableListOf(requireContext().getString(R.string.desktop_no_operation))
         )
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = dataAdapter
@@ -68,7 +63,11 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                 pos: Int,
                 id: Long
             ) {
-                viewModel.isScanButtonEnable.postValue(viewModel.operations.value?.get(pos) != "Нет доступных операций")
+                viewModel.isScanButtonEnable.postValue(
+                    viewModel.operations.value?.get(pos) != requireContext().getString(
+                        R.string.desktop_no_operation
+                    )
+                )
                 viewModel.selectedOperationsPosition.postValue(pos)
             }
 
@@ -77,7 +76,6 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
             }
         }
     }
-
 
     private fun allRuntimePermissionsGranted(): Boolean {
         for (permission in REQUIRED_RUNTIME_PERMISSIONS) {
@@ -121,22 +119,4 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         Log.i("TAG", "Permission NOT granted: $permission")
         return false
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        checkPermissionToGeolocation()
-//    }
-
-//    private fun checkPermissionToGeolocation() {
-//        lifecycleScope.launch {
-//            val result =
-//                Peko.requestPermissionsAsync(
-//                    requireContext(),
-//                    permission.CAMERA
-//                )
-//            if (result is PermissionResult.Denied) {
-//                viewModel.openGeolocationDialog()
-//            }
-//        }
-//    }
 }

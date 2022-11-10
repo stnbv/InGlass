@@ -11,8 +11,6 @@ buildscript {
         classpath gradlePlugins.hiltPlugin
         classpath gradlePlugins.navigationPlugin
 
-        classpath 'com.google.gms:google-services:4.3.10'
-
         classpath gradlePlugins.detektPlugin
         classpath gradlePlugins.codeQualityPlugin
     }

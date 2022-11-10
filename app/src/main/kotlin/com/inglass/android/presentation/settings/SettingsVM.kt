@@ -1,4 +1,4 @@
-package com.inglass.android.presentation.auth_screens.settings
+package com.inglass.android.presentation.settings
 
 import androidx.lifecycle.MutableLiveData
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository

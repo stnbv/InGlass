@@ -20,6 +20,7 @@ abstract class BaseService {
         return if (!response.isSuccessful) {
             Answer.failure(parseError(response.code(), response.errorBody()))
         } else {
+            println("response ${response.body()}")
             if (response.body() == null) {
                 Answer.failure(ErrorCode.EmptyResponseError)
             } else {
@@ -57,7 +58,6 @@ abstract class BaseService {
                 )
             }
 
-//
 //        return Answer.Failure(
 //            NoException(),
 //            ErrorCode.InternalError, //TODO Это удалила и сломала запрос на главном экране

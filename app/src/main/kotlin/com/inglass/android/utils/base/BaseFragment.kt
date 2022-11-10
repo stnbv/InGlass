@@ -15,7 +15,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.inglass.android.AppActivity
-import com.inglass.android.utils.base.toolbar.ToolbarConfig
 import com.inglass.android.utils.navigation.DIALOGS
 import com.inglass.android.utils.navigation.SCREENS
 import com.inglass.android.utils.navigation.safePopBackStack
@@ -27,11 +26,9 @@ abstract class BaseFragment<BINDING : ViewDataBinding, VIEWMODEL : BaseViewModel
     Fragment() {
 
     private var _binding: BINDING? = null
-     val binding get() = _binding!!
+    val binding get() = _binding!!
 
     protected abstract val viewModel: VIEWMODEL
-
-    open fun createToolbarConfig(): ToolbarConfig? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -49,7 +46,6 @@ abstract class BaseFragment<BINDING : ViewDataBinding, VIEWMODEL : BaseViewModel
             binding.root.findNavController().safePopBackStack()
         }
 
-        createToolbarConfig()
         return binding.root
     }
 
@@ -69,14 +65,14 @@ abstract class BaseFragment<BINDING : ViewDataBinding, VIEWMODEL : BaseViewModel
     }
 
     infix fun <T> LiveData<T>.observe(consumer: (T) -> Unit) {
-        this.observe(viewLifecycleOwner, {
+        this.observe(viewLifecycleOwner) {
             val result = this.value
             if (result != null) {
                 consumer(result)
             } else {
                 Timber.tag("BaseFragment").d("Observable value in null")
             }
-        })
+        }
     }
 
     private fun navigateToScreen(screen: SCREENS) {

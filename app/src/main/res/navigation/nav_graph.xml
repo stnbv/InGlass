@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.inglass.android.presentation.auth_screens.settings.SettingsFragment"
+        android:name="com.inglass.android.presentation.settings.SettingsFragment"
         android:label="@string/setting_title"
         tools:layout="@layout/fragment_settings">
 
@@ -43,7 +43,7 @@
 
     <dialog
         android:id="@+id/accessToSettingsDialog"
-        android:name="com.inglass.android.presentation.dialogs.AccessToSettingsDialogFragment"
+        android:name="com.inglass.android.presentation.settings.access_dialog.AccessToSettingsDialogFragment"
         android:label="@string/title_access_to_settings"
         tools:layout="@layout/dialog_access_to_settings" />
 
@@ -63,52 +63,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_helpers"
-        android:name="com.inglass.android.presentation.helpers.HelpersFragment"
-        android:label="@string/helpers_title"
-        tools:layout="@layout/fragment_helpers">
-
-        <action
-            android:id="@+id/to_navigation_add_helpers_bs"
-            app:destination="@id/addHelperBottomSheet" />
-
-        <action
-            android:id="@+id/to_navigation_add_participation_rate"
-            app:destination="@id/addParticipationRateDialog" />
-
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_preview_preference"
         android:name="com.inglass.android.presentation.scan.camera_settings.LivePreviewPreferenceFragment"
         android:label="LivePreviewPreference" />
-
-    <dialog
-        android:id="@+id/addParticipationRateDialog"
-        android:name="com.inglass.android.presentation.dialogs.add_helper.AddParticipationRateDialogFragment"
-        android:label="@string/add_helper_title"
-        tools:layout="@layout/dialog_add_helper">
-
-        <action
-            android:id="@+id/to_navigation_helpers"
-            app:destination="@id/navigation_helpers" />
-
-        <argument
-            android:name="employee"
-            app:argType="com.inglass.android.presentation.dialogs.add_helper.EmployeeItemData" />
-
-    </dialog>
-
-    <dialog
-        android:id="@+id/addHelperBottomSheet"
-        android:name="com.inglass.android.presentation.dialogs.add_helper.AddHelperBottomSheetFragment"
-        android:label="AddHelperBottomSheetDialogFragment"
-        tools:layout="@layout/bottom_sheet_add_helper">
-
-        <argument
-            android:name="employees"
-            app:argType="com.inglass.android.presentation.dialogs.add_helper.EmployeeItemData[]" />
-
-    </dialog>
 
 </navigation>

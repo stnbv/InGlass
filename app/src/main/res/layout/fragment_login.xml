@@ -65,7 +65,7 @@
                         style="@style/DefaultTextInputEditText"
                         android:text="@={vm.login}"
                         android:textColor="@color/main_black"
-                        android:textColorHint="@color/normal_gray"
+                        android:textColorHint="@color/light_grey"
                         android:textSize="16dp"
                         app:unfocusedHint="@{@string/login}"
                         tools:hint="Логин" />
@@ -90,7 +90,7 @@
                         android:maxLength="40"
                         android:text="@={vm.password}"
                         android:textColor="@color/main_black"
-                        android:textColorHint="@color/normal_gray"
+                        android:textColorHint="@color/light_grey"
                         android:textSize="16dp"
                         app:unfocusedHint="@{@string/login_hint_pass}"
                         tools:hint="@string/login_hint_pass" />
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:indeterminateTint="@color/grey"
+                    android:indeterminateTint="@color/silver"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

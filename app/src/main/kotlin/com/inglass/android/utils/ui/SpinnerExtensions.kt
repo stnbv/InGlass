@@ -62,7 +62,7 @@ class BindingSpinnerListener(private val hintColor: Int) : AdapterView.OnItemSel
         if (view !is TextView) return
         view.typeface = if (position > 0) {
             adapterView?.setSelection(position)
-            getFont(view.context, R.font.roboto_medium)
+            getFont(view.context, R.font.roboto_regular)
         } else {
             (view as? TextView)?.setTextColor(hintColor)
             getFont(view.context, R.font.roboto_regular)

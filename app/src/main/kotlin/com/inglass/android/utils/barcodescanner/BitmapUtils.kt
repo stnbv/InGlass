@@ -6,6 +6,7 @@ import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.graphics.Rect
 import android.graphics.YuvImage
+import android.media.Image
 import android.media.Image.Plane
 import android.os.Build.VERSION_CODES
 import android.util.Log
@@ -88,76 +89,6 @@ object BitmapUtils {
         return rotatedBitmap
     }
 
-//    @Throws(IOException::class)
-//    fun getBitmapFromContentUri(contentResolver: ContentResolver, imageUri: Uri): Bitmap? {
-//        val decodedBitmap = Media.getBitmap(contentResolver, imageUri) ?: return null
-//        val orientation = getExifOrientationTag(contentResolver, imageUri)
-//        var rotationDegrees = 0
-//        var flipX = false
-//        var flipY = false
-//        when (orientation) {
-//            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> flipX = true
-//            ExifInterface.ORIENTATION_ROTATE_90 -> rotationDegrees = 90
-//            ExifInterface.ORIENTATION_TRANSPOSE -> {
-//                rotationDegrees = 90
-//                flipX = true
-//            }
-//            ExifInterface.ORIENTATION_ROTATE_180 -> rotationDegrees = 180
-//            ExifInterface.ORIENTATION_FLIP_VERTICAL -> flipY = true
-//            ExifInterface.ORIENTATION_ROTATE_270 -> rotationDegrees = -90
-//            ExifInterface.ORIENTATION_TRANSVERSE -> {
-//                rotationDegrees = -90
-//                flipX = true
-//            }
-//            ExifInterface.ORIENTATION_UNDEFINED, ExifInterface.ORIENTATION_NORMAL -> {}
-//            else -> {}
-//        }
-//        return rotateBitmap(decodedBitmap, rotationDegrees, flipX, flipY)
-//    }
-
-//    private fun getExifOrientationTag(resolver: ContentResolver, imageUri: Uri): Int {
-//        // We only support parsing EXIF orientation tag from local file on the device.
-//        // See also:
-//        // https://android-developers.googleblog.com/2016/12/introducing-the-exifinterface-support-library.html
-//        if (ContentResolver.SCHEME_CONTENT != imageUri.scheme
-//            && ContentResolver.SCHEME_FILE != imageUri.scheme
-//        ) {
-//            return 0
-//        }
-//        var exif: ExifInterface
-//        try {
-//            resolver.openInputStream(imageUri).use { inputStream ->
-//                if (inputStream == null) {
-//                    return 0
-//                }
-//                exif = ExifInterface(inputStream)
-//            }
-//        } catch (e: IOException) {
-//            Log.e(TAG, "failed to open file to read rotation meta data: $imageUri", e)
-//            return 0
-//        }
-//        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-//    }
-
-    /**
-     * Converts YUV_420_888 to NV21 bytebuffer.
-     *
-     *
-     * The NV21 format consists of a single byte array containing the Y, U and V values. For an
-     * image of size S, the first S positions of the array contain all the Y values. The remaining
-     * positions contain interleaved V and U values. U and V are subsampled by a factor of 2 in both
-     * dimensions, so there are S/4 U values and S/4 V values. In summary, the NV21 array will contain
-     * S Y values followed by S/4 VU values: YYYYYYYYYYYYYY(...)YVUVUVUVU(...)VU
-     *
-     *
-     * YUV_420_888 is a generic format that can describe any YUV image where U and V are subsampled
-     * by a factor of 2 in both dimensions. [Image.getPlanes] returns an array with the Y, U and
-     * V planes. The Y plane is guaranteed not to be interleaved, so we can just copy its values into
-     * the first part of the NV21 array. The U and V planes may already have the representation in the
-     * NV21 format. This happens if the planes share the same buffer, the V buffer is one position
-     * before the U buffer and the planes have a pixelStride of 2. If this is case, we can just copy
-     * them to the NV21 array.
-     */
     private fun yuv420ThreePlanesToNV21(
         yuv420888planes: Array<Plane>, width: Int, height: Int
     ): ByteBuffer {
@@ -242,5 +173,60 @@ object BitmapUtils {
             }
             rowStart += plane.rowStride
         }
+    }
+
+    fun yuv420toNV21(image: Image): ByteArray {
+        val crop = image.cropRect
+        val format = image.format
+        val width = crop.width()
+        val height = crop.height()
+        val planes = image.planes
+        val data =
+            ByteArray(width * height * ImageFormat.getBitsPerPixel(format) / 8)
+        val rowData = ByteArray(planes[0].rowStride)
+        var channelOffset = 0
+        var outputStride = 1
+        for (i in planes.indices) {
+            when (i) {
+                0 -> {
+                    channelOffset = 0
+                    outputStride = 1
+                }
+                1 -> {
+                    channelOffset = width * height + 1
+                    outputStride = 2
+                }
+                2 -> {
+                    channelOffset = width * height
+                    outputStride = 2
+                }
+            }
+            val buffer = planes[i].buffer
+            val rowStride = planes[i].rowStride
+            val pixelStride = planes[i].pixelStride
+            val shift = if (i == 0) 0 else 1
+            val w = width shr shift
+            val h = height shr shift
+            buffer.position(rowStride * (crop.top shr shift) + pixelStride * (crop.left shr shift))
+            for (row in 0 until h) {
+                var length: Int
+                if (pixelStride == 1 && outputStride == 1) {
+                    length = w
+                    buffer[data, channelOffset, length]
+                    channelOffset += length
+                } else {
+                    length = (w - 1) * pixelStride + 1
+                    buffer[rowData, 0, length]
+                    for (col in 0 until w) {
+                        data[channelOffset] = rowData[col * pixelStride]
+                        channelOffset += outputStride
+                    }
+                }
+                if (row < h - 1) {
+                    buffer.position(buffer.position() + rowStride - length)
+                }
+            }
+        }
+        return data
     }
 }

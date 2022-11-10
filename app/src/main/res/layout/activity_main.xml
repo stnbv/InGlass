@@ -31,6 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navGraph="@navigation/nav_graph" />
 
+            <!-- //TODO Удалить вью(была нужна для теста)-->
             <View
                 android:id="@+id/remove"
                 android:layout_width="50dp"
@@ -38,6 +39,7 @@
                 android:layout_marginTop="150dp"
                 android:background="@color/silver"
                 android:onClick="@{()->vm.changeToken()}"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

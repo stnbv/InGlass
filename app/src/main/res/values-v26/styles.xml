@@ -9,17 +9,17 @@
         <item name="colorPrimary">@color/gray</item>
         <item name="colorPrimaryVariant">@color/onyx</item>
         <item name="colorOnPrimary">@color/white</item>
+
         <!-- Secondary brand color. -->
-
         <item name="colorSecondary">@color/silver</item>
-        <item name="colorSecondaryVariant">@color/silver</item>
+        <item name="colorSecondaryVariant">@color/dim_gray</item>
+        <item name="android:textColor">@color/main_black</item>
 
-        <item name="android:textColor">@color/silver</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Customize your theme here. -->
 
+        <!-- Customize your theme here. -->
         <item name="android:autofilledHighlight">@android:color/transparent</item>
         <item name="android:defaultFocusHighlightEnabled">false</item>
     </style>

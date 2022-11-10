@@ -43,7 +43,7 @@ class AuthTokenInterceptor(
                 addHeader(
                     "Accept",
                     "application/json"
-                ) //TODO Заменить токен на строке ниже(сейчас тестовый предоставленный заказчиком)
+                )
                 addHeader("Authorization", "Bearer $token")
             }
         }.build()

@@ -71,9 +71,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
         )
     }
 
-
-    @ExperimentalGetImage
-    override fun processImageBitmap(image: Bitmap, scannerOverlay: ScannerOverlayImpl) {
+    override fun processImageBitmap(image: Bitmap, scannerOverlayImpl: ScannerOverlayImpl) {
         val inputImage = InputImage.fromBitmap(image, 0)
         val frameStartMs = SystemClock.elapsedRealtime()
         if (isShutdown) {
@@ -82,7 +80,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
 
         setUpListener(
             task = detectInImage(inputImage),
-            scannerOverlay = scannerOverlay,
+            scannerOverlay = scannerOverlayImpl,
             frameStartMs = frameStartMs
         )
     }

@@ -14,6 +14,7 @@
     <string name="my">Мои</string>
 
     <!-- Errors -->
+    <string name="error_code_not_send">Штрихкод не отправлен</string>
     <string name="error_internal_error">Что-то пошло не так, попробуйте позже...</string>
     <string name="error_external_error">Ошибка сервера, попробуйте позже...</string>
     <string name="error_internal_connectivity_error">Нет подключения к интернету, проверьте пожалуйста соединение и повторите попытку</string>
@@ -56,6 +57,7 @@
     <string name="desktop_select_operation">Выберите операцию</string>
     <string name="desktop_clear_cache">Очистить базу</string>
     <string name="desktop_no_operation">Нет доступных операций</string>
+    <string name="desktop_one_scan">в количестве 1 шт.</string>
 
     <!-- AuthFragment -->
     <string name="action_sign_in">Войти</string>

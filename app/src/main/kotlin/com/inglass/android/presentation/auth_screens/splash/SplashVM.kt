@@ -18,12 +18,12 @@ const val VALUE_LOADING_START = "0"
 const val VALUE_LOADING_FINISH = "100"
 const val LOADING_TIME = 3000L
 private const val LOADING_CHANGE_INTERVAL = 50L
-private const val NUMBER = 30 // Что это за число ?
+private const val NUMBER = 30
 
 @HiltViewModel
 class SplashVM @Inject constructor(private val authStateUseCase: AuthStateUseCase) : BaseViewModel() {
 
-    val valuePercentLoad = MutableLiveData(VALUE_LOADING_START) //TODO удалить, если лоадер удалить решим
+    val valuePercentLoad = MutableLiveData(VALUE_LOADING_START)
 
     var timer = object : CountDownTimer(LOADING_TIME, LOADING_CHANGE_INTERVAL) {
 

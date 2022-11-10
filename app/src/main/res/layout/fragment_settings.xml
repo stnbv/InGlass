@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.inglass.android.presentation.auth_screens.settings.SettingsVM" />
+            type="com.inglass.android.presentation.settings.SettingsVM" />
     </data>
 
     <LinearLayout
@@ -34,7 +34,7 @@
                 android:maxLength="40"
                 android:text="@={vm.baseUrl}"
                 android:textColor="@color/main_black"
-                android:textColorHint="@color/normal_gray"
+                android:textColorHint="@color/light_grey"
                 android:textSize="16dp"
                 app:unfocusedHint="@{@string/settings_server_address_hint}" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -51,6 +51,4 @@
             app:backgroundTint="@drawable/bg_tint_pressed_main_black" />
 
     </LinearLayout>
-
-
 </layout>

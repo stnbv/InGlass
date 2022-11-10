@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.res.Configuration
-import android.graphics.ImageFormat
-import android.graphics.Rect
 import android.hardware.camera2.CameraMetadata.LENS_FACING_BACK
-import android.media.Image
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
@@ -25,13 +22,14 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentCameraXBinding
-import com.inglass.android.presentation.scan.CameraXFragment.ScannerRectToPreviewViewRelation
+import com.inglass.android.utils.barcodescanner.BitmapUtils
 import com.inglass.android.utils.barcodescanner.BitmapUtils.getBitmap
 import com.inglass.android.utils.barcodescanner.FrameMetadata
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
 import com.inglass.android.utils.barcodescanner.VisionImageProcessor
 import com.inglass.android.utils.barcodescanner.barcodescanner.BarcodeScannerProcessor
 import com.inglass.android.utils.base.BaseFragment
+import com.inglass.android.utils.ui.getCropRectAccordingToRotation
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -52,13 +50,11 @@ class CameraXFragment :
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
-        cameraProviderFuture.addListener(
-            {
-                cameraProvider = cameraProviderFuture.get()
-                bindAllCameraUseCases()
+        cameraProviderFuture.addListener({
+            cameraProvider = cameraProviderFuture.get()
+            bindAllCameraUseCases()
 
-            }, ContextCompat.getMainExecutor(requireContext())
-        )
+        }, ContextCompat.getMainExecutor(requireContext()))
 
         viewModel.onScannedFlow observe {
             vibration()
@@ -66,8 +62,7 @@ class CameraXFragment :
         }
     }
 
-
-    fun setCameraInfo(text: String) {
+    private fun setCameraInfo(text: String) {
         binding.cameraInfoTextView.text = text
     }
 
@@ -164,7 +159,7 @@ class CameraXFragment :
                 val cropRect = image.getCropRectAccordingToRotation(scannerRect, rotation)
                 image.cropRect = cropRect
 
-                val byteArray = YuvNV21Util.yuv420toNV21(image)
+                val byteArray = BitmapUtils.yuv420toNV21(image)
                 val bitmap = getBitmap(byteArray, FrameMetadata(cropRect.width(), cropRect.height(), rotation))
 
                 imageProcessor!!.processImageBitmap(bitmap, binding.barcodeScannerZone)
@@ -177,13 +172,6 @@ class CameraXFragment :
         }
         cameraProvider!!.bindToLifecycle(this, CameraSelector.DEFAULT_BACK_CAMERA, analysisUseCase)
     }
-
-    data class ScannerRectToPreviewViewRelation(
-        val relativePosX: Float,
-        val relativePosY: Float,
-        val relativeWidth: Float,
-        val relativeHeight: Float
-    )
 
     private fun getScannerRectToPreviewViewRelation(proxySize: Size, rotation: Int): ScannerRectToPreviewViewRelation {
         return when (rotation) {
@@ -260,94 +248,9 @@ class CameraXFragment :
     }
 }
 
-private fun Image.getCropRectAccordingToRotation(scannerRect: ScannerRectToPreviewViewRelation, rotation: Int): Rect {
-    return when (rotation) {
-        0 -> {
-            val startX = (scannerRect.relativePosX * this.width).toInt()
-            val numberPixelW = (scannerRect.relativeWidth * this.width).toInt()
-            val startY = (scannerRect.relativePosY * this.height).toInt()
-            val numberPixelH = (scannerRect.relativeHeight * this.height).toInt()
-            Rect(startX, startY, startX + numberPixelW, startY + numberPixelH)
-        }
-        90 -> {
-            val startX = (scannerRect.relativePosY * this.width).toInt()
-            val numberPixelW = (scannerRect.relativeHeight * this.width).toInt()
-            val numberPixelH = (scannerRect.relativeWidth * this.height).toInt()
-            val startY = height - (scannerRect.relativePosX * this.height).toInt() - numberPixelH
-            Rect(startX, startY, startX + numberPixelW, startY + numberPixelH)
-        }
-        180 -> {
-            val numberPixelW = (scannerRect.relativeWidth * this.width).toInt()
-            val startX = (this.width - scannerRect.relativePosX * this.width - numberPixelW).toInt()
-            val numberPixelH = (scannerRect.relativeHeight * this.height).toInt()
-            val startY = (height - scannerRect.relativePosY * this.height - numberPixelH).toInt()
-            Rect(startX, startY, startX + numberPixelW, startY + numberPixelH)
-        }
-        270 -> {
-            val numberPixelW = (scannerRect.relativeHeight * this.width).toInt()
-            val numberPixelH = (scannerRect.relativeWidth * this.height).toInt()
-            val startX = (this.width - scannerRect.relativePosY * this.width - numberPixelW).toInt()
-            val startY = (scannerRect.relativePosX * this.height).toInt()
-            Rect(startX, startY, startX + numberPixelW, startY + numberPixelH)
-        }
-        else -> throw IllegalArgumentException("Rotation degree ($rotation) not supported!")
-    }
-}
-
-object YuvNV21Util {
-
-    fun yuv420toNV21(image: Image): ByteArray {
-        val crop = image.cropRect
-        val format = image.format
-        val width = crop.width()
-        val height = crop.height()
-        val planes = image.planes
-        val data =
-            ByteArray(width * height * ImageFormat.getBitsPerPixel(format) / 8)
-        val rowData = ByteArray(planes[0].rowStride)
-        var channelOffset = 0
-        var outputStride = 1
-        for (i in planes.indices) {
-            when (i) {
-                0 -> {
-                    channelOffset = 0
-                    outputStride = 1
-                }
-                1 -> {
-                    channelOffset = width * height + 1
-                    outputStride = 2
-                }
-                2 -> {
-                    channelOffset = width * height
-                    outputStride = 2
-                }
-            }
-            val buffer = planes[i].buffer
-            val rowStride = planes[i].rowStride
-            val pixelStride = planes[i].pixelStride
-            val shift = if (i == 0) 0 else 1
-            val w = width shr shift
-            val h = height shr shift
-            buffer.position(rowStride * (crop.top shr shift) + pixelStride * (crop.left shr shift))
-            for (row in 0 until h) {
-                var length: Int
-                if (pixelStride == 1 && outputStride == 1) {
-                    length = w
-                    buffer[data, channelOffset, length]
-                    channelOffset += length
-                } else {
-                    length = (w - 1) * pixelStride + 1
-                    buffer[rowData, 0, length]
-                    for (col in 0 until w) {
-                        data[channelOffset] = rowData[col * pixelStride]
-                        channelOffset += outputStride
-                    }
-                }
-                if (row < h - 1) {
-                    buffer.position(buffer.position() + rowStride - length)
-                }
-            }
-        }
-        return data
-    }
-}
+data class ScannerRectToPreviewViewRelation(
+    val relativePosX: Float,
+    val relativePosY: Float,
+    val relativeWidth: Float,
+    val relativeHeight: Float
+)
