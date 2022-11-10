@@ -38,7 +38,7 @@ abstract class BaseService {
             return when (code) {
                 400 -> Answer.Failure(
                     NoException(),
-                    code = ErrorCode.AuthorizationError,
+                    code = ErrorCode.AuthorizationError, //Todo заменить код ошибки
                     message = response?.error?.detail ?: message
                 )
                 401 -> Answer.Failure(
@@ -57,11 +57,5 @@ abstract class BaseService {
                     message
                 )
             }
-
-//        return Answer.Failure(
-//            NoException(),
-//            ErrorCode.InternalError, //TODO Это удалила и сломала запрос на главном экране
-//            ""
-//        )
     }
 }
