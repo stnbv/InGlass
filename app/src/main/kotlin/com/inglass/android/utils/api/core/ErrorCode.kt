@@ -5,4 +5,5 @@ enum class ErrorCode {
     InternalError,
     ExternalError,
     EmptyResponseError,
+    Incorrect
 }

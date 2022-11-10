@@ -135,8 +135,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
             .addOnFailureListener(
                 executor,
                 OnFailureListener { e: Exception ->
-//                    scannerOverlay.clear()
-//                    scannerOverlay.postInvalidate() // TODO postInvalidate
                     e.printStackTrace()
                     this@VisionProcessorBase.onFailure(e)
                 }

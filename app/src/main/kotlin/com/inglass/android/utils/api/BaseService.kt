@@ -20,7 +20,6 @@ abstract class BaseService {
         return if (!response.isSuccessful) {
             Answer.failure(parseError(response.code(), response.errorBody()))
         } else {
-            println("response ${response.body()}")
             if (response.body() == null) {
                 Answer.failure(ErrorCode.EmptyResponseError)
             } else {
@@ -34,28 +33,28 @@ abstract class BaseService {
         body: ResponseBody?
     ): Answer.Failure {
         val response = body?.string().fromJson<ServerErrorResponse>()
-            val message = response?.error?.message ?: "No message"
-            return when (code) {
-                400 -> Answer.Failure(
-                    NoException(),
-                    code = ErrorCode.AuthorizationError, //Todo заменить код ошибки
-                    message = response?.error?.detail ?: message
-                )
-                401 -> Answer.Failure(
-                    NoException(),
-                    code = ErrorCode.AuthorizationError,
-                    message = response?.error?.detail ?: message
-                )
-                404 -> Answer.Failure(
-                    NoException(),
-                    code = ErrorCode.ExternalError,
-                    message = message
-                )
-                else -> Answer.Failure(
-                    NoException(),
-                    ErrorCode.ExternalError,
-                    message
-                )
-            }
+        val message = response?.message ?: "No message"
+        return when (code) {
+            400 -> Answer.Failure(
+                NoException(),
+                code = ErrorCode.Incorrect,
+                message = message
+            )
+            401 -> Answer.Failure(
+                NoException(),
+                code = ErrorCode.AuthorizationError,
+                message = message
+            )
+            404 -> Answer.Failure(
+                NoException(),
+                code = ErrorCode.ExternalError,
+                message = message
+            )
+            else -> Answer.Failure(
+                NoException(),
+                ErrorCode.InternalError,
+                message
+            )
+        }
     }
 }
