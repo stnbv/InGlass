@@ -34,9 +34,7 @@ ext.versions = [
         decoro              : '1.5.0',
         circle_image_view   : '3.1.0',
         dotsindicator       : '4.2',
-        permissions_kotlin  : '2.1.4',
-        browser             : '1.3.0',
-        exoplayer           : '2.16.1'
+        permissions_kotlin  : '2.1.4'
 ]
 
 ext.gradlePlugins = [
@@ -71,7 +69,6 @@ ext.libraries = [
         circleImageViewSupport   : "de.hdodenhof:circleimageview:$versions.circle_image_view",
         dotsindicatorSupport     : "com.tbuonomo:dotsindicator:$versions.dotsindicator",
         permissionsKotlin        : "com.markodevcic:peko:$versions.permissions_kotlin",
-        browser                  : "androidx.browser:browser:$versions.browser",
 
         //Lifecycle
         lifecycleRuntime         : "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle",
@@ -126,10 +123,6 @@ ext.libraries = [
 
         //Decoro (PhoneInputMask)
         decoro                   : "ru.tinkoff.decoro:decoro:$versions.decoro",
-
-        //ExoPlayer
-        exoplayer                : "com.google.android.exoplayer:exoplayer:$versions.exoplayer",
-        exoplayerUi              : "com.google.android.exoplayer:exoplayer-ui:$versions.exoplayer",
 
         // CameraX
         camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",

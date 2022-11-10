@@ -120,10 +120,6 @@ dependencies {
     implementation libraries.glide
     annotationProcessor libraries.glideAnnProcess
 
-    //ExoPlayer
-    implementation libraries.exoplayer
-    implementation libraries.exoplayerUi
-
 }
 
 codeQuality {
