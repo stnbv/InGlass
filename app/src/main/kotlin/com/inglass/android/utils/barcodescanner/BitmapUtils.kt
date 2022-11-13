@@ -47,14 +47,14 @@ object BitmapUtils {
         return rotatedBitmap
     }
 
+    // преобразование изображения формата YUV_420_888 в массив байтов цветового формата YUV420SemiPlanar (NV21)
     fun yuv420toNV21(image: Image): ByteArray {
         val crop = image.cropRect
         val format = image.format
         val width = crop.width()
         val height = crop.height()
         val planes = image.planes
-        val data =
-            ByteArray(width * height * ImageFormat.getBitsPerPixel(format) / 8)
+        val data = ByteArray(width * height * ImageFormat.getBitsPerPixel(format) / 8)
         val rowData = ByteArray(planes[0].rowStride)
         var channelOffset = 0
         var outputStride = 1

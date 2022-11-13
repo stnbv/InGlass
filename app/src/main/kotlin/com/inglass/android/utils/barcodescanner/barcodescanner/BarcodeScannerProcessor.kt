@@ -13,13 +13,14 @@ import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_13
 import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_8
 import com.google.mlkit.vision.barcode.common.Barcode.FORMAT_QR_CODE
 import com.google.mlkit.vision.common.InputImage
+import com.inglass.android.R
 import com.inglass.android.presentation.scan.overlay.ScannerOverlayImpl
 import timber.log.Timber
 
 const val REQUIRED_COUNT = 3
 
 class BarcodeScannerProcessor(
-    context: Context,
+    private val context: Context,
     private val scanned: Set<String>,
     private val onScanned: (String) -> Unit,
     private val setCameraInfo: (String) -> Unit
@@ -51,16 +52,17 @@ class BarcodeScannerProcessor(
     }
 
     override fun onSuccess(results: List<Barcode>, scannerOverlay: ScannerOverlayImpl, info: CameraXInfo?) {
-        if (info != null) { //TODO заменить на строковые ресурсы
-            var text = "InputImage size: ${scannerOverlay.getImageWidth()}x${scannerOverlay.getImageHeight()}\n"
-            text += if (info.shouldShowFps != null) {
-                "FPS: ${info.shouldShowFps}, Frame latency: ${info.currentFrameLatencyMs} ms\n"
-            } else {
-                "Frame latency: ${info.currentFrameLatencyMs} ms\n"
-            }
-            text += "Detector latency: ${info.currentDetectorLatencyMs} ms"
-
-            setCameraInfo(text)
+        if (info != null) {
+            setCameraInfo(
+                context.getString(
+                    R.string.camera_info,
+                    scannerOverlay.getImageWidth(),
+                    scannerOverlay.getImageHeight(),
+                    info.framesPerSecond,
+                    info.currentFrameLatencyMs,
+                    info.currentDetectorLatencyMs
+                )
+            )
         }
 
         scannerOverlay.drawGreenRect = results.firstOrNull()?.rawValue in scanned
@@ -90,5 +92,5 @@ class BarcodeScannerProcessor(
 data class CameraXInfo(
     val currentFrameLatencyMs: Long,
     val currentDetectorLatencyMs: Long,
-    val shouldShowFps: Int?
+    val framesPerSecond: Int?
 )

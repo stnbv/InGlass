@@ -6,14 +6,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.inglass.android.data.local.db.dao.CompanionsDao
-import com.inglass.android.data.local.db.dao.EmployeeDao
-import com.inglass.android.data.local.db.dao.OperationsDao
-import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.local.db.entities.Companions
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
+import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
+import com.inglass.android.domain.repository.interfaces.IReferenceBookRepository
+import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.domain.usecase.WaitNetworkUseCase
 import com.inglass.android.domain.usecase.companions.GetCompanionsUseCase
 import com.inglass.android.domain.usecase.personal_information.GetPersonalInformationUseCase
@@ -39,10 +38,9 @@ class DesktopVM @Inject constructor(
     private val getPersonalInformationUseCase: GetPersonalInformationUseCase,
     private val getReferenceBookUseCase: GetReferenceBookUseCase,
     private val preferencesRepository: IPreferencesRepository,
-    private val scanResultDao: ScanResultsDao,
-    private val operationsDao: OperationsDao,
-    private val employeeDao: EmployeeDao,
-    private val companionsDao: CompanionsDao,
+    private val referenceBookRepository: IReferenceBookRepository,
+    private val companionsRepository: ICompanionsRepository,
+    private val scanResultsRepository: IScanResultsRepository,
     private val networkUseCase: WaitNetworkUseCase,
     private val getCompanionsUseCase: GetCompanionsUseCase
 ) : BasePagingViewModel() {
@@ -64,7 +62,7 @@ class DesktopVM @Inject constructor(
     private fun getCompanions() {
         viewModelScope.launch(Dispatchers.IO) {
             getCompanionsUseCase().onSuccess { referenceBook ->
-                companionsDao.insertCompanions(referenceBook.map {
+                companionsRepository.saveCompanions(referenceBook.map {
                     Companions(it.id, it.participationRate)
                 })
             }
@@ -72,13 +70,12 @@ class DesktopVM @Inject constructor(
                     Timber.e(it.message)
                 }
 
-            companionsDao.getCompanionsFullInfoFlow().collect {
-                var helpersText = ""
-                helpersNames.postValue("")
-                it.forEach { helper ->
-                    helpersText += "${helper.name} - ${helper.participationRate} /"
-                    helpersNames.postValue("Помощники: $helpersText".trim().dropLast(1))
-                }
+            var helpersText = ""
+            companionsRepository.getCompanionsFullInfo().forEach { helper ->
+                helpersText += "${helper.name} - ${helper.participationRate} /"
+            }
+            if (helpersText.isNotEmpty()) {
+                helpersNames.postValue("Помощники: $helpersText".trim().dropLast(1))
             }
         }
     }
@@ -91,7 +88,7 @@ class DesktopVM @Inject constructor(
                     enablePlaceholders = false,
                     initialLoadSize = 5
                 ),
-                pagingSourceFactory = { scanResultDao.getScanResultWithOperation() }
+                pagingSourceFactory = { scanResultsRepository.getScanResultWithOperation() }
             ).flow.cachedIn(viewModelScope)
 
             items.collect {
@@ -113,9 +110,8 @@ class DesktopVM @Inject constructor(
     private fun getUserInformation() {
         viewModelScope.launch {
             getPersonalInformationUseCase()
-
             val userAvailableOperationsIds = preferencesRepository.user?.availableOperations
-            val allOperations = operationsDao.getOperations()
+            val allOperations = referenceBookRepository.getOperations()
 
             userAvailableOperations = userAvailableOperationsIds?.mapNotNull {
                 allOperations.find { operation ->
@@ -140,11 +136,11 @@ class DesktopVM @Inject constructor(
                 do {
                     val result = getReferenceBookUseCase().onSuccess { referenceBook ->
 
-                        operationsDao.insertOperations(referenceBook.operations.map { operation ->
+                        referenceBookRepository.saveOperations(referenceBook.operations.map { operation ->
                             Operation(operation.id, operation.name)
                         })
 
-                        employeeDao.insertEmployee(referenceBook.employees.map { employee ->
+                        referenceBookRepository.saveEmployee(referenceBook.employees.map { employee ->
                             Employee(employee.id, employee.name)
                         })
                     }

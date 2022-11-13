@@ -16,7 +16,7 @@ class ScannedItemVM(
 ) : CommonItemVM<ItemScannedBinding>(R.layout.item_scanned) {
     var dateTime = DateFormatHelper.FullDateTimeStamp.format(data.dateTime)
     var operation = data.operation
-    var barcode = data.barcode + " в количестве 1 шт." //TODO Заменить на строковый ресурс с парметром
+    var barcode = data.barcode
 
     val loadStatusImage = when (data.loadingStatus) {
         NotLoaded -> R.drawable.ic_error

@@ -4,34 +4,13 @@
     <!--Generals-->
     <string name="app_name_logo">inGlass Производство</string>
     <string name="app_version">Версия 1.0</string>
-    <string name="comment_text">Комментировать</string>
-    <string name="text_your_comment">Ваш комментарий</string>
-    <string name="text_send">Отправить</string>
-    <string name="text_massage">Текст сообщения</string>
-    <string name="no_internet_connection">Отсутствует подключение к интернету</string>
-    <string name="internet_connection_restored">Подключение к интернету восстановлено</string>
-    <string name="ok">ОK</string>
-    <string name="my">Мои</string>
 
     <!-- Errors -->
     <string name="error_code_not_send">Штрихкод не отправлен</string>
     <string name="error_internal_error">Что-то пошло не так, попробуйте позже...</string>
-    <string name="error_external_error">Ошибка сервера, попробуйте позже...</string>
     <string name="error_internal_connectivity_error">Нет подключения к интернету, проверьте пожалуйста соединение и повторите попытку</string>
-    <string name="error_format_email">Неверный формат e-mail</string>
     <string name="error_login_or_pass">Неверный логин или пароль</string>
-    <string name="error_not_fill_required_fields">Обязательные поля не заполнены</string>
-    <string name="error_user_already_registered">Пользователь уже зарегистрирован</string>
-    <string name="error_min_length_sms_code">Код слишком короткий</string>
-    <string name="error_phone_number">Некорректный номер телефона</string>
-    <string name="error_repeated_pass">Пароли не совпадают</string>
-    <string name="error_password_not_equals">Пароли не совпадают</string>
     <string name="error_password_incorrect">Неверный пароль</string>
-    <string name="error_unregistered_phone">Номер телефона не зарегистрирован</string>
-    <string name="error_unregistered_email">Email не зарегистрирован</string>
-    <string name="error_sms_code">Неверный код подтверждения</string>
-    <string name="error_pass_min_length">Пароль должен содержать не менее 8 символов</string>
-    <string name="error_all_attempts_used">На сегодня число попыток исчерпано</string>
 
     <!-- Titles in App -->
     <string name="title_home">Главная</string>
@@ -43,21 +22,13 @@
     <string name="setting_title">Настройки</string>
     <string name="title_access_to_settings">Доступ к настройкам</string>
 
-    <string name="title_onboard">Онбординг</string>
-    <string name="title_registration">Регистрация</string>
-    <string name="title_purchase_history">История покупок</string>
-    <string name="title_details">Подробней</string>
-    <string name="title_understandable">Понятно</string>
-    <string name="title_turn_on">Включить</string>
-    <string name="title_country_code">Страна</string>
-
     <!-- DesktopFragment -->
     <string name="desktop_scan_scan_only_one_item">Отметка операции в количестве 1шт</string>
     <string name="desktop_scan_barcode">Сканирование</string>
     <string name="desktop_select_operation">Выберите операцию</string>
     <string name="desktop_clear_cache">Очистить базу</string>
     <string name="desktop_no_operation">Нет доступных операций</string>
-    <string name="desktop_one_scan">в количестве 1 шт.</string>
+    <string name="desktop_one_scan">%1$s в количестве 1 шт.</string>
 
     <!-- AuthFragment -->
     <string name="action_sign_in">Войти</string>
@@ -76,81 +47,25 @@
     <string name="settings_enter_server_address">Введите IP-адрес сервера</string>
     <string name="settings_server_address_hint">IP-адрес</string>
 
-    <!-- SplashFragment -->
-    <string name="splash_load_algorithms">Загружаем алгоритмы</string>
+    <!-- Strings for camera settings and info -->
+    <string name="camera_info">InputImage size: %1$dx%2$d \nFPS: %3$d, Frame latency: %4$d ms \nDetector latency:  %5$d ms</string>
+    <string name="pref_category_title_camera">Camera</string>
+    <string name="pref_title_camerax_rear_camera_target_resolution">CameraX rear camera target resolution</string>
+    <string name="pref_key_camerax_rear_camera_target_resolution">target resolution</string>
+    <string name="pref_camerax_rear_camera_target_resolution_default">Default</string>
+    <string name="pref_title_info_hide">Hide detection info</string>
+    <string name="pref_key_info_hide">hide_info</string>
 
-    <!-- HelpersFragment -->
-    <string name="helpers_title">Помощники</string>
-    <string name="helpers_delete">Удалить всех</string>
-    <string name="helpers_full_name">ФИО</string>
-    <string name="helpers_participation">Доля участия</string>
-    <string name="helpers_add_helper">Добавить помощника</string>
-
-    <!-- AddHelperDialog -->
-    <string name="add_helper_title">Добавить помощника</string>
-    <string name="add_helper_save">Сохранить</string>
-    <string name="add_helper_cancel">Отменить</string>
-
-    <!-- Strings for camera settings. -->
-    <string name="pref_category_key_camera" translatable="false">pckc</string>
-    <string name="pref_category_title_camera" translatable="false">Camera</string>
-    <string name="pref_key_rear_camera_picture_size" translatable="false">rcpts</string>
-    <string name="pref_key_front_camera_picture_size" translatable="false">fcpts</string>
-    <string name="pref_key_camerax_rear_camera_target_resolution" translatable="false">crctas</string>
-    <string name="pref_key_camerax_front_camera_target_resolution" translatable="false">cfctas</string>
-    <string name="pref_key_camera_live_viewport" translatable="false">clv</string>
-    <string name="pref_title_rear_camera_preview_size" translatable="false">Rear camera preview size</string>
-    <string name="pref_title_front_camera_preview_size" translatable="false">Front camera preview size</string>
-    <string name="pref_title_camerax_rear_camera_target_resolution" translatable="false">CameraX rear camera target resolution</string>
-    <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">CameraX front camera target resolution</string>
-    <string name="pref_title_camera_live_viewport" translatable="false">Enable live viewport</string>
-    <string name="pref_summary_camera_live_viewport" translatable="false">Do not block camera preview drawing on detection</string>
-
-    <!-- Strings for info preference. -->
-    <string name="pref_title_info_hide" translatable="false">Hide detection info</string>
-    <string name="pref_key_info_hide" translatable="false">ih</string>
-
-    <!-- Strings for text recognition preference. -->
-    <string name="pref_title_group_recognized_text_in_blocks" translatable="false">Group recognized text in paragraphs</string>
-    <string name="pref_key_group_recognized_text_in_blocks" translatable="false">grtib</string>
-    <string name="pref_title_show_language_tag" translatable="false">Show language identified</string>
-    <string name="pref_key_show_language_tag" translatable="false">slt</string>
-
-    <!-- Strings for pose detector prefer gpu preference. -->
-    <string name="pref_title_pose_detector_prefer_gpu" translatable="false">Prefer using GPU</string>
-    <string name="pref_key_pose_detector_prefer_gpu" translatable="false">pdpg</string>
-    <string name="pref_summary_pose_detector_prefer_gpu" translatable="false">If enabled, GPU will be used as long as it is available, stable and returns correct results. In this case, the detector will not check if GPU is really faster than CPU.</string>
-
-    <!-- CameraX settings -->
-    <string name="pref_screen" translatable="false">ps</string>
-    <string name="pref_category_pose_detection" translatable="false">Pose Detection</string>
-    <string name="pref_title_pose_detector_performance_mode" translatable="false">Performance mode</string>
-    <string name="pref_key_live_preview_pose_detection_performance_mode" translatable="false">lppdpm</string>
-    <string name="pref_key_still_image_pose_detection_performance_mode" translatable="false">sipdpm</string>
-    <string name="pref_entries_pose_detector_performance_mode_fast" translatable="false">Fast</string>
-    <string name="pref_entries_pose_detector_performance_mode_accurate" translatable="false">Accurate</string>
-    <string name="pref_entry_values_pose_detector_performance_mode_fast" translatable="false">1</string>
-    <string name="pref_entry_values_pose_detector_performance_mode_accurate" translatable="false">2</string>
-
-    <string-array name="pref_entry_values_pose_detector_performance_mode">
-        <item>@string/pref_entry_values_pose_detector_performance_mode_fast</item>
-        <item>@string/pref_entry_values_pose_detector_performance_mode_accurate</item>
+    <string-array name="camera_resolutions">
+        <item>2000x2000</item>
+        <item>1600x1600</item>
+        <item>1200x1200</item>
+        <item>1000x1000</item>
+        <item>800x800</item>
+        <item>600x600</item>
+        <item>400x400</item>
+        <item>200x200</item>
+        <item>100x100</item>
     </string-array>
-
-    <string-array name="pref_entries_values_pose_detector_performance_mode">
-        <item>@string/pref_entries_pose_detector_performance_mode_fast</item>
-        <item>@string/pref_entries_pose_detector_performance_mode_accurate</item>
-    </string-array>
-
-    <!-- Strings for pose detector showInFrameLikelihood preference. -->
-    <string name="pref_title_pose_detector_show_in_frame_likelihood" translatable="false">Show in-frame likelihood</string>
-    <string name="pref_key_live_preview_pose_detector_show_in_frame_likelihood" translatable="false">lppdsifl</string>
-
-    <string name="pref_key_pose_detector_visualize_z" translatable="false">pdvz</string>
-    <string name="pref_title_pose_detector_visualize_z" translatable="false">Visualize z value</string>
-    <string name="pref_key_pose_detector_rescale_z" translatable="false">pdrz</string>
-    <string name="pref_title_pose_detector_rescale_z" translatable="false">Rescale z value for visualization</string>
-
-    <string name="pref_category_info" translatable="false">Detection Info</string>
 
 </resources>

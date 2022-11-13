@@ -20,6 +20,9 @@ interface ScanResultsDao {
     @Query("select * from scan_results where barcode = :barcode")
     suspend fun getItemById(barcode: String): ScanResult?
 
+    @Query("UPDATE scan_results SET loadingStatus = :loadingStatus WHERE barcode = :barcode")
+    suspend fun updateScanResult(barcode: String, loadingStatus: LoadingStatus)
+
     @Query(
         "SELECT scan_results.barcode AS barcode, scan_results.dateAndTime AS dateAndTime," +
                 "scan_results.loadingStatus AS loadingStatus, scan_results.operationId AS operationId, " +
@@ -28,7 +31,4 @@ interface ScanResultsDao {
                 "WHERE scan_results.operationId = operations.operationId ORDER BY dateAndTime DESC "
     )
     fun getScanResultWithOperation(): PagingSource<Int, ScanResultFullInfo>
-
-    @Query("UPDATE scan_results SET loadingStatus = :loadingStatus WHERE barcode = :barcode")
-    fun updateScanResult(barcode: String, loadingStatus: LoadingStatus)
 }

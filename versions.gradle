@@ -125,16 +125,19 @@ ext.libraries = [
         decoro                   : "ru.tinkoff.decoro:decoro:$versions.decoro",
 
         // CameraX
-        camera1                  : "androidx.camera:camera-camera2:1.2.0-alpha02",
-        camera2                  : "androidx.camera:camera-lifecycle:1.2.0-alpha02",
-        camera3                  : "androidx.camera:camera-view:1.2.0-alpha02",
+        camera                   : "androidx.camera:camera-camera2:1.2.0-alpha02",
+        cameraLifecycle          : "androidx.camera:camera-lifecycle:1.2.0-alpha02",
+        cameraView               : "androidx.camera:camera-view:1.2.0-alpha02",
 
-        barcode_scanning         : "com.google.mlkit:barcode-scanning:17.0.2",
-        object_detection         : "com.google.mlkit:object-detection:17.0.0",
+        barcodeScanning          : "com.google.mlkit:barcode-scanning:17.0.2",
+        objectDetection          : "com.google.mlkit:object-detection:17.0.0",
 
-        object_detection_custom  : "com.google.mlkit:object-detection-custom:17.0.0",
-        text_recognition         : "com.google.mlkit:text-recognition:16.0.0-beta6",
-        mlkit_camera             : "com.google.mlkit:camera:16.0.0-beta3"
+        objectDetectionCustom    : "com.google.mlkit:object-detection-custom:17.0.0",
+        textRecognition          : "com.google.mlkit:text-recognition:16.0.0-beta6",
+        mlkitCamera              : "com.google.mlkit:camera:16.0.0-beta3",
+
+        //PreferenceScreen
+        preference               : "androidx.preference:preference:1.2.0"
 ]
 
 def build_versions = [:]

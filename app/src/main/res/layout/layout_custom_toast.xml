@@ -29,7 +29,6 @@
         android:ellipsize="end"
         android:lineSpacingExtra="2dp"
         android:maxLines="3"
-        android:textColor="@android:color/white"
-        tools:text="@string/no_internet_connection" />
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

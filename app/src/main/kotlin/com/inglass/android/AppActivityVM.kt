@@ -2,14 +2,13 @@ package com.inglass.android
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.inglass.android.data.local.db.dao.CompanionsDao
-import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.domain.models.LoadingStatus.InProgress
 import com.inglass.android.domain.models.LoadingStatus.Loaded
 import com.inglass.android.domain.models.LoadingStatus.NotLoaded
 import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.domain.models.ScannedItemModel
 import com.inglass.android.domain.repository.interfaces.IAuthRepository
+import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
 import com.inglass.android.domain.repository.interfaces.IPersonalInformationRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
@@ -36,8 +35,7 @@ class AppActivityVM @Inject constructor(
     private val scanResultsRepository: IScanResultsRepository,
     private val personalInformationRepository: IPersonalInformationRepository,
     private val authRepository: IAuthRepository,
-    private val scanResultDao: ScanResultsDao,
-    private val companionsDao: CompanionsDao
+    private val companionsRepository: ICompanionsRepository
 ) : BaseViewModel() {
 
     val showToast = MutableLiveData(false)
@@ -47,7 +45,7 @@ class AppActivityVM @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultsRepository.result.receiveAsFlow().collect { scanResult ->
-                scanResultDao.updateScanResult(scanResult.barcode, InProgress)
+                scanResultsRepository.updateScanResult(scanResult.barcode, InProgress)
 
                 val isMakeOperation = retry(3) {
                     makeOperationUseCase.invoke(
@@ -65,11 +63,11 @@ class AppActivityVM @Inject constructor(
                 }
 
                 isMakeOperation.onSuccess {
-                    scanResultDao.updateScanResult(scanResult.barcode, Loaded)
+                    scanResultsRepository.updateScanResult(scanResult.barcode, Loaded)
                     showToast.postValue(false)
                 }
                 isMakeOperation.onFailure {
-                    scanResultDao.updateScanResult(scanResult.barcode, NotLoaded)
+                    scanResultsRepository.updateScanResult(scanResult.barcode, NotLoaded)
                     showToast.postValue(true)
                     if (it.code == AuthorizationError) navigateToScreen(LOGIN)
                 }
@@ -88,19 +86,15 @@ class AppActivityVM @Inject constructor(
 
     fun clearScanResultDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            scanResultDao.deleteAllItems()
+            scanResultsRepository.deleteAllItems()
         }
     }
 
     fun clearDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
-            scanResultDao.deleteAllItems()
-            companionsDao.deleteAllCompanions()
+            scanResultsRepository.deleteAllItems()
+            companionsRepository.deleteAllCompanions()
         }
-    }
-
-    fun changeToken() {
-        prefs.token = "dbvhbdfbvdfbvhdbfjv" //TODO REMOVE Для теста скисшего токена
     }
 
     private fun observePersonalInformation() {

@@ -1,10 +1,6 @@
 package com.inglass.android.utils.binding
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
@@ -13,19 +9,11 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.inglass.android.R
 import com.inglass.android.utils.ErrorWrapper
-import com.inglass.android.utils.ui.BindingSpinnerListener
-import com.inglass.android.utils.ui.dp
-import java.math.BigDecimal
 
 private const val PROGRESS_BAR_WIDTH = 5f
 private const val PROGRESS_BAR_RADIUS = 30f

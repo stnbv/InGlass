@@ -17,10 +17,10 @@ import com.inglass.android.databinding.FragmentDesktopBinding
 import com.inglass.android.utils.base.BaseFragment
 import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
-
-private val REQUIRED_RUNTIME_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+import timber.log.Timber
 
 private const val PERMISSION_REQUESTS = 1
+private val REQUIRED_RUNTIME_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
 @AndroidEntryPoint
 class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout.fragment_desktop) {
@@ -43,20 +43,8 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         viewModel.operations.observe(viewLifecycleOwner) {
             setupOperationsSpinner()
         }
-    }
 
-    private fun setupOperationsSpinner() {
-        val spinner = binding.operationsSpinner
-
-        val dataAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.spinner_style,
-            viewModel.operations.value ?: mutableListOf(requireContext().getString(R.string.desktop_no_operation))
-        )
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = dataAdapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.operationsSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>,
                 selectedItemView: View?,
@@ -68,13 +56,24 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                         R.string.desktop_no_operation
                     )
                 )
-                viewModel.selectedOperationsPosition.postValue(pos)
+                viewModel.selectedOperationsPosition.value = pos
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {
                 viewModel.isScanButtonEnable.postValue(false)
             }
         }
+    }
+
+    private fun setupOperationsSpinner() {
+        val dataAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_style,
+            viewModel.operations.value ?: mutableListOf(requireContext().getString(R.string.desktop_no_operation))
+        )
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.operationsSpinner.adapter = dataAdapter
+        binding.operationsSpinner.setSelection(viewModel.selectedOperationsPosition.value ?: 0)
     }
 
     private fun allRuntimePermissionsGranted(): Boolean {
@@ -113,10 +112,10 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                 permission
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.i("TAG", "Permission granted: $permission")
+            Timber.i("TAG", "Permission granted: $permission")
             return true
         }
-        Log.i("TAG", "Permission NOT granted: $permission")
+        Timber.i("TAG", "Permission NOT granted: $permission")
         return false
     }
 }

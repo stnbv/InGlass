@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.res.Configuration
-import android.hardware.camera2.CameraMetadata.LENS_FACING_BACK
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
@@ -100,7 +99,7 @@ class CameraXFragment :
 
         val builder = Preview.Builder()
         val targetResolution =
-            PreferenceUtils.getCameraXTargetResolution(requireContext(), LENS_FACING_BACK)?.let { res ->
+            PreferenceUtils.getCameraXTargetResolution(requireContext())?.let { res ->
                 when (resources.configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> Size(res.height, res.width)
                     else -> Size(res.width, res.height)
@@ -135,7 +134,7 @@ class CameraXFragment :
 
         val builder = ImageAnalysis.Builder()
         val targetResolution =
-            PreferenceUtils.getCameraXTargetResolution(requireContext(), LENS_FACING_BACK)?.let { res ->
+            PreferenceUtils.getCameraXTargetResolution(requireContext())?.let { res ->
                 when (resources.configuration.orientation) {
                     Configuration.ORIENTATION_PORTRAIT -> Size(res.height, res.width)
                     else -> Size(res.width, res.height)

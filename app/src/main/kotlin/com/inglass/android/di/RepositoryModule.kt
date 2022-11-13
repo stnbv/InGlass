@@ -1,6 +1,10 @@
 package com.inglass.android.di
 
 import android.content.Context
+import com.inglass.android.data.local.db.dao.CompanionsDao
+import com.inglass.android.data.local.db.dao.EmployeeDao
+import com.inglass.android.data.local.db.dao.OperationsDao
+import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.remote.services.auth.IAuthService
 import com.inglass.android.data.remote.services.companions.ICompanionsService
 import com.inglass.android.data.remote.services.make_operation.IMakeOperationService
@@ -51,13 +55,17 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideReferenceBookRepository(service: IReferenceBookService): IReferenceBookRepository =
-        ReferenceBookRepository(service)
+    fun provideReferenceBookRepository(
+        service: IReferenceBookService,
+        operationsDao: OperationsDao,
+        employeeDao: EmployeeDao
+    ): IReferenceBookRepository =
+        ReferenceBookRepository(service, operationsDao, employeeDao)
 
     @Provides
     @Singleton
-    fun provideCompanionsRepository(service: ICompanionsService): ICompanionsRepository =
-        CompanionsRepository(service)
+    fun provideCompanionsRepository(service: ICompanionsService, companionsDao: CompanionsDao): ICompanionsRepository =
+        CompanionsRepository(service, companionsDao)
 
     @Provides
     @Singleton
@@ -66,7 +74,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideScanResultsRepository(): IScanResultsRepository = ScanResultsRepository()
+    fun provideScanResultsRepository(scanResultsDao: ScanResultsDao): IScanResultsRepository =
+        ScanResultsRepository(scanResultsDao)
 
     @Provides
     @Singleton

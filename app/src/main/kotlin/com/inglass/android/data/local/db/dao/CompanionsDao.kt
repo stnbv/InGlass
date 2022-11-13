@@ -14,9 +14,6 @@ interface CompanionsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCompanions(helpers: List<Companions>)
 
-    @Query("SELECT * FROM companions")
-    fun getCompanions(): List<Companions>
-
     @Query(
         "SELECT companions.participationRate AS participationRate, employees.name AS name, companions.helperId AS id " +
                 "FROM companions, employees " +
@@ -30,9 +27,6 @@ interface CompanionsDao {
                 "WHERE companions.helperId = employees.id"
     )
     fun getCompanionsFullInfo(): List<CompanionsFullInfoModel>
-
-    @Query("delete from companions where helperId = :helperId ")
-    suspend fun deleteCompanions(helperId: String)
 
     @Query("delete from companions")
     suspend fun deleteAllCompanions()

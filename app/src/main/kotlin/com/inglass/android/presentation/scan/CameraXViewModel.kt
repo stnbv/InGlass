@@ -2,12 +2,11 @@ package com.inglass.android.presentation.scan
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.inglass.android.data.local.db.dao.CompanionsDao
-import com.inglass.android.data.local.db.dao.ScanResultsDao
 import com.inglass.android.data.local.db.entities.ScanResult
 import com.inglass.android.domain.models.FullScannedItemModel
 import com.inglass.android.domain.models.Helper
 import com.inglass.android.domain.models.LoadingStatus.Queue
+import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.utils.base.BaseViewModel
@@ -22,10 +21,9 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CameraXViewModel @Inject constructor(
-    private val scanResultDao: ScanResultsDao,
     private val preferences: IPreferencesRepository,
     private val scanResultsRepository: IScanResultsRepository,
-    private val companionsDao: CompanionsDao,
+    private val companionsRepository: ICompanionsRepository,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
@@ -41,7 +39,7 @@ class CameraXViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            companionsDao.getCompanionsFullInfo().forEach { companion ->
+            companionsRepository.getCompanionsFullInfo().forEach { companion ->
                 helpersRateSum += companion.participationRate
                 helpers.add(Helper(companion.id, companion.participationRate))
             }
@@ -54,7 +52,7 @@ class CameraXViewModel @Inject constructor(
         if (barcode in scanResSet) return
         scanResSet.add(barcode)
         viewModelScope.launch(Dispatchers.IO) {
-            if (scanResultDao.getItemById(barcode) == null) {
+            if (scanResultsRepository.getItemById(barcode) == null) {
                 onScannedChannel.send(Unit)
                 saveBarcode(barcode)
                 scanResultsRepository.emitScanResult(
@@ -76,7 +74,7 @@ class CameraXViewModel @Inject constructor(
     }
 
     private suspend fun saveBarcode(barcode: String) =
-        scanResultDao.insertScanResult(
+        scanResultsRepository.saveScanResult(
             ScanResult(
                 barcode = barcode,
                 operationId = navArgs.operationId,

@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.SystemClock
 import androidx.annotation.GuardedBy
-import androidx.camera.core.ExperimentalGetImage
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
@@ -88,7 +87,6 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
     private fun setUpListener(
         task: Task<T>,
         scannerOverlay: ScannerOverlayImpl,
-        shouldShowFps: Boolean = true,
         frameStartMs: Long
     ): Task<T> {
         val detectorStartMs = SystemClock.elapsedRealtime()
@@ -122,7 +120,7 @@ abstract class VisionProcessorBase<T>(context: Context) : VisionImageProcessor {
                             results, scannerOverlay, CameraXInfo(
                                 currentFrameLatencyMs,
                                 currentDetectorLatencyMs,
-                                if (shouldShowFps) framesPerSecond else null
+                                framesPerSecond
                             )
                         )
 

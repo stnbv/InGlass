@@ -7,14 +7,18 @@ import com.inglass.android.domain.models.AuthData
 import com.inglass.android.domain.repository.interfaces.IAuthRepository
 import com.inglass.android.utils.api.core.Answer
 import com.inglass.android.utils.api.core.map
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class AuthRepository(private val service: IAuthService) : IAuthRepository {
 
-    override val logOut: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val _logOut = MutableSharedFlow<Unit>()
+    override val logOut: Flow<Unit>
+        get() = _logOut.asSharedFlow()
 
     override suspend fun logOut() {
-        logOut.emit(Unit)
+        _logOut.emit(Unit)
     }
 
     override suspend fun logIn(phoneNumber: String, password: String): Answer<AuthData> {

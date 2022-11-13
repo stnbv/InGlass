@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="@string/pref_screen">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:enabled="true"
-        android:key="@string/pref_category_key_camera"
         android:title="@string/pref_category_title_camera">
 
         <ListPreference

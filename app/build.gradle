@@ -56,7 +56,6 @@ dependencies {
     implementation libraries.roomCore
     implementation libraries.roomKtx
     implementation libraries.roomPaging
-    implementation 'androidx.preference:preference:1.2.0'
     kapt libraries.roomCompiler
 
     //Paging 3
@@ -68,15 +67,17 @@ dependencies {
     implementation libraries.navigationFragment
 
     // CameraX
-    implementation "androidx.camera:camera-camera2:1.2.0-alpha02"
-    implementation "androidx.camera:camera-lifecycle:1.2.0-alpha02"
-    implementation "androidx.camera:camera-view:1.2.0-alpha02"
+    implementation libraries.camera
+    implementation libraries.cameraLifecycle
+    implementation libraries.cameraView
 
-    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
-    implementation 'com.google.mlkit:object-detection:17.0.0'
+    implementation libraries.barcodeScanning
+    implementation libraries.objectDetection
 
-    implementation 'com.google.mlkit:object-detection-custom:17.0.0'
-    implementation 'com.google.mlkit:text-recognition:16.0.0-beta6'
-    implementation 'com.google.mlkit:camera:16.0.0-beta3'
+    implementation libraries.objectDetectionCustom
+    implementation libraries.textRecognition
+    implementation libraries.mlkitCamera
+
+    implementation libraries.preference
 
 }

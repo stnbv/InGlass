@@ -15,6 +15,4 @@ interface OperationsDao {
     @Query("select * from operations")
     suspend fun getOperations(): List<Operation>
 
-    @Query("delete from operations")
-    suspend fun deleteAllOperations()
 }

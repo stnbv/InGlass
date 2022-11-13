@@ -49,13 +49,6 @@ abstract class BaseFragment<BINDING : ViewDataBinding, VIEWMODEL : BaseViewModel
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.errorLiveData.observe(viewLifecycleOwner, {
-            //TODO: Отображение ошибки если нужно, возможно и не нужно
-        })
-    }
-
     infix fun <T> Flow<T>.observe(consumer: (T) -> Unit) {
         lifecycleScope.launchWhenStarted {
             this@observe.collect {

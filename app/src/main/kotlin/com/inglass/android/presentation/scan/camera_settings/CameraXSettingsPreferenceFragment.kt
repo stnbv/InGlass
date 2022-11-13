@@ -20,14 +20,15 @@ import com.inglass.android.R.xml
 import com.inglass.android.utils.barcodescanner.PreferenceUtils
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import timber.log.Timber
 
 @AndroidEntryPoint
 class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(xml.fragment_camerax_settings)
+        addPreferencesFromResource(xml.camerax_settings)
         setUpCameraXTargetAnalysisSizePreference(
-            string.pref_key_camerax_rear_camera_target_resolution, CameraSelector.LENS_FACING_BACK
+            string.pref_key_camerax_rear_camera_target_resolution
         )
     }
 
@@ -37,11 +38,9 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
         return view
     }
 
-    private fun setUpCameraXTargetAnalysisSizePreference(
-        @StringRes previewSizePrefKeyId: Int, lensFacing: Int
-    ) {
+    private fun setUpCameraXTargetAnalysisSizePreference(@StringRes previewSizePrefKeyId: Int) {
         val pref = findPreference<ListPreference>(getString(previewSizePrefKeyId))
-        val cameraCharacteristics = getCameraCharacteristics(lensFacing)
+        val cameraCharacteristics = getCameraCharacteristics()
         val entries: Array<String?>
         if (cameraCharacteristics != null) {
             val map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
@@ -51,21 +50,16 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
                 entries[i] = outputSizes[i].toString()
             }
         } else {
-            entries = arrayOf(
-                "2000x2000",
-                "1600x1600",
-                "1200x1200",
-                "1000x1000",
-                "800x800",
-                "600x600",
-                "400x400",
-                "200x200",
-                "100x100"
-            )
+            entries = resources.getStringArray(R.array.camera_resolutions)
         }
         pref!!.entries = entries
         pref.entryValues = entries
-        pref.summary = if (pref.entry == null) "Default" else pref.entry
+        pref.summary =
+            if (pref.entry == null) {
+                requireContext().getString(R.string.pref_camerax_rear_camera_target_resolution_default)
+            } else {
+                pref.entry
+            }
         pref.onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _, newValue: Any? ->
                 val newStringValue = newValue as String?
@@ -76,7 +70,7 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
     }
 
     private fun getCameraCharacteristics(
-        lensFacing: Int
+        lensFacing: Int = CameraSelector.LENS_FACING_BACK
     ): CameraCharacteristics? {
         val cameraManager = requireContext().getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
@@ -90,7 +84,7 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
                 }
             }
         } catch (e: CameraAccessException) {
-            // Accessing camera ID info got error
+            Timber.e(e)
         }
         return null
     }

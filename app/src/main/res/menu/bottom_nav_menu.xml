@@ -5,14 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navChangeUser"
-            android:onClick="selectMenuNavigation"
-            android:title="@string/title_change_user" />
-
-        <item
             android:id="@+id/clearDatabase"
             android:onClick="selectMenuNavigation"
             android:title="@string/desktop_clear_cache" />
+
+        <item
+            android:id="@+id/navChangeUser"
+            android:onClick="selectMenuNavigation"
+            android:title="@string/title_change_user" />
 
         <!--Заказчик попросил скрыть настройки в меню-->
         <item
