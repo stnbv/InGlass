@@ -31,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @HiltViewModel
@@ -55,28 +56,25 @@ class DesktopVM @Inject constructor(
     init {
         initViewModelWithRecycler()
         getReferenceBook()
-        getUserInformation()
-        getCompanions()
     }
 
-    private fun getCompanions() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getCompanionsUseCase().onSuccess { referenceBook ->
+    private suspend fun getCompanions() {
+        getCompanionsUseCase()
+            .onSuccess { referenceBook ->
                 companionsRepository.saveCompanions(referenceBook.map {
                     Companions(it.id, it.participationRate)
                 })
             }
-                .onFailure {
-                    Timber.e(it.message)
-                }
+            .onFailure {
+                Timber.e(it.message)
+            }
 
-            var helpersText = ""
-            companionsRepository.getCompanionsFullInfo().forEach { helper ->
-                helpersText += "${helper.name} - ${helper.participationRate} /"
-            }
-            if (helpersText.isNotEmpty()) {
-                helpersNames.postValue("Помощники: $helpersText".trim().dropLast(1))
-            }
+        var helpersText = ""
+        companionsRepository.getCompanionsFullInfo().forEach { helper ->
+            helpersText += "${helper.name} - ${helper.participationRate} /"
+        }
+        if (helpersText.isNotEmpty()) {
+            helpersNames.postValue("Помощники: $helpersText".trim().dropLast(1))
         }
     }
 
@@ -107,32 +105,29 @@ class DesktopVM @Inject constructor(
         }
     }
 
-    private fun getUserInformation() {
-        viewModelScope.launch {
-            getPersonalInformationUseCase()
-            val userAvailableOperationsIds = preferencesRepository.user?.availableOperations
-            val allOperations = referenceBookRepository.getOperations()
+    private suspend fun getUserInformation() {
+        getPersonalInformationUseCase()
+        val userAvailableOperationsIds = preferencesRepository.user?.availableOperations
+        val allOperations = referenceBookRepository.getOperations()
 
-            userAvailableOperations = userAvailableOperationsIds?.mapNotNull {
-                allOperations.find { operation ->
-                    operation.operationId == it
-                }
+        userAvailableOperations = userAvailableOperationsIds?.mapNotNull {
+            allOperations.find { operation ->
+                operation.operationId == it
             }
+        }
 
-            val userOperations: List<String> = userAvailableOperations?.map {
-                it!!.name
-            } ?: listOf("Нет доступных операций")
-
-            if (userOperations.isNotEmpty()) {
-                operations.value = userOperations
-            }
+        val userOperations: List<String> = userAvailableOperations?.map {
+            it!!.name
+        } ?: listOf("Нет доступных операций")
+        if (userOperations.isNotEmpty()) {
+            operations.value = userOperations
         }
     }
 
     private fun getReferenceBook() {
         if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 300000) return
-        else {
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
                 do {
                     val result = getReferenceBookUseCase().onSuccess { referenceBook ->
 
@@ -152,8 +147,10 @@ class DesktopVM @Inject constructor(
                             }
                         }
                 } while (result.isFailure && result.errorOrNull()?.code != AuthorizationError)
-                preferencesRepository.lastReceivedData = System.currentTimeMillis()
             }
+            preferencesRepository.lastReceivedData = System.currentTimeMillis()
+            getUserInformation()
+            getCompanions()
         }
     }
 
