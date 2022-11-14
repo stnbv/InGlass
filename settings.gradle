@@ -8,4 +8,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "InGlass"
 include ':app'
-include ':widgets'

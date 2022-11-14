@@ -13,8 +13,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/addressesConfirmRootView"
         android:layout_width="match_parent"
-        android:background="@color/light_gray"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/dark_gray">
 
         <ScrollView
             android:id="@+id/scrollView"
@@ -63,15 +63,12 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passTextInputEditText1"
                         style="@style/DefaultTextInputEditText"
-                        android:inputType="textPassword"
-                        android:text= ""
+                        android:text="@={vm.login}"
                         android:textColor="@color/main_black"
-                        android:textColorHint="@color/normal_gray"
+                        android:textColorHint="@color/light_grey"
                         android:textSize="16dp"
-                        android:maxLength="40"
-                        android:digits="ABCDEFGHJIKLMNOPQRSTUVWXYZabcdefghjiklmnopqrstuvwxyz"
                         app:unfocusedHint="@{@string/login}"
-                        tools:hint="@string/login_hint_pass" />
+                        tools:hint="Логин" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -90,14 +87,11 @@
                         android:id="@+id/passTextInputEditText"
                         style="@style/DefaultTextInputEditText"
                         android:inputType="textPassword"
+                        android:maxLength="40"
                         android:text="@={vm.password}"
                         android:textColor="@color/main_black"
-                        android:textColorHint="@color/normal_gray"
+                        android:textColorHint="@color/light_grey"
                         android:textSize="16dp"
-                        android:maxLength="40"
-                        android:digits="ABCDEFGHJIKLMNOPQRSTUVWXYZabcdefghjiklmnopqrstuvwxyz1234567890"
-                        app:bindErrorWrapperText="@{vm.passErrorWrapper}"
-                        app:hasMediumWeightInput="@{true}"
                         app:unfocusedHint="@{@string/login_hint_pass}"
                         tools:hint="@string/login_hint_pass" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -151,11 +145,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:indeterminateTint="@color/grey"
-                    app:visibility="@{vm.showLoader}"
+                    android:indeterminateTint="@color/silver"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/appLogoView"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:visibility="@{vm.showLoader}"
                     tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

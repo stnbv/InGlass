@@ -1,11 +1,6 @@
 package com.inglass.android.utils.binding
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Rect
-import android.text.TextUtils
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
@@ -13,42 +8,13 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.bumptech.glide.Glide
-import com.facebook.shimmer.ShimmerFrameLayout
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.ui.PlayerView
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.inglass.android.R
-import com.inglass.android.domain.models.Country
 import com.inglass.android.utils.ErrorWrapper
-import com.inglass.android.utils.helpers.DateFormatHelper
-import com.inglass.android.utils.ui.BindingSpinnerListener
-import com.inglass.android.utils.ui.Gender.Default
-import com.inglass.android.utils.ui.Gender.Female
-import com.inglass.android.utils.ui.Gender.Male
-import com.inglass.android.utils.ui.dp
-import com.inglass.android.utils.ui.getOrCreatePhoneMaskWatcher
-import java.math.BigDecimal
-import java.util.Date
-import ru.tinkoff.decoro.FormattedTextChangeListener
-import ru.tinkoff.decoro.MaskImpl
-import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser
-import ru.tinkoff.decoro.watchers.FormatWatcher
 
-private const val DELAY_BEFORE_ALPHA_MS = 1000L
 private const val PROGRESS_BAR_WIDTH = 5f
 private const val PROGRESS_BAR_RADIUS = 30f
 
@@ -56,48 +22,6 @@ private const val PROGRESS_BAR_RADIUS = 30f
 fun setVisibility(v: View, isVisible: Boolean?) {
     if (isVisible == null) return
     v.isVisible = isVisible
-}
-
-@BindingAdapter("app:invisibility")
-fun setInvisibility(v: View, isInvisible: Boolean) {
-    v.isInvisible = isInvisible
-}
-
-@BindingAdapter("app:date")
-fun setDate(view: EditText, date: Date?) {
-    val dateString = date?.let { DateFormatHelper.DotsDate.format(it) } ?: ""
-
-    if (!TextUtils.equals(view.text, dateString)) {
-        view.setText(dateString)
-    }
-}
-
-
-@BindingAdapter("app:genderAttrChanged")
-fun setGenderListener(view: Spinner, attrChange: InverseBindingListener?) {
-    view.onItemSelectedListener?.let { listener ->
-        if (listener is BindingSpinnerListener && listener.bindingCallback == null) {
-            listener.bindingCallback = { attrChange?.onChange() }
-        }
-    }
-}
-
-@BindingAdapter("app:stringUrl")
-fun loadImage(view: ImageView, url: String?) {
-    if (url.isNullOrBlank()) return
-    val circularProgressDrawable = CircularProgressDrawable(view.context).apply {
-        colorFilter = PorterDuffColorFilter(ContextCompat.getColor(view.context, R.color.pink), PorterDuff.Mode.SRC_IN)
-        strokeWidth = PROGRESS_BAR_WIDTH
-        centerRadius = PROGRESS_BAR_RADIUS
-        start()
-    }
-
-    Glide
-        .with(view)
-        .load(url)
-        .placeholder(circularProgressDrawable)
-        .fitCenter()
-        .into(view)
 }
 
 @BindingAdapter("app:drawableId")
@@ -118,43 +42,15 @@ fun setTextColor(view: TextView, @ColorRes resId: Int) {
     view.setTextColor(view.context.getColor(resId))
 }
 
-@BindingAdapter(value = ["app:topMargin", "app:bottomMargin", "app:startMargin", "app:endMargin"], requireAll = false)
-fun setMargin(v: View, top: Int?, bottom: Int?, start: Int?, end: Int?) {
-    v.layoutParams = (v.layoutParams as ViewGroup.MarginLayoutParams).apply {
-        topMargin = top?.dp() ?: topMargin
-        bottomMargin = bottom?.dp() ?: bottomMargin
-        marginStart = start?.dp() ?: marginStart
-        marginEnd = end?.dp() ?: marginEnd
-    }
-}
-
-@BindingAdapter("app:setPrice")
-fun setPrice(v: TextView, price: BigDecimal) {
-    v.text = "$price ${v.context.getString(R.string.title_login)}"
-}
-
-@BindingAdapter("app:recyclerSpaceElement")
-fun setRecyclerSpace(recyclerView: RecyclerView, space: Int) {
-    val itemDecoration = object : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-            parent.adapter?.itemCount?.let {
-                if (parent.getChildAdapterPosition(view) != it - 1) outRect.bottom = space.dp()
-            }
-        }
-    }
-
-    recyclerView.addItemDecoration(itemDecoration)
-}
-
 @BindingAdapter(value = ["bindErrorWrapperText", "errorDisplayText", "wrapperHintColor"], requireAll = false)
 fun bindErrorWrapper(view: View, error: ErrorWrapper, errorDisplayText: Boolean, wrapperHintColor: Int?) {
     if (errorDisplayText) {
         (view as TextView).text = error.getText(view.context)
     } else {
         val (drawable, color) = if (error.isThereError) {
-            R.drawable.bg_edit_text_error to R.color.pink
+            R.drawable.bg_edit_text_error to R.color.red
         } else {
-            R.drawable.bg_edit_text to R.color.prompt_black
+            R.drawable.bg_edit_text to R.color.dark_gray
         }
 
         if (view is Spinner) {
@@ -172,71 +68,11 @@ fun bindErrorWrapper(view: View, error: ErrorWrapper, errorDisplayText: Boolean,
                 view.setTextColor(ContextCompat.getColor(view.context, color))
                 val hColor = wrapperHintColor ?: ContextCompat.getColor(
                     view.context,
-                    if (error.isThereError) color else R.color.normal_gray
+                    if (error.isThereError) color else R.color.light_grey
                 )
                 view.setHintTextColor(hColor)
             }
         }
-    }
-}
-
-@BindingAdapter(value = ["phone", "country"], requireAll = false)
-fun setFormattedPhone(view: TextView, rawPhone: String?, country: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(country)
-    if ((maskWatcher.mask.hasUserInput() || !rawPhone.isNullOrEmpty()) &&
-        maskWatcher.mask.toUnformattedString() != rawPhone
-    ) {
-        maskWatcher.mask.isShowingEmptySlots
-        maskWatcher.maskOriginal.clear()
-        maskWatcher.maskOriginal.insertFront(rawPhone)
-        maskWatcher.refreshMask()
-    }
-}
-
-@InverseBindingAdapter(attribute = "phone")
-fun getRawPhone(view: TextView): String {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(null)
-    return maskWatcher.mask.toUnformattedString().let { rawPhone ->
-        if (rawPhone.startsWith("+")) {
-            rawPhone.drop(1)
-        } else {
-            rawPhone
-        }
-    }
-}
-
-@BindingAdapter(value = ["phoneAttrChanged", "country"], requireAll = false)
-fun setPhoneListener(view: TextView, attrChange: InverseBindingListener?, country: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(country)
-    maskWatcher.setCallback(object : FormattedTextChangeListener {
-        override fun beforeFormatting(oldValue: String?, newValue: String?) = false
-
-        override fun onTextFormatted(formatter: FormatWatcher?, newFormattedText: String?) {
-            attrChange?.onChange()
-        }
-    })
-}
-
-@BindingAdapter(value = ["phoneMask", "countryState"], requireAll = false)
-fun setMask(view: TextView, mask: String?, countryState: Country?) {
-    val maskWatcher = view.getOrCreatePhoneMaskWatcher(countryState)
-    mask?.let {
-        maskWatcher.swapMask(MaskImpl.createTerminated(UnderscoreDigitSlotsParser().parseSlots(mask)).apply {
-            isHideHardcodedHead = true
-        })
-    }
-}
-
-// Не разобрался пока как без обязательного переопределения этого метода обойтись (Gerasimets 01/12/2021)
-@BindingAdapter("gender")
-fun setGender(view: Spinner, newGender: String?) = Unit
-
-@InverseBindingAdapter(attribute = "gender")
-fun getGender(view: Spinner): String {
-    return when (view.selectedItemPosition) {
-        Male.ordinal -> Male.gender
-        Female.ordinal -> Female.gender
-        else -> Default.gender
     }
 }
 
@@ -248,63 +84,4 @@ fun setHintWhenUnfocused(view: EditText, hint: String?) {
             view.hint = if (hasFocus) null else hint
         }
     }
-}
-
-@BindingAdapter("app:hasMediumWeightInput")
-fun setTypefaceBoldForInput(view: EditText, hasMediumWeightInput: Boolean) {
-    if (!hasMediumWeightInput) return
-    val hintFont = ResourcesCompat.getFont(view.context, R.font.roboto_regular)
-    val inputFont = ResourcesCompat.getFont(view.context, R.font.roboto_medium)
-    view.addTextChangedListener {
-        val typeface = if (it.isNullOrEmpty()) hintFont else inputFont
-        view.typeface = typeface
-    }
-}
-
-@BindingAdapter("app:startAlphaLoaderVisibility")
-fun setStartAlphaLoaderVisibility(view: View, visibility: Boolean) {
-    when (visibility) {
-        true -> view.isVisible = visibility
-        else -> view.animate().apply {
-            alpha(0F)
-            duration = DELAY_BEFORE_ALPHA_MS
-        }.start()
-    }
-}
-
-@BindingAdapter("app:setVisibilityShimmer")
-fun setVisibilityShimmer(shimmer: ShimmerFrameLayout, visibility: Boolean) {
-    when (visibility) {
-        true -> {
-            shimmer.isVisible = true
-            shimmer.startShimmerAnimation()
-        }
-        false -> {
-            shimmer.stopShimmerAnimation()
-            shimmer.visibility = View.INVISIBLE
-        }
-    }
-}
-
-@BindingAdapter("app:isPriority")
-fun isPriority(view: CardView, isPriority: Boolean?) {
-    if (isPriority == true) {
-        view.setCardBackgroundColor(ContextCompat.getColor(view.context, R.color.light_pink))
-    }
-}
-
-@BindingAdapter("app:priceVisibility")
-fun priceVisibility(view: TextView, price: BigDecimal) {
-    view.text = "$price ${view.context.getString(R.string.title_login)}"
-    view.isVisible = price.toInt() != 0
-}
-
-@BindingAdapter("app:viewVisibility")
-fun viewVisibility(view: View, price: BigDecimal) {
-    view.isVisible = price.toInt() != 0
-}
-
-@BindingAdapter("app:setClickablePinkButton")
-fun setClickablePinkButton(button: MaterialButton, isClickable: Boolean) {
-        button.isEnabled = isClickable
 }

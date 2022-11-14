@@ -3,7 +3,6 @@ package com.inglass.android.presentation.auth_screens.splash
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.inglass.android.R
 import com.inglass.android.databinding.FragmentSplashBinding
 import com.inglass.android.utils.base.BaseFragment
@@ -18,14 +17,5 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashVM>(R.layout.fr
         super.onViewCreated(view, savedInstanceState)
         binding.vm = viewModel
         viewModel.getAuthState()
-        lifecycleScope.launchWhenCreated {
-            viewModel.valuePercentLoad.observe {
-                binding.loadDataProgressbar.setFill(
-                    it.toInt(),
-                    VALUE_LOADING_START.toInt(),
-                    VALUE_LOADING_FINISH.toInt()
-                )
-            }
-        }
     }
 }

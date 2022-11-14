@@ -1,54 +1,47 @@
-package app.inglass.tasker.data.db
+package com.inglass.android.data.local.db
 
 import android.content.Context
-import androidx.room.*
-import com.inglass.android.data.local.db.DbConverters
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.inglass.android.data.local.db.dao.CompanionsDao
+import com.inglass.android.data.local.db.dao.EmployeeDao
+import com.inglass.android.data.local.db.dao.OperationsDao
 import com.inglass.android.data.local.db.dao.ScanResultsDao
+import com.inglass.android.data.local.db.entities.Companions
+import com.inglass.android.data.local.db.entities.Employee
+import com.inglass.android.data.local.db.entities.Operation
 import com.inglass.android.data.local.db.entities.ScanResult
 
 @Database(
     entities = [
-        ScanResult::class
+        ScanResult::class,
+        Employee::class,
+        Operation::class,
+        Companions::class
     ],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
+
 @TypeConverters(DbConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun scanResultsDao(): ScanResultsDao
+    abstract fun employeeDao(): EmployeeDao
+    abstract fun operationsDao(): OperationsDao
+    abstract fun companionDao(): CompanionsDao
 
     companion object {
-        private var INSTANCE: AppDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase? {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    INSTANCE =
-                        Room.databaseBuilder(
-                            context.applicationContext,
-                            AppDatabase::class.java,
-                            "inglass_common_db"
-                        )
-                            .allowMainThreadQueries()
-                            .build()
-                }
-            }
-            return INSTANCE!!
+        fun getInstance(context: Context): AppDatabase {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
+                "inGlass_common_db"
+            )
+                .allowMainThreadQueries()
+                .build()
         }
-
-        fun destroyInstance() {
-            INSTANCE = null
-        }
-//        private val MIGRATION_4_8: Migration = object : Migration(4, 8) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("CREATE TABLE IF NOT EXISTS `accumulativediscountonstart` (`spec_id` INTEGER NOT NULL, `current_discount` INTEGER, `next_month_discount` INTEGER, `next_month_discount_sum` REAL, PRIMARY KEY(`spec_id`))")
-//            }
-//        }
-//
-//        private val MIGRATION_7_8: Migration = object : Migration(7, 8) {
-//            override fun migrate(database: SupportSQLiteDatabase) {
-//                database.execSQL("CREATE TABLE IF NOT EXISTS `accumulativediscountonstart` (`spec_id` INTEGER NOT NULL, `current_discount` INTEGER, `next_month_discount` INTEGER, `next_month_discount_sum` REAL, PRIMARY KEY(`spec_id`))")
-//            }
-//        }
     }
 }

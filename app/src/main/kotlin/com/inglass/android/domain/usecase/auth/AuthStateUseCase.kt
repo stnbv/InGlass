@@ -15,7 +15,7 @@ class AuthStateUseCase(private val repository: IPreferencesRepository) : UseCase
 
     override suspend operator fun invoke(params: Unit): Answer<AuthState> {
         return withContext(Dispatchers.IO) {
-            delay(LOADING_TIME) //TODO Временно, для старта
+            delay(LOADING_TIME)
             try {
                 when {
                     repository.token.isNullOrEmpty() -> Answer.success(AuthState.LoggedOut)

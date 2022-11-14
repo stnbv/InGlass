@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.domain.models.AuthState
 import com.inglass.android.domain.usecase.auth.AuthStateUseCase
-import com.inglass.android.utils.analitics.AnalyticMessage.AnalyticsLogInEvent
 import com.inglass.android.utils.api.core.onFailure
 import com.inglass.android.utils.api.core.onSuccess
 import com.inglass.android.utils.base.BaseViewModel
@@ -17,9 +16,9 @@ import kotlinx.coroutines.launch
 
 const val VALUE_LOADING_START = "0"
 const val VALUE_LOADING_FINISH = "100"
-const val LOADING_TIME = 2000L
+const val LOADING_TIME = 3000L
 private const val LOADING_CHANGE_INTERVAL = 50L
-private const val NUMBER = 30 // Что это за число ?
+private const val NUMBER = 30
 
 @HiltViewModel
 class SplashVM @Inject constructor(private val authStateUseCase: AuthStateUseCase) : BaseViewModel() {
@@ -47,10 +46,7 @@ class SplashVM @Inject constructor(private val authStateUseCase: AuthStateUseCas
             authStateUseCase(Unit)
                 .onSuccess { state ->
                     when (state) {
-                        is AuthState.LoggedIn -> {
-                            analitycs.handleAnalyticMessage(AnalyticsLogInEvent)
-                            navigateToScreen(SCREENS.DESKTOP)
-                        }
+                        is AuthState.LoggedIn -> navigateToScreen(SCREENS.DESKTOP)
                         else -> navigateToScreen(SCREENS.LOGIN)
                     }
                 }

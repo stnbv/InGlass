@@ -1,63 +1,81 @@
 package com.inglass.android
 
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat.START
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
+import com.bumptech.glide.Glide
+import com.inglass.android.R.color
 import com.inglass.android.databinding.ActivityMainBinding
+import com.inglass.android.databinding.MenuHeaderBinding
+import com.inglass.android.domain.models.PersonalInformationModel
 import com.inglass.android.utils.navigation.DIALOGS
+import com.inglass.android.utils.navigation.DIALOGS.ACCESS_TO_SETTINGS
 import com.inglass.android.utils.navigation.SCREENS
 import com.inglass.android.utils.navigation.findNavController
 import com.inglass.android.utils.navigation.setCurrentDialogScreenWithNavController
 import com.inglass.android.utils.navigation.setCurrentScreenWithNavController
-import com.inglass.android.utils.ui.doOnClick
-import com.inglass.android.utils.ui.showSimpleDialogFragment
+import com.inglass.android.utils.ui.makeToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class AppActivity : AppCompatActivity() {
 
     private val viewModel: AppActivityVM by viewModels()
 
-    private var binding: ActivityMainBinding? = null
+    lateinit var binding: ActivityMainBinding
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-//    fun createToolbarConfig() = ToolbarConfig(
-//        binding!!.toolbar,
-//        homeDrawableRes = ICON_MENU,
-//    ).apply {
-//        setHomeButtonListener {
-//            binding?.drawerLayout?.openDrawer(START)
-//        }
-//    }
+    private lateinit var menuHeader: MenuHeaderBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        firebaseAnalytics = Firebase.analytics
-        setContentView(binding?.root)
-        binding?.vm = viewModel
-        binding?.menu?.doOnClick { binding?.drawerLayout?.openDrawer(START) }
-        binding?.navView?.setupWithNavController(findNavController(R.id.navHostFragment))
-        showMenu()
+        setContentView(binding.root)
+        binding.vm = viewModel
+
+        binding.navView.setupWithNavController(findNavController(R.id.navHostFragment))
+        menuHeader = MenuHeaderBinding.bind(binding.navView.getHeaderView(0))
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.showToast.observe(this@AppActivity as LifecycleOwner) {
+                if (it == true) {
+                    binding.drawerLayout.makeToast(
+                        backgroundRes = getColor(color.red),
+                        message = getString(R.string.error_code_not_send)
+                    )
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.screenFlow.collect {
+                navigateToScreen(it)
+            }
+        }
+
+        binding.drawerLayout.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+
+        viewModel.userInfo.observe(this) {
+            setMenuPersonalInformation(it)
+        }
     }
 
-    private fun showMenu() {
-        if (findNavController(R.id.navHostFragment).currentDestination?.label == getString(R.string.title_splash) ||
-            findNavController(R.id.navHostFragment).currentDestination?.label == getString(R.string.title_login)
-        ) viewModel.showMenu.postValue(false)
-        else viewModel.showMenu.postValue(true)
+    private fun setMenuPersonalInformation(personalInformation: PersonalInformationModel) {
+        with(personalInformation) {
+            menuHeader.nameTextView.text = fullName
+            menuHeader.serverAddressTextView.text = viewModel.host.value
+            Glide
+                .with(this@AppActivity)
+                .load(photo)
+                .into(menuHeader.profileImageView)
+        }
     }
 
     fun navigateToScreen(screen: SCREENS) {
@@ -75,49 +93,28 @@ class AppActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         val imm = applicationContext.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding?.root?.windowToken, 0)
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-    fun selectBottomNavigation(item: MenuItem) {
+    fun openMenu() {
+        binding.drawerLayout.openDrawer(GravityCompat.START)
+    }
+
+    private fun closeMenu() {
+        binding.drawerLayout.closeDrawer(GravityCompat.START)
+    }
+
+    fun selectMenuNavigation(item: MenuItem) {
         if (findNavController(R.id.navHostFragment).currentDestination?.id == item.itemId) return
         when (item.itemId) {
-            R.id.nav_settings -> {
-                binding?.drawerLayout?.closeDrawer(START)
-                navigateToScreen(SCREENS.SETTINGS)
-            }
-            R.id.nav_helpers -> {
-                binding?.drawerLayout?.closeDrawer(START)
-                navigateToScreen(SCREENS.SETTINGS)
-
-            }
-            R.id.nav_change_user -> {
-                binding?.drawerLayout?.closeDrawer(START)
+            R.id.clearDatabase -> viewModel.clearScanResultDatabase()
+            R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
+            R.id.navChangeUser -> {
+                viewModel.clearPrefs()
+                viewModel.clearDatabase()
                 navigateToScreen(SCREENS.LOGIN)
             }
         }
-    }
-
-    private fun showDialogWithCurrentDescription(@StringRes description: Int, @StringRes buttonText: Int) {
-        showSimpleDialogFragment(
-            R.string.access_to_setting_title,
-            description,
-            buttonText
-        )
-    }
-
-    //убирает клавиатуру,убирает фокус с EditText'a //Alexander Yanchelenko 20.12.2021
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
-            val view = currentFocus
-            hideKeyboard()
-            if (view is EditText) {
-                val outRect = Rect()
-                view.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    view.clearFocus()
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event)
+        closeMenu()
     }
 }

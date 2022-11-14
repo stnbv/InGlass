@@ -32,6 +32,19 @@ android {
         viewBinding true
     }
 
+    flavorDimensions "mode"
+    productFlavors {
+        app {
+            dimension "mode"
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
+        emulator {
+            dimension "mode"
+        }
+    }
+
     // Последовал решению https://stackoverflow.com/questions/36540015/how-to-reduce-apk-apk-size-in-android-studio для уменьшения размера apk
     packagingOptions {
         exclude 'AndroidManifest.xml'
@@ -106,13 +119,6 @@ dependencies {
     //Glide
     implementation libraries.glide
     annotationProcessor libraries.glideAnnProcess
-
-    //ExoPlayer
-    implementation libraries.exoplayer
-    implementation libraries.exoplayerUi
-
-    //Debug
-    implementation libraries.leakCanary
 
 }
 

@@ -1,21 +1,23 @@
 package com.inglass.android.data.local.db.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.time.LocalDateTime
+import com.inglass.android.domain.models.LoadingStatus
 import java.util.*
 
 @Entity(tableName = "scan_results")
 data class ScanResult(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long? = null,
-    @ColumnInfo(index = true)
+    @PrimaryKey
     val barcode: String,
-    val operation: String,
+    val operationId: String,
     val dateAndTime: Date,
-    var employee: Long,
-//    val helpers: List<String>?,
-    @ColumnInfo(name = "has_uploaded")
-    var hasUploaded: Boolean? = false
+    val loadingStatus: LoadingStatus
+)
+
+data class ScanResultFullInfo(
+    val barcode: String,
+    val operationId: String,
+    val dateAndTime: Date,
+    val loadingStatus: LoadingStatus,
+    var operationName: String
 )

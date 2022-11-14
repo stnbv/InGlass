@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.inglass.android.presentation.dialogs.AccessToSettingsDialogVM" />
+            type="com.inglass.android.presentation.settings.access_dialog.AccessToSettingsDialogVM" />
     </data>
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:gravity="center"
             android:lineSpacingExtra="6dp"
             android:text="@string/access_to_setting_title"
-            android:textColor="@color/main_black"
+            android:textColor="@color/silver"
             android:textSize="20dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -45,7 +45,7 @@
                 android:maxLength="40"
                 android:text="@={vm.passwordText}"
                 android:textColor="@color/main_black"
-                android:textColorHint="@color/normal_gray"
+                android:textColorHint="@color/light_grey"
                 android:textSize="16dp"
                 app:unfocusedHint="@{@string/access_to_setting_hint}"
                 tools:hint="@string/login_hint_pass" />
@@ -57,6 +57,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="4dp"
             android:text="@string/error_password_incorrect"
+            android:textColor="@color/silver"
             app:visibility="@{vm.passwordError}" />
 
         <com.google.android.material.button.MaterialButton

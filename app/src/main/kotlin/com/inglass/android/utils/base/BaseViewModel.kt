@@ -8,11 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inglass.android.utils.SingleLiveEvent
 import com.inglass.android.utils.adapter.CommonAdapter
 import com.inglass.android.utils.adapter.ItemVM
-import com.inglass.android.utils.analitics.AnalyticsManager
 import com.inglass.android.utils.api.core.Answer.Failure
 import com.inglass.android.utils.navigation.DIALOGS
 import com.inglass.android.utils.navigation.SCREENS
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
@@ -22,9 +20,6 @@ import kotlinx.coroutines.launch
 abstract class BaseViewModel : ViewModel() {
 
     var adapter: CommonAdapter? = null
-
-    @Inject
-    lateinit var analitycs: AnalyticsManager
 
     private val error = SingleLiveEvent<Failure>()
     val errorLiveData: LiveData<Failure>

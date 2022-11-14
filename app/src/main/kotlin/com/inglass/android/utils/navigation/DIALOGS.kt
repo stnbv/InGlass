@@ -8,5 +8,5 @@ enum class DIALOGS(
     var navDirections: NavDirections? = null
 ) {
     //DeletePhoto
-    ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog),
+    ACCESS_TO_SETTINGS(R.id.accessToSettingsDialog)
 }

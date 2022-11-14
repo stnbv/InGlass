@@ -12,7 +12,8 @@ import dagger.hilt.android.components.ViewModelComponent
 object PersonalInformationUseCaseModule {
 
     @Provides
-    fun providePersonalInformationUseCase(personalInformationRepository: IPersonalInformationRepository) =
-        GetPersonalInformationUseCase(personalInformationRepository)
+    fun providePersonalInformationUseCase(
+        personalInformationRepository: IPersonalInformationRepository
+    ) = GetPersonalInformationUseCase(personalInformationRepository)
 
 }

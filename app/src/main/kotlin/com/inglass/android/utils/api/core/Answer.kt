@@ -1,6 +1,7 @@
 package com.inglass.android.utils.api.core
 
 import com.inglass.android.utils.api.core.Answer.Failure
+import kotlinx.coroutines.delay
 
 @Suppress("unchecked_cast")
 class Answer<out T>(val value: Any?) {
@@ -52,17 +53,6 @@ private fun createFailure(exception: Throwable, code: ErrorCode, message: String
 private fun createFailure(code: ErrorCode, message: String): Any = Failure(NoException(), code, message)
 
 @Suppress("unchecked_cast")
-inline fun <R, T> Answer<T>.fold(
-    onSuccess: (value: T) -> R,
-    onFailure: (exception: Failure) -> R
-): R {
-    return when (val error = errorOrNull()) {
-        null -> onSuccess(value as T)
-        else -> onFailure(error)
-    }
-}
-
-@Suppress("unchecked_cast")
 inline fun <R, T> Answer<T>.map(transform: (value: T) -> R): Answer<R> {
     return when {
         isSuccess -> Answer.success(transform(value as T))
@@ -81,30 +71,9 @@ inline fun <T> Answer<T>.onSuccess(action: (value: T) -> Unit): Answer<T> {
     return this
 }
 
-@Suppress("unchecked_cast")
-fun <T> Answer<T>.getOrThrow(): T {
-    throwOnFailure()
-    return value as T
-}
-
 fun Answer<*>.throwOnFailure() {
     if (value is Failure) throw value.exception
 }
-
-@Suppress("unchecked_cast")
-inline fun <R, T : R> Answer<T>.getOrElse(onFailure: (error: Failure) -> R): R {
-    return when (val exception = errorOrNull()) {
-        null -> value as T
-        else -> onFailure(exception)
-    }
-}
-
-@Suppress("unchecked_cast")
-fun <R, T : R> Answer<T>.getOrDefault(defaultValue: R): R {
-    if (isFailure) return defaultValue
-    return value as T
-}
-
 suspend fun <T> retry(count: Int, operation: suspend () -> Answer<T>): Answer<T> {
     check(count > 0)
 
@@ -112,6 +81,7 @@ suspend fun <T> retry(count: Int, operation: suspend () -> Answer<T>): Answer<T>
     repeat(count) {
         val result = operation()
         if (result.isSuccess) return result
+        delay(3000)
         lastAnswer = result
     }
     return lastAnswer!!

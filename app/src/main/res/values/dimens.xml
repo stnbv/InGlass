@@ -4,28 +4,11 @@
     <dimen name="appLogоHeight">160dp</dimen>
     <dimen name="screensHorizontalPadding">18dp</dimen>
 
-    <!--Segmented Loading Bar-->
-    <dimen name="segment_height">12dp</dimen>
-    <dimen name="segment_gap_width">2dp</dimen>
-
-    <!-- CosmoPassportReportInfoDialogFragment -->
-    <dimen name="fragment_cosmo_passport_info_dialog_width">256dp</dimen>
-
-    <!-- CosmoPassportReportAboutInfoDialog -->
-    <dimen name="fragment_cosmo_passport_about_dialog_width">378dp</dimen>
-
-    <!-- CosmoPassportReportAboutInfoDialog -->
-    <dimen name="fragment_cosmo_passport_alert_dialog_width">378dp</dimen>
-
-    <!-- TransformationPlanDialog -->
-    <dimen name="transformation_plan_dialog_height">550dp</dimen>
-
-    <!-- ProcedureTimeExpiredDialogFragment -->
-    <dimen name="dialog_procedure_time_expired_width">380dp</dimen>
+    <!-- Toast -->
+    <dimen name="toast_margin_horizontal">12dp</dimen>
+    <dimen name="toast_margin_top">4dp</dimen>
+    <dimen name="toast_margin_bot">0dp</dimen>
 
     <!-- LoginFragment -->
     <dimen name="scroll_value_for_login_screen">160dp</dimen>
-
-    <!-- FinishDiagnosticDialogFragment -->
-    <dimen name="finish_diagnostic_dialog_visible_view">550dp</dimen>
 </resources>
