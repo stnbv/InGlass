@@ -50,6 +50,11 @@ abstract class BaseService {
                 code = ErrorCode.ExternalError,
                 message = message
             )
+            500 -> Answer.Failure(
+                NoException(),
+                code = ErrorCode.ExternalError,
+                message = "Internal server error"
+            )
             else -> Answer.Failure(
                 NoException(),
                 ErrorCode.InternalError,
