@@ -50,7 +50,7 @@ class PreferencesRepository(context: Context) : IPreferencesRepository {
 
     override var lastReceivedData: Long
         //300000 = 5 минут в милисекундах
-        get() = settings.getLong(LAST_RECEIVED_DATA_KEY, System.currentTimeMillis() - 300000)
+        get() = settings.getLong(LAST_RECEIVED_DATA_KEY, 0)
         set(value) = settings.edit().putLong(LAST_RECEIVED_DATA_KEY, value).apply()
 
     @Synchronized
