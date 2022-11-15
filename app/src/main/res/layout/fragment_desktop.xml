@@ -139,7 +139,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="12dp"
-            android:enabled="@{vm.isScanButtonEnable}"
+            android:enabled="@{vm.isOperationSelected}"
             android:onClick="@{()->vm.openCameraScreen()}"
             android:text="@string/desktop_scan_barcode"
             app:backgroundTint="@drawable/bg_tint_pressed_main_black"

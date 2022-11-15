@@ -1,10 +1,9 @@
 package com.inglass.android.presentation.main.desktop
 
-import android.Manifest
+import android.Manifest.permission
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,10 +16,9 @@ import com.inglass.android.databinding.FragmentDesktopBinding
 import com.inglass.android.utils.base.BaseFragment
 import com.inglass.android.utils.ui.doOnClick
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 private const val PERMISSION_REQUESTS = 1
-private val REQUIRED_RUNTIME_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+private val REQUIRED_RUNTIME_PERMISSIONS = arrayOf(permission.CAMERA)
 
 @AndroidEntryPoint
 class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout.fragment_desktop) {
@@ -51,16 +49,14 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
                 pos: Int,
                 id: Long
             ) {
-                viewModel.isScanButtonEnable.postValue(
-                    viewModel.operations.value?.get(pos) != requireContext().getString(
-                        R.string.desktop_no_operation
-                    )
+                viewModel.isOperationSelected.postValue(
+                    viewModel.operations.value?.get(pos) != requireContext().getString(R.string.desktop_no_operation)
                 )
                 viewModel.selectedOperationsPosition.value = pos
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>?) {
-                viewModel.isScanButtonEnable.postValue(false)
+                viewModel.isOperationSelected.postValue(false)
             }
         }
     }
@@ -107,15 +103,6 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
     }
 
     private fun isPermissionGranted(context: Context, permission: String): Boolean {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                permission
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            Timber.i("TAG", "Permission granted: $permission")
-            return true
-        }
-        Timber.i("TAG", "Permission NOT granted: $permission")
-        return false
+        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
     }
 }

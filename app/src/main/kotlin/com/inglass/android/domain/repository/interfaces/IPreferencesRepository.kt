@@ -8,6 +8,5 @@ interface IPreferencesRepository {
     var baseUrl: String
     var token: String?
     var user: PersonalInformationModel?
-    var lastReceivedData: Long
     suspend fun clear()
 }
