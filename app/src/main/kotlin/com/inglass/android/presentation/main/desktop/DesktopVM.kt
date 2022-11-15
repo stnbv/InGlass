@@ -46,7 +46,7 @@ class DesktopVM @Inject constructor(
     private val getCompanionsUseCase: GetCompanionsUseCase
 ) : BasePagingViewModel() {
 
-    val isScanButtonEnable = MutableLiveData(false)
+    val isOperationSelected = MutableLiveData(false)
     val operations = MutableLiveData(listOf("Нет доступных операций"))
     val selectedOperationsPosition = MutableLiveData(0)
     val isSingleScan = MutableLiveData(false)
@@ -125,12 +125,10 @@ class DesktopVM @Inject constructor(
     }
 
     private fun getReferenceBook() {
-        if (System.currentTimeMillis() - preferencesRepository.lastReceivedData < 300000) return
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 do {
                     val result = getReferenceBookUseCase().onSuccess { referenceBook ->
-
                         referenceBookRepository.saveOperations(referenceBook.operations.map { operation ->
                             Operation(operation.id, operation.name)
                         })
@@ -148,7 +146,6 @@ class DesktopVM @Inject constructor(
                         }
                 } while (result.isFailure && result.errorOrNull()?.code != AuthorizationError)
             }
-            preferencesRepository.lastReceivedData = System.currentTimeMillis()
             getUserInformation()
             getCompanions()
         }

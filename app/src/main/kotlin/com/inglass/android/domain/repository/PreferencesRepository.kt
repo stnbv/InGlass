@@ -48,11 +48,6 @@ class PreferencesRepository(context: Context) : IPreferencesRepository {
         get() = settings.getString(USER_KEY, null).fromJson()
         set(value) = settings.edit().putString(USER_KEY, value.toJson()).apply()
 
-    override var lastReceivedData: Long
-        //300000 = 5 минут в милисекундах
-        get() = settings.getLong(LAST_RECEIVED_DATA_KEY, 0)
-        set(value) = settings.edit().putLong(LAST_RECEIVED_DATA_KEY, value).apply()
-
     @Synchronized
     override suspend fun clear() {
         settings.edit {

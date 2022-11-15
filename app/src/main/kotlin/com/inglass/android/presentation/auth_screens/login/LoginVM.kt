@@ -51,8 +51,7 @@ class LoginVM @Inject constructor(
     private val networkConnectionValidator = Validator(networkError).apply {
         addCondition(
             NetworkConditionMessagesLogin(
-                mapOf(ErrorCode.InternalError to R.string.error_internal_connectivity_error),
-                useServerMessage = true
+                mapOf(ErrorCode.InternalError to R.string.error_no_message), useServerMessage = true
             )
         )
         setObserver(DefaultObserverValidate(currentError))
@@ -61,9 +60,7 @@ class LoginVM @Inject constructor(
     fun onLoginClick() {
         loginValidator.validation()
         passValidator.validation()
-
         if (loginValidator.getState().isThereError || passValidator.getState().isThereError) return
-
         viewModelScope.launch {
             val password = password.value ?: return@launch
             val login = login.value ?: return@launch

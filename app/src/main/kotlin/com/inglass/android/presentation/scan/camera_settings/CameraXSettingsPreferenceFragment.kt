@@ -30,12 +30,12 @@ class LivePreviewPreferenceFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(xml.camerax_settings)
-        setUpCameraXTargetAnalysisSizePreference(string.pref_key_camerax_rear_camera_target_resolution)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
         view.setBackgroundColor(requireContext().getColor(R.color.dim_gray))
+        setUpCameraXTargetAnalysisSizePreference(string.pref_key_camerax_rear_camera_target_resolution)
         return view
     }
 
