@@ -109,11 +109,7 @@ class AppActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.clearDatabase -> viewModel.clearScanResultDatabase()
             R.id.navSettings -> navigateToScreen(ACCESS_TO_SETTINGS)
-            R.id.navChangeUser -> {
-                viewModel.clearPrefs()
-                viewModel.clearDatabase()
-                navigateToScreen(SCREENS.LOGIN)
-            }
+            R.id.navChangeUser -> viewModel.louOut()
         }
         closeMenu()
     }

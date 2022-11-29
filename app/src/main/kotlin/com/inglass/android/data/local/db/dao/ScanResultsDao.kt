@@ -20,13 +20,16 @@ interface ScanResultsDao {
     @Query("select * from scan_results where barcode = :barcode")
     suspend fun getItemById(barcode: String): ScanResult?
 
-    @Query("UPDATE scan_results SET loadingStatus = :loadingStatus WHERE barcode = :barcode")
-    suspend fun updateScanResult(barcode: String, loadingStatus: LoadingStatus)
+    @Query("UPDATE scan_results SET loadingStatus = :loadingStatus, error = :error WHERE barcode = :barcode")
+    suspend fun updateScanResult(barcode: String, loadingStatus: LoadingStatus, error: String?)
+
+    @Query("select * from scan_results where loadingStatus in (:status)")
+    suspend fun getItemsByStatus(status: List<LoadingStatus>): List<ScanResult>
 
     @Query(
         "SELECT scan_results.barcode AS barcode, scan_results.dateAndTime AS dateAndTime," +
                 "scan_results.loadingStatus AS loadingStatus, scan_results.operationId AS operationId, " +
-                "operations.name AS operationName " +
+                "operations.name AS operationName, scan_results.error AS error " +
                 "FROM scan_results, operations " +
                 "WHERE scan_results.operationId = operations.operationId ORDER BY dateAndTime DESC "
     )

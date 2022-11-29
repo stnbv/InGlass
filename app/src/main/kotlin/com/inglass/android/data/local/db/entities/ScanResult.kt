@@ -11,7 +11,8 @@ data class ScanResult(
     val barcode: String,
     val operationId: String,
     val dateAndTime: Date,
-    val loadingStatus: LoadingStatus
+    val loadingStatus: LoadingStatus,
+    val error: String?
 )
 
 data class ScanResultFullInfo(
@@ -19,5 +20,6 @@ data class ScanResultFullInfo(
     val operationId: String,
     val dateAndTime: Date,
     val loadingStatus: LoadingStatus,
-    var operationName: String
+    var operationName: String,
+    val error: String?
 )

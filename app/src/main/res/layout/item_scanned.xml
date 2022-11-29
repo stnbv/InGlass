@@ -25,7 +25,10 @@
             android:layout_height="match_parent"
             android:background="@drawable/bg_button_rounded"
             android:backgroundTint="@color/main_white"
-            android:padding="8dp">
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp">
 
             <TextView
                 android:id="@+id/dateTimeTextView"
@@ -60,6 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:drawableId="@{vm.loadStatusImage}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/operationTextView"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -74,10 +78,25 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/main_black"
                 android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/errorTextView"
                 app:layout_constraintEnd_toStartOf="@+id/statusImageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dateTimeTextView"
+                tools:text="Код: 9346346436748367" />
+
+            <TextView
+                android:id="@+id/errorTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{vm.error}"
+                android:textAlignment="textStart"
+                android:textColor="@color/red"
+                android:textSize="11dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/statusImageView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/codeTextView"
                 tools:text="Код: 9346346436748367" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ServerErrorResponse(
     @SerializedName("error_code") val errorCode: Int?,
-    @SerializedName("error_msg") val message: String?,
+    @SerializedName("error_msg") val message: String?
 )

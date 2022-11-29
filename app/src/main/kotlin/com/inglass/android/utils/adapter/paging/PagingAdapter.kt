@@ -14,7 +14,7 @@ open class PagingAdapter : PagingDataAdapter<ItemVM, ViewHolder>(DiffCallback) {
     open var observableEvents = Channel<Any>()
 
     private object DiffCallback : DiffUtil.ItemCallback<ItemVM>() {
-        override fun areItemsTheSame(oldItem: ItemVM, newItem: ItemVM) = oldItem == newItem
+        override fun areItemsTheSame(oldItem: ItemVM, newItem: ItemVM) = newItem.areItemsTheSame(oldItem)
         override fun areContentsTheSame(oldItem: ItemVM, newItem: ItemVM) = newItem.areContentsTheSame(oldItem)
         override fun getChangePayload(oldItem: ItemVM, newItem: ItemVM) = newItem.getChangePayload(oldItem)
     }

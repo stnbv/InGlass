@@ -31,26 +31,27 @@ class Answer<out T>(val value: Any?) {
     companion object {
         fun <T> success(value: T): Answer<T> = Answer(value)
 
-        fun <T> failure(ex: Throwable, code: ErrorCode, message: String = ""): Answer<T> =
-            Answer(createFailure(ex, code, message))
+        fun <T> failure(ex: Throwable, code: ErrorCode, message: String = "", errorCodeNumber: Int): Answer<T> =
+            Answer(createFailure(ex, code, message, errorCodeNumber))
 
-        fun <T> failure(code: ErrorCode, message: String = ""): Answer<T> =
-            Answer(createFailure(code, message))
+        fun <T> failure(code: ErrorCode, message: String = "", errorCodeNumber: Int = 0): Answer<T> =
+            Answer(createFailure(code, message, errorCodeNumber))
 
         fun <T> failure(error: Failure?): Answer<T> = Answer(error)
     }
 
-    class Failure(val exception: Throwable, val code: ErrorCode, val message: String) {
+    class Failure(val exception: Throwable, val code: ErrorCode, val message: String, val errorCodeNumber: Int) {
         override fun equals(other: Any?): Boolean = other is Failure && exception == other.exception
         override fun hashCode(): Int = exception.hashCode()
         override fun toString(): String = "Failure($exception) code(${code}) message(${message})"
     }
 }
 
-private fun createFailure(exception: Throwable, code: ErrorCode, message: String): Any =
-    Failure(exception, code, message)
+private fun createFailure(exception: Throwable, code: ErrorCode, message: String, errorCodeNumber: Int): Any =
+    Failure(exception, code, message, errorCodeNumber)
 
-private fun createFailure(code: ErrorCode, message: String): Any = Failure(NoException(), code, message)
+private fun createFailure(code: ErrorCode, message: String, errorCodeNumber: Int): Any =
+    Failure(NoException(), code, message, errorCodeNumber)
 
 @Suppress("unchecked_cast")
 inline fun <R, T> Answer<T>.map(transform: (value: T) -> R): Answer<R> {
@@ -74,6 +75,7 @@ inline fun <T> Answer<T>.onSuccess(action: (value: T) -> Unit): Answer<T> {
 fun Answer<*>.throwOnFailure() {
     if (value is Failure) throw value.exception
 }
+
 suspend fun <T> retry(count: Int, operation: suspend () -> Answer<T>): Answer<T> {
     check(count > 0)
 

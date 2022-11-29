@@ -1,5 +1,6 @@
 package com.inglass.android.data.remote.interceptors
 
+import com.inglass.android.domain.repository.interfaces.IAuthRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.auth.LogInUseCase
 import com.inglass.android.domain.usecase.auth.LogInUseCase.Params
@@ -11,7 +12,8 @@ import okhttp3.Route
 
 class TokenAuthenticator(
     private val preferences: IPreferencesRepository,
-    private val logInUseCase: LogInUseCase
+    private val logInUseCase: LogInUseCase,
+    private val authRepository: IAuthRepository
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -21,6 +23,7 @@ class TokenAuthenticator(
                     .header("Authorization", "Bearer ${preferences.token}")
                     .build()
             } else {
+                authRepository.logOut()
                 null
             }
         }
