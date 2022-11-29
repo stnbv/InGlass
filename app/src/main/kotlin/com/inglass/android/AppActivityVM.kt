@@ -43,9 +43,16 @@ class AppActivityVM @Inject constructor(
     val host = MutableLiveData("")
 
     init {
+        observeScanResult()
+        host.postValue(prefs.baseUrl)
+        observePersonalInformation()
+        observeLogout()
+    }
+
+    private fun observeScanResult() {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultsRepository.result.receiveAsFlow().collect { scanResult ->
-                scanResultsRepository.updateScanResult(scanResult.barcode, InProgress)
+                scanResultsRepository.updateScanResult(scanResult.barcode, InProgress, null)
 
                 val isMakeOperation = retry(3) {
                     makeOperationUseCase.invoke(
@@ -63,24 +70,19 @@ class AppActivityVM @Inject constructor(
                 }
 
                 isMakeOperation.onSuccess {
-                    scanResultsRepository.updateScanResult(scanResult.barcode, Loaded)
+                    scanResultsRepository.updateScanResult(scanResult.barcode, Loaded, null)
                     showToast.postValue(false)
                 }
                 isMakeOperation.onFailure {
-                    scanResultsRepository.updateScanResult(scanResult.barcode, NotLoaded)
+                    scanResultsRepository.updateScanResult(
+                        scanResult.barcode,
+                        NotLoaded,
+                        "${it.errorCodeNumber}: ${it.message}"
+                    )
                     showToast.postValue(true)
                     if (it.code == AuthorizationError) navigateToScreen(LOGIN)
                 }
             }
-        }
-        host.postValue(prefs.baseUrl)
-        observePersonalInformation()
-        observeLogout()
-    }
-
-    fun clearPrefs() {
-        viewModelScope.launch {
-            prefs.clear()
         }
     }
 
@@ -90,7 +92,7 @@ class AppActivityVM @Inject constructor(
         }
     }
 
-    fun clearDatabase() {
+    private fun clearDatabase() {
         viewModelScope.launch(Dispatchers.IO) {
             scanResultsRepository.deleteAllItems()
             companionsRepository.deleteAllCompanions()
@@ -108,10 +110,16 @@ class AppActivityVM @Inject constructor(
     private fun observeLogout() {
         viewModelScope.launch(Dispatchers.IO) {
             authRepository.logOut.filterNotNull().collect {
+                scanResultsRepository.recreateResultsChannel()
+                observeScanResult()
                 clearDatabase()
                 prefs.clear()
                 navigateToScreen(LOGIN)
             }
         }
+    }
+
+    fun louOut() {
+        authRepository.logOut()
     }
 }

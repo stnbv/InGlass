@@ -23,7 +23,7 @@ class AuthStateUseCase(private val repository: IPreferencesRepository) : UseCase
                 }
             } catch (e: Exception) {
                 Timber.d(e)
-                Answer.failure(e, ErrorCode.InternalError)
+                Answer.failure(e, ErrorCode.InternalError, errorCodeNumber = 0)
             }
         }
     }

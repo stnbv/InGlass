@@ -34,6 +34,7 @@ class DesktopFragment : BaseFragment<FragmentDesktopBinding, DesktopVM>(R.layout
         }
 
         viewModel.setDataToItems()
+        binding.scannedOperationsRecyclerView.scrollToPosition(0)
         binding.menu.doOnClick {
             (activity as? AppActivity)?.openMenu()
         }

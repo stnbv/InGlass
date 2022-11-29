@@ -3,11 +3,7 @@ package com.inglass.android.presentation.scan
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.inglass.android.data.local.db.entities.ScanResult
-import com.inglass.android.domain.models.FullScannedItemModel
-import com.inglass.android.domain.models.Helper
 import com.inglass.android.domain.models.LoadingStatus.Queue
-import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
-import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IScanResultsRepository
 import com.inglass.android.utils.base.BaseViewModel
 import com.inglass.android.utils.navigation.SCREENS.PREVIEW_PREFERENCE
@@ -21,32 +17,16 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CameraXViewModel @Inject constructor(
-    private val preferences: IPreferencesRepository,
     private val scanResultsRepository: IScanResultsRepository,
-    private val companionsRepository: ICompanionsRepository,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel() {
 
     private val navArgs = CameraXFragmentArgs.fromSavedStateHandle(savedStateHandle)
 
     val scanResSet: MutableSet<String> = mutableSetOf()
-    var helpersRateSum = 0F
-    var userRate = 1F
-    val helpers = mutableListOf<Helper>()
 
     private val onScannedChannel = Channel<Unit>()
     val onScannedFlow = onScannedChannel.receiveAsFlow()
-
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            companionsRepository.getCompanionsFullInfo().forEach { companion ->
-                helpersRateSum += companion.participationRate
-                helpers.add(Helper(companion.id, companion.participationRate))
-            }
-
-            userRate -= helpersRateSum
-        }
-    }
 
     fun checkBarcode(barcode: String) {
         if (barcode in scanResSet) return
@@ -54,34 +34,21 @@ class CameraXViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             if (scanResultsRepository.getItemById(barcode) == null) {
                 onScannedChannel.send(Unit)
-                saveBarcode(barcode)
-                scanResultsRepository.emitScanResult(
-                    FullScannedItemModel(
-                        barcode = barcode,
-                        loadingStatus = Queue,
-                        employeeId = preferences.user?.id ?: return@launch,
-                        operationId = navArgs.operationId,
-                        dateTime = Calendar.getInstance().time,
-                        participationRate = userRate,
-                        helpers = helpers
-                    )
+                val scanResult = ScanResult(
+                    barcode = barcode,
+                    operationId = navArgs.operationId,
+                    dateAndTime = Calendar.getInstance().time,
+                    loadingStatus = Queue,
+                    error = null
                 )
+                scanResultsRepository.saveScanResult(scanResult)
+                scanResultsRepository.emitScanResult(scanResult)
                 if (navArgs.isSingleScan) {
                     navigateBack()
                 }
             }
         }
     }
-
-    private suspend fun saveBarcode(barcode: String) =
-        scanResultsRepository.saveScanResult(
-            ScanResult(
-                barcode = barcode,
-                operationId = navArgs.operationId,
-                dateAndTime = Calendar.getInstance().time,
-                loadingStatus = Queue
-            )
-        )
 
     fun navigateToPreferences() {
         navigateToScreen(PREVIEW_PREFERENCE)

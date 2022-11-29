@@ -8,7 +8,7 @@ interface IAuthRepository {
 
     val logOut: Flow<Unit>
 
-    suspend fun logOut()
+    fun logOut()
 
     suspend fun logIn(phoneNumber: String, password: String): Answer<AuthData>
 

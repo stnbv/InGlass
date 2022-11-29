@@ -18,6 +18,7 @@ import com.inglass.android.data.remote.services.personal_information.IPersonalIn
 import com.inglass.android.data.remote.services.personal_information.PersonalInformationService
 import com.inglass.android.data.remote.services.reference_book.IReferenceBookService
 import com.inglass.android.data.remote.services.reference_book.ReferenceBookService
+import com.inglass.android.domain.repository.interfaces.IAuthRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.usecase.auth.LogInUseCase
 import dagger.Module
@@ -40,8 +41,9 @@ object NetworkModule {
     @Provides
     fun provideAuthenticator(
         preferencesRepository: IPreferencesRepository,
-        logInUseCase: LogInUseCase
-    ): TokenAuthenticator = TokenAuthenticator(preferencesRepository, logInUseCase)
+        logInUseCase: LogInUseCase,
+        authRepository: IAuthRepository
+    ): TokenAuthenticator = TokenAuthenticator(preferencesRepository, logInUseCase, authRepository)
 
     @Provides
     @Singleton

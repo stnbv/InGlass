@@ -9,6 +9,8 @@ import androidx.paging.map
 import com.inglass.android.data.local.db.entities.Companions
 import com.inglass.android.data.local.db.entities.Employee
 import com.inglass.android.data.local.db.entities.Operation
+import com.inglass.android.domain.models.LoadingStatus.InProgress
+import com.inglass.android.domain.models.LoadingStatus.Queue
 import com.inglass.android.domain.repository.interfaces.ICompanionsRepository
 import com.inglass.android.domain.repository.interfaces.IPreferencesRepository
 import com.inglass.android.domain.repository.interfaces.IReferenceBookRepository
@@ -17,6 +19,7 @@ import com.inglass.android.domain.usecase.WaitNetworkUseCase
 import com.inglass.android.domain.usecase.companions.GetCompanionsUseCase
 import com.inglass.android.domain.usecase.personal_information.GetPersonalInformationUseCase
 import com.inglass.android.domain.usecase.reference_book.GetReferenceBookUseCase
+import com.inglass.android.domain.usecase.scanning.GetSecondaryScanInfoUseCase
 import com.inglass.android.utils.adapter.ItemVM
 import com.inglass.android.utils.api.core.ErrorCode.AuthorizationError
 import com.inglass.android.utils.api.core.ErrorCode.InternalError
@@ -38,15 +41,17 @@ import timber.log.Timber
 class DesktopVM @Inject constructor(
     private val getPersonalInformationUseCase: GetPersonalInformationUseCase,
     private val getReferenceBookUseCase: GetReferenceBookUseCase,
+    private val getCompanionsUseCase: GetCompanionsUseCase,
     private val preferencesRepository: IPreferencesRepository,
     private val referenceBookRepository: IReferenceBookRepository,
     private val companionsRepository: ICompanionsRepository,
     private val scanResultsRepository: IScanResultsRepository,
-    private val networkUseCase: WaitNetworkUseCase,
-    private val getCompanionsUseCase: GetCompanionsUseCase
+    private val getSecondaryScanInfoUseCase: GetSecondaryScanInfoUseCase,
+    private val networkUseCase: WaitNetworkUseCase
 ) : BasePagingViewModel() {
 
     val isOperationSelected = MutableLiveData(false)
+    val isSecondaryDataLoaded = MutableLiveData(false)
     val operations = MutableLiveData(listOf("Нет доступных операций"))
     val selectedOperationsPosition = MutableLiveData(0)
     val isSingleScan = MutableLiveData(false)
@@ -82,9 +87,9 @@ class DesktopVM @Inject constructor(
         viewModelScope.launch {
             val items = Pager(
                 config = PagingConfig(
-                    pageSize = 3,
+                    pageSize = 10,
                     enablePlaceholders = false,
-                    initialLoadSize = 5
+                    initialLoadSize = 10
                 ),
                 pagingSourceFactory = { scanResultsRepository.getScanResultWithOperation() }
             ).flow.cachedIn(viewModelScope)
@@ -96,7 +101,8 @@ class DesktopVM @Inject constructor(
                             dateTime = scanResultFullInfo.dateAndTime,
                             operation = scanResultFullInfo.operationName,
                             barcode = scanResultFullInfo.barcode,
-                            loadingStatus = scanResultFullInfo.loadingStatus
+                            loadingStatus = scanResultFullInfo.loadingStatus,
+                            error = scanResultFullInfo.error
                         )
                     ) as ItemVM
                 }
@@ -148,6 +154,15 @@ class DesktopVM @Inject constructor(
             }
             getUserInformation()
             getCompanions()
+            getSecondaryScanInfoUseCase()
+            emitQueueScanResults()
+            isSecondaryDataLoaded.postValue(true)
+        }
+    }
+
+    private suspend fun emitQueueScanResults() {
+        scanResultsRepository.getItemsByStatus(listOf(Queue, InProgress)).forEach {
+            scanResultsRepository.emitScanResult(it)
         }
     }
 

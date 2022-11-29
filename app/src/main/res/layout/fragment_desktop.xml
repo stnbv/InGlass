@@ -16,120 +16,105 @@
         android:layout_height="match_parent"
         android:background="@color/dark_gray">
 
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="6dp"
-            app:layout_constraintBottom_toTopOf="@+id/buttonScan"
+        <LinearLayout
+            android:id="@+id/toolbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/gray"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
+            <ImageView
+                android:id="@+id/menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                app:srcCompat="@drawable/ic_menu" />
 
-                <LinearLayout
-                    android:id="@+id/toolbar_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/gray"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:text="@string/desktop_scan_barcode"
+                android:textColor="@color/silver"
+                android:textSize="20dp" />
 
-                    <ImageView
-                        android:id="@+id/menu"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        app:srcCompat="@drawable/ic_menu" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/titleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="12dp"
-                        android:text="@string/desktop_scan_barcode"
-                        android:textColor="@color/silver"
-                        android:textSize="20dp" />
+        <TextView
+            android:id="@+id/receiveNewsAndOffersTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/desktop_scan_scan_only_one_item"
+            android:textColor="@color/silver"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
 
-                </LinearLayout>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/receiveNewsAndOffersSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:checked="@{vm.isSingleScan}"
+            android:onCheckedChanged="@{(view, value)->vm.changeScanCount(value)}"
+            android:paddingHorizontal="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/receiveNewsAndOffersTextView"
+            app:useMaterialThemeColors="false" />
 
-                <TextView
-                    android:id="@+id/receiveNewsAndOffersTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/desktop_scan_scan_only_one_item"
-                    android:textColor="@color/silver"
-                    android:textSize="18dp"
-                    app:layout_constraintEnd_toStartOf="@id/receiveNewsAndOffersSwitch"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
+        <Spinner
+            android:id="@+id/operationsSpinner"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_transpanent_text_view"
+            android:includeFontPadding="true"
+            android:spinnerMode="dropdown"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/receiveNewsAndOffersSwitch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:checked="@{vm.isSingleScan}"
-                    android:onCheckedChanged="@{(view, value)->vm.changeScanCount(value)}"
-                    android:paddingHorizontal="16dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/receiveNewsAndOffersTextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/receiveNewsAndOffersTextView"
-                    app:useMaterialThemeColors="false" />
+        <TextView
+            android:id="@+id/helpersTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="8dp"
+            android:text="@{vm.helpersNames}"
+            android:textColor="@color/silver"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/operationsSpinner"
+            tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
 
-                <Spinner
-                    android:id="@+id/operationsSpinner"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_transpanent_text_view"
-                    android:includeFontPadding="true"
-                    android:spinnerMode="dropdown"
-                    android:textSize="15dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/receiveNewsAndOffersTextView" />
-
-                <TextView
-                    android:id="@+id/helpersTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{vm.helpersNames}"
-                    android:textColor="@color/silver"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/operationsSpinner"
-                    tools:text="Помощники: Иванов И. - 0.5 / Петров В. - 0.3 / Селезнев К. - 0.2" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/expandableButtonsRecyclerView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="12dp"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/helpersTextView"
-                    app:setPagingAdapter="@{vm.pagingAdapter}"
-                    tools:listitem="@layout/item_scanned" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/scannedOperationsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="12dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/buttonScan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/helpersTextView"
+            app:setPagingAdapter="@{vm.pagingAdapter}"
+            tools:listitem="@layout/item_scanned" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonScan"
@@ -139,7 +124,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="12dp"
-            android:enabled="@{vm.isOperationSelected}"
+            android:enabled="@{vm.isOperationSelected &amp;&amp; vm.isSecondaryDataLoaded}"
             android:onClick="@{()->vm.openCameraScreen()}"
             android:text="@string/desktop_scan_barcode"
             app:backgroundTint="@drawable/bg_tint_pressed_main_black"
